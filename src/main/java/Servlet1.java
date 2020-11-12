@@ -13,7 +13,7 @@ public class Servlet1 extends HttpServlet {
         System.out.println("Funziona!");
         try{
             PrintWriter out = response.getWriter();
-            out.println("<html> <head> <body> Servlet1 funziona! </body> </head> </html>" );
+            out.println("<html> <head> <body> Servlet1 funziona anche dopo github! </body> </head> </html>" );
         } catch (IOException e){
             e.printStackTrace();
         }
