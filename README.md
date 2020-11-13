@@ -12,7 +12,7 @@ Progetto di TWEB aa 2020/2021
       git clone https://github.com/AdrianaLongo/TWEB.git
       ```
    Questo creerà una nuova cartella "TWEB"
-5. Spostare in questa nuova cartella TWEB tutte le sottocartelle del progetto creato al punto 1 TRANNE SRC
+5. Spostare in questa nuova cartella TWEB tutte le sottocartelle del progetto creato al punto 1 TRANNE SRC (anche eventuali cartelle nascoste)
 6. Eliminare la vecchia cartella del progetto creato al punto 1
 7. Aprire in IntelliJ la nuova cartella in cui abbiamo la repo
 8. Caricare la libreria JDBC
