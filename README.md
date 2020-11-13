@@ -21,7 +21,7 @@ Progetto di TWEB aa 2020/2021
 mysql-connector-java
 
 ## Problemi frequenti
-###Error 404
+### Error 404
 Causa: non viene trovata la servlet
 Soluzione: controllare che nei punti in cui viene chiamata la servlet (ad esempio dall'index.html) sia impsotato l'URL corretto (in particoalre, controllare che il nome della servlet sia giusto)
 
