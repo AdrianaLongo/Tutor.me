@@ -1,5 +1,6 @@
 # TWEB
-Progetto di TWEB aa 2020/2021
+Progetto di Tecnologie WEB (aa 2020/2021, UniTO)
+
 
 
 ## Istruzioni per clonare correttamente la repo in modo da poterla utilizzare su IntelliJ
