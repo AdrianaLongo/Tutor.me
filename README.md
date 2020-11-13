@@ -17,6 +17,19 @@ Progetto di TWEB aa 2020/2021
 7. Aprire in IntelliJ la nuova cartella in cui abbiamo la repo
 8. Caricare la libreria JDBC
 
+### NB per la push
+Non fare 
+```bash
+      git add -a
+```
+prima della commit: bisogna inserire manualmente nella add i file che abbiamo modificato, per evitare di caricare nuovi file di configurazione creati da Intellij (nonostante ci sia il .gitignore!).
+Nella add bisogna inserire l'intero percorso del file: conviene quindi fare prima una 
+```bash
+      git status
+```
+e fare copia/incolla del percorso nella git add.
+NB: separare i file/cartelle con un spazio!
+
 ## Librerie da importare
 mysql-connector-java
 
