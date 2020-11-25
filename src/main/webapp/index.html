@@ -20,7 +20,6 @@
 </head>
 
 <body>
-
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg fixed-top ">
         <a class="navbar-brand" href="#">Home</a>
@@ -30,16 +29,13 @@
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav mr-4">
                 <li class="nav-item">
-                    <a class="nav-link" data-value="about" href="#">Catalogo corsi</a>
+                    <a class="nav-link" data-value="courses" href="#">Catalogo corsi</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " data-value="portfolio"href="#">Tutor</a>
+                    <a class="nav-link " data-value="tutors"href="#">Tutor</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " data-value="blog" href="#">Calendario disponibilit&agrave</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " data-value="contact" href="#">Contattaci</a>
+                    <a class="nav-link " data-value="calendario" href="#">Calendario disponibilit&agrave</a>
                 </li>
                 <li>
                     <a href="#LogInButton" role="button" class="btn btn-outline" data-toggle="modal">Login</a>
@@ -80,96 +76,144 @@
         </div>
     </div>
 
-    <div class="wrapper">
-        <!--HEADER-->
-        <header class="header">
-            <div class="container">
-                <div class="description">
-                    <h1> Benvenuto/a su Tutor.me
-                        <p> Tutor.me &egrave una piattaforma che ti permette di trovare il tutor adatto alle tue
-                            esigenze.
-                            Scegli il corso per cui hai bisogno, seleziona il tutor che preferisci ed &egrave fatta!
-                        </p>
-                    </h1>
-                    <button id="scegliIlCorsoButton" type="button" class="btn btn-secondary dropdown-toggle"
-                            id="dropdownCourseButton" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" formaction="http://localhost:8080/TWEB_war_exploded/PopulateServlet">
-                        Scegli il corso...
-                    </button>
-                    <div id="dropdownCorsiButton" class="dropdown-menu" aria-labelledby="dropdownCourseButton">
-                        <a class="dropdown-item" v-for="course in courses">{{course.nome}}</a>
+    <!--HEADER-->
+    <header class="header">
+        <div class="container">
+            <div class="description">
+                <h1> Benvenuto/a su Tutor.me
+                    <p> Tutor.me &egrave una piattaforma che ti permette di trovare il tutor adatto alle tue
+                        esigenze.
+                        Scegli il corso per cui hai bisogno, seleziona il tutor che preferisci ed &egrave fatta!
+                    </p>
+                </h1>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group" id="selectCorsiTutor">
+                            <!-- Cicla su "corsi"-->
+                                <select class="custom-select" id="inputGroupSelect04" aria-label="Cerca corsi...">
+                                    <option selected>Seleziona corso...</option>
+                                    <option v-for="course in courses" :nomeCorso="course.nome">{{course.nome}}</option>
+                                </select>
+                                <div class="input-group-append" >
+                                    <button class="btn btn-outline-secondary" type="button">Cerca tutor</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-secondary dropdown-toggle"
-                            id="dropdownTutorButton" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                        Scegli il tutor...
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownTutorButton">
-                        <a class="dropdown-item" href="#">tutor1 caricato da servlet tramite vue</a>
-                        <a class="dropdown-item" href="#">tutor2 caricato da servlet tramite vue</a>
-                        <a class="dropdown-item" href="#">tutor3 caricato da servlet tramite vue</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!--CATALOGO CORSI-->
+    <!--Cicla su "insegna"-->
+    <div class="courses" id="courses">
+        <h1 class="text-center">Catalogo corsi</h1>
+        <div class="container">
+            <div class="row" id="showCatalogoCorsi">
+                <div class="col-sm-4" v-for="course in courses">
+                    <div class="card text-center text-white bg-info mb-3">
+                        <div class="card-header">{{course.nomeCorso}}</div>
+                        <div class="card-body">
+                            <p class="card-text">Sono disponibili tutor</p>
+                            <a href="#" class="btn btn-light">Controlla disponibilit&agrave</a>
+                        </div>
                     </div>
-
-                    <div id="dropdownCorsiSelect">
-                        <select v-model="selectedCourse">
-                            <option value="" disabled>Seleziona corso</option>
-                            <option v-for="course in courses" :nomeCorso="course.nome">{{course.nome}}</option>
-                        </select>
-
-                    </div>
-
-                    <div id="selectCorsiTutor" class="input-group">
-                        <select class="custom-select" id="inputGroupSelectCorso" aria-label="Seleziona corso">
-                            <option value="" disabled>Seleziona corso</option>
-                            <option v-for="course in courses" :nomeCorso="course.nome">{{course.nome}}</option>
-                        </select>
-                    </div>
-
-
-
-                    <form action="/TWEB_war_exploded/PopulateServlet" method="post">
-                        <p><input type="submit" name="submit" value="Prova servlet"/></p>
-                    </form>
                 </div>
             </div>
 
-        </header>
+        </div>
 
     </div>
+
+    <!--TUTOR-->
+    <div class="tutors" id="tutors">
+        <h1 class="text-center">Tutor</h1>
+        <div class="container">
+            <div class="row" id="showCatalogoTutor">
+                <div class="col-sm-4" v-for="tutor in tutors">
+                    <div class="card border-info mb-3">
+                        <div class="card-header text-center">{{tutor.nomeDocente}} {{tutor.cognomeDocente}}</div>
+                        <div class="card-body">
+                            <span class="badge badge-pill badge-primary">Materia</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card border-info mb-3">
+                        <div class="card-header text-center">Nome Cognome</div>
+                        <div class="card-body">
+                            <span class="badge badge-pill badge-primary">Materia</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card border-info mb-3">
+                        <div class="card-header text-center">Nome Cognome</div>
+                        <div class="card-body">
+                            <span class="badge badge-pill badge-primary">Materia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
 
     <script type="text/javascript" src="main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <script>
-
-        var dropdownCorsiButton = new Vue({
-            el: '#dropdownCorsiButton',
-            data() {
-                return {
-                    courses:
-                        [{"nome":"statico"},{"nome":"Fisica"},{"nome":"Greco"},{"nome":"Inglese"},{"nome":"Italiano"},{"nome":"Latino"},{"nome":"Matematica"}]
-                };
-            }
-        });
-
-        var dropdownCorsiSelect = new Vue({
-            el: '#dropdownCorsiSelect',
-            data() {
-                return {
-                    courses:
-                        [{"nome":"statico"},{"nome":"Fisica"},{"nome":"Greco"},{"nome":"Inglese"},{"nome":"Italiano"},{"nome":"Latino"},{"nome":"Matematica"}]
-                };
-            }
-
-        });
-
-        var selectCorsi = new Vue({
+        var selectCourse = new Vue({
             el: '#selectCorsiTutor',
             data() {
                 return {
                     courses:
-                        [{"nome":"statico"},{"nome":"Fisica"},{"nome":"Greco"},{"nome":"Inglese"},{"nome":"Italiano"},{"nome":"Latino"},{"nome":"Matematica"}]
+                        [{"nome":"Filosofia"},{"nome":"Fisica"},{"nome":"Greco"},{"nome":"Inglese"},{"nome":"Italiano"},{"nome":"Latino"},{"nome":"Matematica"}]
+                };
+            }
+        });
+        var showCourses = new Vue({
+            el: '#showCatalogoCorsi',
+            data() {
+                return {
+                    courses:
+                        [
+                            {"nomeCorso":"Inglese","idDocente":"13","disponibilita":"0"},
+                            {"nomeCorso":"Filosofia","idDocente":"18","disponibilita":"1"},
+                            {"nomeCorso":"Fisica","idDocente":"19","disponibilita":"1"},
+                            {"nomeCorso":"Italiano","idDocente":"12","disponibilita":"1"},
+                            {"nomeCorso":"Matematica","idDocente":"16","disponibilita":"1"},
+                            {"nomeCorso":"Fisica","idDocente":"16","disponibilita":"1"},
+                            {"nomeCorso":"Matematica","idDocente":"19","disponibilita":"1"},
+                            {"nomeCorso":"Greco","idDocente":"21","disponibilita":"1"},
+                            {"nomeCorso":"Latino","idDocente":"21","disponibilita":"1"},
+                            {"nomeCorso":"Italiano","idDocente":"20","disponibilita":"1"}
+                        ]                };
+            }
+        });
+        var showTutor = new Vue({
+            el: '#showCatalogoTutor',
+            data(){
+                return{
+                    tutors:
+                        [
+                            {"idDocente":"12","nomeDocente":"Mariastella","cognomeDocente":"Vittoria"},
+                            {"idDocente":"13","nomeDocente":"Giosue","cognomeDocente":"Gullotta"},
+                            {"idDocente":"16","nomeDocente":"Franco","cognomeDocente":"Alberio"},
+                            {"idDocente":"17","nomeDocente":"Mariaconcetta","cognomeDocente":"Distefano"},
+                            {"idDocente":"18","nomeDocente":"Nino","cognomeDocente":"Reina"},
+                            {"idDocente":"19","nomeDocente":"Mariagrazia","cognomeDocente":"Distefano"},
+                            {"idDocente":"20","nomeDocente":"Agata","cognomeDocente":"Garraffo"},
+                            {"idDocente":"21","nomeDocente":"Annamaria","cognomeDocente":"Cultraro"}
+                        ]
                 };
             }
         });
