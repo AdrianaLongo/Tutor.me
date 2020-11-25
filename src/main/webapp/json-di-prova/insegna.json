@@ -1,0 +1,12 @@
+[
+  {"nomeCorso":"Inglese","idDocente":"13","disponibilita":"0"},
+  {"nomeCorso":"Filosofia","idDocente":"18","disponibilita":"1"},
+  {"nomeCorso":"Fisica","idDocente":"19","disponibilita":"1"},
+  {"nomeCorso":"Italiano","idDocente":"12","disponibilita":"1"},
+  {"nomeCorso":"Matematica","idDocente":"16","disponibilita":"1"},
+  {"nomeCorso":"Fisica","idDocente":"16","disponibilita":"1"},
+  {"nomeCorso":"Matematica","idDocente":"19","disponibilita":"1"},
+  {"nomeCorso":"Greco","idDocente":"21","disponibilita":"1"},
+  {"nomeCorso":"Latino","idDocente":"21","disponibilita":"1"},
+  {"nomeCorso":"Italiano","idDocente":"20","disponibilita":"1"}
+]

@@ -1,18 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Tutor.me</title>
+
+
+    <!-- Bootstrap CSS -->
+    <link href="bootstrap-4.5.2-dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudﬂare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="bootstrap-4.5.2-dist/js/jquery-slim.min.js"></script>
+    <script src="bootstrap-4.5.2-dist/js/bootstrap.min.js"></script>
+
+    <link href="styles.css" rel="stylesheet" type="text/css">
+
 </head>
+
 <body>
 
-<div> Pippo fa la cacca </div>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top ">
+        <a class="navbar-brand" href="#">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <ul class="navbar-nav mr-4">
+                <li class="nav-item">
+                    <a class="nav-link" data-value="about" href="#">Catalogo corsi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="portfolio"href="#">Tutor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="blog" href="#">Calendario disponibilit&agrave</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-value="contact" href="#">Contattaci</a>
+                </li>
+                <li>
+                    <a href="#LogInButton" role="button" class="btn btn-outline" data-toggle="modal">Login</a>
+                </li>
+                <li>
+                    <a href="#" class="btn btn-outline">Sign up</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-<form action="/TWEB_war_exploded/Servlet1" method="post">
-    <p><input type="submit" name="submit" value="Invoca Servlet1"></p>
-</form>
+    <!--LOGIN-->
+    <div id="LogInButton" class="modal fade modal-get-offer" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Login</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <form class="form" role="form" autocomplete="off" id="formGetOffer" novalidate="" method="POST">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="uname1" id="uname1" required=""
+                                   placeholder="Username">
+                            <div class="invalid-feedback">Username obbligatorio</div>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" class="form-control" id="pwd1" required="" placeholder="Password">
+                            <div class="invalid-feedback">Inserisci password</div>
+                        </div>
 
-Ecco l'invocazione con ancora:
-<a href="/TWEB_war_exploded/Servlet1"> invoca Servlet1 </a>
+                        <div class="form-group py-4">
+                            <button type="submit" class="btn btn-success" id="btnGetOffer">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!--HEADER-->
+        <header class="header">
+            <div class="container">
+                <div class="description">
+                    <h1> Benvenuto/a su Tutor.me
+                        <p> Tutor.me &egrave una piattaforma che ti permette di trovare il tutor adatto alle tue
+                            esigenze.
+                            Scegli il corso per cui hai bisogno, seleziona il tutor che preferisci ed &egrave fatta!
+                        </p>
+                    </h1>
+                    <button id="scegliIlCorsoButton" type="button" class="btn btn-secondary dropdown-toggle"
+                            id="dropdownCourseButton" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false" formaction="http://localhost:8080/TWEB_war_exploded/PopulateServlet">
+                        Scegli il corso...
+                    </button>
+                    <div id="dropdownCorsiButton" class="dropdown-menu" aria-labelledby="dropdownCourseButton">
+                        <a class="dropdown-item" v-for="course in courses">{{course.nome}}</a>
+                    </div>
+                    <button type="button" class="btn btn-secondary dropdown-toggle"
+                            id="dropdownTutorButton" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                        Scegli il tutor...
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownTutorButton">
+                        <a class="dropdown-item" href="#">tutor1 caricato da servlet tramite vue</a>
+                        <a class="dropdown-item" href="#">tutor2 caricato da servlet tramite vue</a>
+                        <a class="dropdown-item" href="#">tutor3 caricato da servlet tramite vue</a>
+                    </div>
+
+                    <div id="dropdownCorsiSelect">
+                        <select v-model="selectedCourse">
+                            <option value="" disabled>Seleziona corso</option>
+                            <option v-for="course in courses" :nomeCorso="course.nome">{{course.nome}}</option>
+                        </select>
+
+                    </div>
+
+                    <div id="selectCorsiTutor" class="input-group">
+                        <select class="custom-select" id="inputGroupSelectCorso" aria-label="Seleziona corso">
+                            <option value="" disabled>Seleziona corso</option>
+                            <option v-for="course in courses" :nomeCorso="course.nome">{{course.nome}}</option>
+                        </select>
+                    </div>
+
+
+
+                    <form action="/TWEB_war_exploded/PopulateServlet" method="post">
+                        <p><input type="submit" name="submit" value="Prova servlet"/></p>
+                    </form>
+                </div>
+            </div>
+
+        </header>
+
+    </div>
+
+    <script type="text/javascript" src="main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script>
+
+        var dropdownCorsiButton = new Vue({
+            el: '#dropdownCorsiButton',
+            data() {
+                return {
+                    courses:
+                        [{"nome":"statico"},{"nome":"Fisica"},{"nome":"Greco"},{"nome":"Inglese"},{"nome":"Italiano"},{"nome":"Latino"},{"nome":"Matematica"}]
+                };
+            }
+        });
+
+        var dropdownCorsiSelect = new Vue({
+            el: '#dropdownCorsiSelect',
+            data() {
+                return {
+                    courses:
+                        [{"nome":"statico"},{"nome":"Fisica"},{"nome":"Greco"},{"nome":"Inglese"},{"nome":"Italiano"},{"nome":"Latino"},{"nome":"Matematica"}]
+                };
+            }
+
+        });
+
+        var selectCorsi = new Vue({
+            el: '#selectCorsiTutor',
+            data() {
+                return {
+                    courses:
+                        [{"nome":"statico"},{"nome":"Fisica"},{"nome":"Greco"},{"nome":"Inglese"},{"nome":"Italiano"},{"nome":"Latino"},{"nome":"Matematica"}]
+                };
+            }
+        });
+    </script>
+
 </body>
+
 </html>

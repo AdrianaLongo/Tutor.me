@@ -4,9 +4,11 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DAO {
-    private static final String url = "jdbc:mysql://localhost:3306/ripetizioni?autoReconnect=true&useSSL=false";
+    private static final String url = "jdbc:mysql://localhost:8889/ripetizioni?autoReconnect=true&useSSL=false";
     private static final String user = "root";
-    private static final String pw = " ";
+    private static final String pw = "root";
+
+
 
     // 1. Registrazione del driver JDBC
     public static void registerDriver(){
