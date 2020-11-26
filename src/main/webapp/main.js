@@ -1,7 +1,10 @@
+
+
 // Per far prendere all'header l'altezza della finestra
 $(document).ready(function(){
     $('.header').height($(window).height());
 })
+
 
 // LOGIN
 $("#btnGetOffer").click(function(event) {
@@ -24,3 +27,6 @@ $(".navbar a").click(function(){
     },1000)
 
 })
+
+
+

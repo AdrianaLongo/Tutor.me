@@ -47,6 +47,7 @@
         </div>
     </nav>
 
+
     <!--LOGIN-->
     <div id="LogInButton" class="modal fade modal-get-offer" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
@@ -106,6 +107,11 @@
         </div>
     </header>
 
+<!--    <form action="/TWEB_war_exploded/PopulateServlet" method="get">-->
+<!--        <p><input type="submit" name="submit" value="Prova servlet elenco corsi"/></p>-->
+<!--    </form>-->
+
+
     <!--CATALOGO CORSI-->
     <!--Cicla su "insegna"-->
     <div class="courses" id="courses">
@@ -162,22 +168,32 @@
 
     </div>
 
-
-
-
-
     <script type="text/javascript" src="main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <script>
-        var selectCourse = new Vue({
+        new Vue({
             el: '#selectCorsiTutor',
-            data() {
-                return {
-                    courses:
-                        [{"nome":"Filosofia"},{"nome":"Fisica"},{"nome":"Greco"},{"nome":"Inglese"},{"nome":"Italiano"},{"nome":"Latino"},{"nome":"Matematica"}]
-                };
+            data: {
+                courses: [],
+                link: 'http://localhost:8080/TWEB_war_exploded/PopulateServlet'
+            },
+            created(){
+                $(window).on('load', function(){
+                   $.get("PopulateServlet", function(response){
+                       console.log(response);
+                   });
+                });
+                this.getCourses();
+            },
+            methods:{
+                getCourses: function(){
+                    var self = this;
+                    $.get(this.link, function(data){
+                        self.courses = data;
+                    });
+                }
             }
         });
         var showCourses = new Vue({

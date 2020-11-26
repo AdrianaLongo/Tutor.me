@@ -27,11 +27,11 @@ public class PopulateServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
-
+        // Luca la mette nella doPost
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
