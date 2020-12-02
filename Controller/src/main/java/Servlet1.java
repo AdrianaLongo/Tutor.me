@@ -10,10 +10,10 @@ import java.io.PrintWriter;
 public class Servlet1 extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException{
-        System.out.println("Funziona!");
+        System.out.println("Servlet1 funziona!");
         try{
             PrintWriter out = response.getWriter();
-            out.println("<html> <head> <body> ciao </body> </head> </html>" );
+            out.println("<html> <head> <body> Sono Servlet1 </body> </head> </html>" );
         } catch (IOException e){
             e.printStackTrace();
         }
