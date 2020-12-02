@@ -32,7 +32,9 @@ e fare copia/incolla del percorso nella git add.
 NB: separare i file/cartelle con un spazio!
 
 ## Librerie da importare
-mysql-connector-java
+mysql-connector-java (.jar)
+com.google.code.gson:gson:2.8.6 (from Maven Repository)
+
 
 ## Problemi frequenti
 ### Error 404
