@@ -6,18 +6,23 @@
         Scegli il corso per cui hai bisogno, seleziona il tutor che preferisci ed è fatta!
       </p>
     </b-jumbotron>
-    <div>
-      <b-form-select v-model="selected" :options="options"></b-form-select>
-      <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>
-    </div>
+<!--    <div>-->
+<!--      <b-form-select v-model="selected" :options="options"></b-form-select>-->
+<!--      <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>-->
+<!--    </div>-->
+    <course-select></course-select>
 
   </div>
 
 </template>
 
 <script>
+import courseSelect from "@/components/courseSelect/courseSelect";
 export default {
   name: "PageHome",
+  components: {
+    courseSelect
+  },
   data() {
     return {
       selected: null,

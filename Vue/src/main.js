@@ -6,6 +6,12 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 // import VueRouter from 'vue-router'
 import router from "./router";
 
+ // import $ from 'jquery'
+
+import jQuery from 'jquery'
+window.jQuery = jQuery()
+
+// import 'expose?$!expose?jQuery!jquery'
 
 // import PageHome from "@/components/pages/PageHome.vue";
 // import PageCourses from "@/components/pages/PageCourses.vue";
@@ -17,6 +23,7 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
  // Vue.use(VueRouter)
+ // Vue.use($)
 
 new Vue({
   el: '#app',
@@ -53,4 +60,5 @@ new Vue({
 //     </div>
 //   `
 // }).$mount('#app');
+
 
