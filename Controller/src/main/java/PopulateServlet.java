@@ -23,7 +23,7 @@ public class PopulateServlet extends HttpServlet {
         super.init(conf);
 
         /* OPZIONE 1 (Luca, opzione migliore):
-         * Mantenere url, user e pwd nel web.xml e creare un nuovo DAO con questi parametri:
+         * Mantenerda cance url, user e pwd nel web.xml e creare un nuovo DAO con questi parametri:
          * Nel DAO bisogna avere quindi un costruttore che abbia al suo interno la registrazione del driver
 
         ServletContext ctx = conf.getServletContext(); //prendo il context per accedere a web.xml
@@ -40,6 +40,16 @@ public class PopulateServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
+
+    }
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException{
         response.setContentType("application/json, charset=UTF-8");
         corsi = dao.mostraCorsi();
         Type type = new TypeToken<ArrayList<Corso>>(){}.getType();
@@ -48,9 +58,5 @@ public class PopulateServlet extends HttpServlet {
         out.print(jsonCorsi);
         System.out.println(jsonCorsi);
         out.close();
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 }
