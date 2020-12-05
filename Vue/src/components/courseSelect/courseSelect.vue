@@ -1,80 +1,31 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6">
-<!--        <div>-->
-<!--          <b-form-select v-model="selected" :options="courses"></b-form-select>-->
-<!--          <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>-->
-<!--          <ul>-->
-<!--            <li v-for="dog in dogs" :key="dog"> {{dog}} </li>-->
-<!--&lt;!&ndash;            <li v-for="(rent, city) in avarageRent"> The avarage rent in {{city}} is ${{rent}} </li>&ndash;&gt;-->
-<!--          </ul>-->
-
-<!--        </div>-->
-      </div>
-    </div>
-    <b-form-select v-model="courses">
-      <option v-for="course in courses" :key="course">{{course.nome}}</option>
-<!--      selected: {{course}}-->
+  <div>
+    <b-form-select>
+      <option v-for="elem in json" :key="elem.corso">{{ elem.nome }}</option>
     </b-form-select>
-    <ul>
-      <li v-for="course in courses" :key="course">{{course.nome}}</li>
-      <!--      selected: {{course}}-->
-    </ul>
   </div>
 </template>
 
 <script>
-// import $ from "jquery";
+import $ from "jquery";
 
 export default {
   name: "courseSelect",
   data() {
     return {
-      // selected: null,
-      dogs: ['Rex', 'Rover', 'Henrietta', 'Alan'],
-      // avarageRent:{
-      //   london: 2650,
-      //   paris: 1730,
-      //   NYC: 3680
-      // }
-      courses: [
-        // {
-        //   "nome": "Filosofia"
-        // },
-        // {
-        //   "nome": "Fisica"
-        // },
-        // {
-        //   "nome": "Greco"
-        // },
-        // {
-        //   "nome": "Inglese"
-        // },
-        // {
-        //   "nome": "Italiano"
-        // },
-        // {
-        //   "nome": "Latino"
-        // },
-        // {
-        //   "nome": "Matematica"
-        // }
-      ],
-      // link: 'http://192.168.1.118:8081/TWEB_war_exploded#/'
-      url: 'http://localhost:8081/TWEB_war_exploded/PopulateServlet', // è proprio il JSON!
-      proxyurl: "https://cors-anywhere.herokuapp.com/"
+      url: 'http://localhost:8081/TWEB_war_exploded/PopulateServlet', // è il JSON!
+      json: null
     }
   },
   // OPZIONE 1
-  created() {
-    fetch('http://localhost:8081/TWEB_war_exploded/PopulateServlet')
-        .then((res) => res.json())
-        .then((data) => {
-          this.courses = data.courses;
-          console.log(data);
-        });
-  }
+  // created() {
+  //   fetch('http://localhost:8081/TWEB_war_exploded/PopulateServlet')
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         this.courses = data.courses;
+  //         console.log(data);
+  //       });
+  // }
 
   // OPZIONE 2
   // mounted() {
@@ -82,11 +33,12 @@ export default {
   //       .then((res) => res.json())
   //       .then((data) => {
   //         this.courses = data.courses;
-  //         console.log("ciao");
+  //         console.log(data); //array
+  //         // console.log(data.courses); // undefined
   //       });
   // }
 
-  // OPZIONE 3 (abilitare import jquery)
+  // OPZIONE 3 (abilitare import jquery) MA NON CREA JSON
   // created() {
   //   $(window).on('load', function(){
   //     $.get("PopulateServlet", function(response){
@@ -104,13 +56,13 @@ export default {
   //   }
   // }
 
-  // OPZIONE 4 (abilitare import jquery)
+  // OPZIONE 4 (abilitare import jquery) MA NON CREA JSON
   // mounted() {
   //   var self = this;
   //   $.getJSON(this.link, function(data){
   //     self.courses = data;
   //   })
-  // }
+  // },
   // methods: {
   //   getCourses: function () {
   //     var self = this;
@@ -119,6 +71,14 @@ export default {
   //     });
   //   }
   // }
+
+  // OPZIONE 5 (abilitare import jquery)
+  created: function() {
+    var _this = this;
+    $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateServlet', function (json) {
+      _this.json = json;
+    });
+  }
 }
 </script>
 

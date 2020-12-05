@@ -45,7 +45,6 @@ public class PopulateServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
-
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
