@@ -30,4 +30,4 @@ idea/
 pom.xml
 TWEB.iml
 target/
-
+node_modules/
