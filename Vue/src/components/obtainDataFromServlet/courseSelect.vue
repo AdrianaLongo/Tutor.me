@@ -1,8 +1,21 @@
 <template>
   <div>
-    <b-form-select>
-      <option v-for="elem in json" :key="elem.corso">{{ elem.nome }}</option>
-    </b-form-select>
+<!--    <p>Questa è la select dei corsi:</p>-->
+<!--    <b-form-select>-->
+<!--      <option v-for="elem in json" :key="elem.corso">{{ elem.nome }}</option>-->
+<!--    </b-form-select>-->
+    <h3>Seleziona un corso: </h3>
+    <b-select v-model="courseName">
+      <option v-for="elem in json" :key="elem.corso" :value="{nome: elem.nome}">{{ elem.nome }}</option>
+    </b-select>
+    <p>Corso selezionato in courseSelect: {{ courseName.nome }}</p>
+
+    <b-button @click="selectCourse">Cerca tutor per questo corso</b-button>
+<!--    <p>course: {{this.$store.getters.courseName}}</p>-->
+<!--    <p>username: {{ this.$store.state.user.username }}</p>-->
+<!--    <p>firstname: {{this.$store.getters.firstName}}</p>-->
+<!--    <p>fullname: {{this.$store.getters.prefixedName("Mr.")}}</p>-->
+<!--    <button @click="mut">Prova mutation</button>-->
   </div>
 </template>
 
@@ -10,11 +23,12 @@
 import $ from "jquery";
 
 export default {
-  name: "courseSelect",
+  name: "courseName",
   data() {
     return {
       url: 'http://localhost:8081/TWEB_war_exploded/PopulateServlet', // è il JSON!
-      json: null
+      json: null,
+      courseName: ''
     }
   },
   // OPZIONE 1
@@ -78,7 +92,39 @@ export default {
     $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateServlet', function (json) {
       _this.json = json;
     });
+  },
+  mounted () {
+    console.log(this.$store.state.course.nome);
+  },
+  methods: {
+    // mut: function(){
+    //   this.$store.commit("changeName", "New Name");
+    //   this.$store.commit({
+    //     type: "changeName",
+    //     newName: "New Name 2"
+    //   })
+    // },
+
+    // act: function(){
+    //   this.$store.dispatch("changeName", {
+    //     newName: "New Name from Action"
+    //   });
+    // }
+
+    selectCourse: function(){
+      console.log(this.courseName.nome);
+      this.$store.commit("selectCourse", this.courseName.nome);
+    }
+
+    // selectCourse: function () {
+    //   console.log(this.courseName.nome);
+    //   this.$store.commit({
+    //     type: "selectCourse",
+    //     nome: this.courseName.nome
+    //   })
+    // }
   }
+
 }
 </script>
 

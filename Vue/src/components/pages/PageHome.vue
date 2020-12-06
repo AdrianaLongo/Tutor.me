@@ -6,43 +6,35 @@
         Scegli il corso per cui hai bisogno, seleziona il tutor che preferisci ed è fatta!
       </p>
     </b-jumbotron>
-<!--    <div>-->
-<!--      <b-form-select v-model="selected" :options="options"></b-form-select>-->
-<!--      <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>-->
-<!--    </div>-->
+
     <course-select></course-select>
 
+    <tutor-select v-if="this.$store.getters.courseName !== ''"></tutor-select>
   </div>
 
 </template>
 
 <script>
-import courseSelect from "@/components/courseSelect/courseSelect";
+import courseSelect from "@/components/obtainDataFromServlet/courseSelect";
+import tutorSelect from "@/components/obtainDataFromServlet/tutorSelect";
+
+
 export default {
   name: "PageHome",
   components: {
-    courseSelect
+    courseSelect,
+    tutorSelect
   },
   data() {
     return {
-      selected: null,
-      options: [
-        { value: null, text: 'Please select an option' },
-        { value: 'a', text: 'This is First option' },
-        { value: 'b', text: 'Selected Option', disabled: true },
-        {
-          label: 'Grouped options',
-          options: [
-            { value: { C: '3PO' }, text: 'Option with object value' },
-            { value: { R: '2D2' }, text: 'Another option with object value' }
-          ]
-        }
-      ]
+      // courseSelected: false
     }
   },
-
+  methods: {
+  },
+  // props: ['courseName'],
   created(){
-
+    // console.log(this.courseName)
   }
 }
 </script>

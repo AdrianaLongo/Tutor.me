@@ -6,23 +6,13 @@
 </template>
 
 <script>
-// import Navbar from "./components/Navbar.vue";
-// import PageHome from "./components/pages/PageHome.vue";
-// import PageCourses from "./components/pages/PageCourses.vue";
-// import PageTutors from "./components/pages/PageTutors.vue";
-// import PageAvailability from "./components/pages/PageAvailability.vue";
-
 import Navbar from "./components/Navbar.vue";
+
 
 export default {
    name: 'App',
    components: {
      Navbar
-  //   Navbar,
-  //   PageHome,
-  //   PageCourses,
-  //   PageTutors,
-  //   PageAvailability
   }
 }
 
