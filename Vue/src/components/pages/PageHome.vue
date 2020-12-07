@@ -8,8 +8,10 @@
     </b-jumbotron>
 
     <course-select></course-select>
-
     <tutor-select v-if="this.$store.getters.courseName !== ''"></tutor-select>
+    <availability v-if="this.$store.getters.tutorId !== ''"></availability>
+<!--    <availability></availability>-->
+
   </div>
 
 </template>
@@ -17,13 +19,14 @@
 <script>
 import courseSelect from "@/components/obtainDataFromServlet/courseSelect";
 import tutorSelect from "@/components/obtainDataFromServlet/tutorSelect";
-
+import availability from "@/components/obtainDataFromServlet/availability";
 
 export default {
   name: "PageHome",
   components: {
     courseSelect,
-    tutorSelect
+    tutorSelect,
+    availability
   },
   data() {
     return {

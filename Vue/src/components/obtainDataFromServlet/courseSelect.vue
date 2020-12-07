@@ -8,14 +8,13 @@
     <b-select v-model="courseName">
       <option v-for="elem in json" :key="elem.corso" :value="{nome: elem.nome}">{{ elem.nome }}</option>
     </b-select>
-    <p>Corso selezionato in courseSelect: {{ courseName.nome }}</p>
+<!--    <p>Corso selezionato in courseSelect: {{ courseName.nome }}</p>-->
 
-    <b-button @click="selectCourse">Cerca tutor per questo corso</b-button>
-<!--    <p>course: {{this.$store.getters.courseName}}</p>-->
-<!--    <p>username: {{ this.$store.state.user.username }}</p>-->
-<!--    <p>firstname: {{this.$store.getters.firstName}}</p>-->
-<!--    <p>fullname: {{this.$store.getters.prefixedName("Mr.")}}</p>-->
-<!--    <button @click="mut">Prova mutation</button>-->
+    <div v-if="courseName.nome !== undefined">
+      <b-button @click="selectCourse">Cerca tutor per questo corso</b-button>
+
+    </div>
+
   </div>
 </template>
 
@@ -23,7 +22,7 @@
 import $ from "jquery";
 
 export default {
-  name: "courseName",
+  name: "courseSelect",
   data() {
     return {
       url: 'http://localhost:8081/TWEB_war_exploded/PopulateServlet', // è il JSON!
@@ -89,9 +88,12 @@ export default {
   // OPZIONE 5 (abilitare import jquery)
   created: function() {
     var _this = this;
-    $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateServlet', function (json) {
+    $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateCorsiServlet', function (json) {
       _this.json = json;
+      // console.log(json); // array di 7 elementi
     });
+    // console.log(this.json); // null
+
   },
   mounted () {
     console.log(this.$store.state.course.nome);
