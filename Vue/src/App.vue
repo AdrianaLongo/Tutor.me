@@ -31,11 +31,12 @@ export default {
 
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding: 0;
+  /*padding: 0;*/
   margin: 0;
   background: linear-gradient(rgba(244, 244, 244, 0.3), rgba(44, 62, 80, 0.3)), url('img/background.jpg');
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
+  padding-top: 50px;
 }
 </style>
