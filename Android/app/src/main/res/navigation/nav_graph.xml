@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/action_login">
+    <fragment
+        android:id="@+id/action_login"
+        android:name="com.example.progetto_android.view.login.LoginFragment"
+        android:label="Start Fragment"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_login_to_menu_course"
+
+            app:destination="@id/menu_course" />
+    </fragment>
+    <fragment
+        android:id="@+id/action_logout"
+        android:name="com.example.progetto_android.view.login.LoginFragment"
+        android:label="Second fragment"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_logout_to_menu_course"
+
+            app:destination="@id/menu_course" />
+    </fragment>
+    <fragment
+        android:id="@+id/menu_course"
+        android:name="com.example.progetto_android.view.corsi.SectionCourseFragment"
+        android:label="Second fragment"
+        tools:layout="@layout/fragment_section_course">
+
+        <action
+            android:id="@+id/menu_course_to_menu_prof"
+
+            app:destination="@id/menu_prof" />
+    </fragment>
+    <fragment
+        android:id="@+id/menu_prof"
+        android:name="com.example.progetto_android.view.professori.SectionProfFragment"
+        android:label="Third fragment"
+        tools:layout="@layout/fragment_section_prof">
+
+        <action
+            android:id="@+id/menu_prof_to_menu_calendar"
+            app:destination="@id/menu_calendar" />
+    </fragment>
+    <fragment
+        android:id="@+id/menu_calendar"
+        android:name="com.example.progetto_android.view.calendario.SectionDateFragment"
+        android:label="Fourth fragment"
+        tools:layout="@layout/tabbed_layout">
+
+    </fragment>
+    <fragment
+        android:id="@+id/action_prenotazioni"
+        android:name="com.example.progetto_android.view.cronologia.CronologiaFragment"
+        android:label="prenotazioni"
+        tools:layout="@layout/cronologia">
+
+    </fragment>
+</navigation>

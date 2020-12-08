@@ -1,4 +1,4 @@
-import com.google.gson.reflect.TypeToken;
+/*import com.google.gson.reflect.TypeToken;
 import dao.*;
 
 import javax.servlet.ServletConfig;
@@ -32,12 +32,12 @@ public class PopulateServlet extends HttpServlet {
         String pwd = ctx.getInitParameter("password");
         dao = new DAO (url, user, pwd);
 
-         */
+
 
         /* OPZIONE 2 (Adri, meno sicura):
         * Tenere url, user e pwd come parametri privati nel DAO.java e registrare il driver con un metodo apposito */
-        dao.registerDriver();
-    }
+       // dao.registerDriver();
+  /*  }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
@@ -53,4 +53,4 @@ public class PopulateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
-}
+}*/

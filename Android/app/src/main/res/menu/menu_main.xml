@@ -1,0 +1,20 @@
+<!--Inseriamo dentro al menu le voci-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.ium.unito.adapters.MainActivity">
+    <item
+        android:id="@id/action_login"
+        android:orderInCategory="2"
+        android:title="Login"
+        android:visible="true"/>
+    <item
+        android:id="@id/action_logout"
+        android:orderInCategory="3"
+        android:title="logout"
+        android:visible="false"/>
+    <item
+        android:id="@id/action_prenotazioni"
+        android:orderInCategory="1"
+        android:title="Prenotazioni"
+        android:visible="false"/>
+</menu>

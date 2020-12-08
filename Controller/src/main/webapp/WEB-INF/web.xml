@@ -3,4 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <context-param>
+            <description>Url di MySql</description>
+            <param-name>DB-Url</param-name>
+            <param-value>jdbc:mysql://localhost:3306/ripetizioni?autoReconnect=true&amp;useSSL=false</param-value>
+    </context-param>
+    <context-param>
+        <description>User per DB</description>
+        <param-name>user</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <context-param>
+        <description>Password del DB</description>
+        <param-name>password</param-name>
+        <param-value></param-value>
+    </context-param>
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
 </web-app>

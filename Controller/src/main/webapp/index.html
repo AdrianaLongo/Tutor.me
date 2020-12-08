@@ -9,10 +9,21 @@
         <p><input type="submit" name="submit" value="Invoca Servlet1"></p>
     </form>
 
-    <form action="/TWEB_war_exploded/PopulateServlet" method="post">
+    <!--<form action="/TWEB_war_exploded/PopulateServlet" method="post">
         <p><input type="submit" name="submit" value="Invoca PopulateServlet"></p>
-    </form>
+    </form>-->
 
+    <form action="/DisdettaServlet" method="post">
+        <label for="idUtente">idUtente</label><br>
+        <input type="text" id="idUtente" name="idUtente"><br>
+        <label for="idDocente">idDocente</label><br>
+        <input type="text" id="idDocente" name="idDocente"><br>
+        <label for="slot">slot:</label><br>
+        <input type="text" id="slot" name="slot"><br><br>
+        <label for="nomeCorso">nomeCorso:</label><br>
+        <input type="text" id="nomeCorso" name="nomeCorso"><br><br>
+        <input type="submit" value="Populate">
+    </form>
 
 </body>
 </html>

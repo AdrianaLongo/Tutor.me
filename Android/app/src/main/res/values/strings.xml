@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Tutor Me</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="insert_username">Insert Username</string>
+    <string name="insert_password">Insert Password</string>
+    <string name="login">Login</string>
+    <string name="guest">Continua come guest</string>
+    <string name="conferma_corsi">conferma e vai <br> alla scelta del professore </br></string>
+    <string name="conferma_prof">conferma e vai <br> alla scelta del giorno</br></string>
+    <string name="empty_course_list">NessunDato disponibile</string>
+</resources>
