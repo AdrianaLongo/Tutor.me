@@ -38,23 +38,23 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
-        HttpSession s = request.getSession(false); //ci sarà da cambiare questo per prenderli dalla session forse
+        HttpSession s = request.getSession(false);
         PrintWriter out = response.getWriter(); //per comunicazione messaggio "Avvenuto"
         if (s != null) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
             if (ruoloUtente == "Utente" || ruoloUtente == "Admin") {
-                String utente = request.getParameter("idUtente"); //getParameter recupera dal campo Nome nell'<input>Html il valore
+                String utente =(String) s.getAttribute("idUtente"); //getParameter recupera dal campo Nome nell'<input>Html il valore
                 String docente = request.getParameter("idDocente");
-                String slot = request.getParameter("slot"); //sostituire con il parsing Json forse
+                String slot = request.getParameter("slot");
                 String nomeCorso = request.getParameter("nomeCorso");
                 ; //sostituire con il parsin Json forse
                 try {
                     int utenteint = Integer.parseInt(utente); //Trasforma in int la stringa utente
                     int docenteint = Integer.parseInt(docente);
-                    disponibilita = dao.isDisponibile(slot, docenteint);
+                    disponibilita = dao.isDisponibile(slot, docenteint); //controlla la disponibilità del prof
                     if (disponibilita) {
-                        dao.prenotaRipetizione(nomeCorso, docenteint, utenteint, slot);
-                        resstate = 1;
+                        dao.prenotaRipetizione(nomeCorso, docenteint, utenteint, slot); //scrive nel db la prenotazione
+                        resstate = 1; //stato risposte per poi creare l'oggetto Useful giusto (giusto messaggio)
                     } else {
                         resstate = 0;
                     }
@@ -78,10 +78,10 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
         else {
             message = new Useful("Sorry you're not logged", -1);
         }
-        Type type = new TypeToken<Useful>() {}.getType();
+        Type type = new TypeToken<Useful>() {}.getType(); //genera il token corrispondente ad oggetto Useful
         Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
         out.print(Json);
-        out.flush();
+        out.flush(); //chiude la stampa della risposta
         //reqDisp.forward(request,response);
 
     }

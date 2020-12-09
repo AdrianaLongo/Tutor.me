@@ -47,7 +47,8 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
             if (ruoloUtente == "Utente" || ruoloUtente == "Admin"){
                 try {
-                    int idUtente = Integer.parseInt(request.getParameter("idUtente"));
+                    String idUtentee =(String) s.getAttribute("idUtente");
+                    int idUtente = Integer.parseInt(idUtentee);
                     prenotazioni = dao.retrievePrenotazioniUtente(idUtente);
                     Type type = new TypeToken<ArrayList<Prenotazione>>() {
                     }.getType();

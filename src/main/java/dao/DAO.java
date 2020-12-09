@@ -179,7 +179,7 @@ public class DAO {
             }
 
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM DOCENTE");
+            ResultSet rs = st.executeQuery("SELECT * FROM docente");
             while(rs.next()){
                 Docente d = new Docente(rs.getString("nomeDocente"), rs.getString("cognomeDocente"), rs.getInt(
                         "idDocente"));
@@ -239,6 +239,80 @@ public class DAO {
         }
 
         return out;
+    }
+    public boolean checkCourse (String course) throws SQLException {
+        Connection conn = null;
+        boolean check = false;
+        PreparedStatement pst;
+
+        try{
+            conn = DriverManager.getConnection(url, user, pw);
+            if(conn != null){
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+
+            Statement st = conn.createStatement();
+            String sql = "SELECT * FROM corso WHERE nomeCorso = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, course);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()) {
+                check = true;
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return check;
+
+    }
+    public boolean checkTutor (int idDocente) throws SQLException {
+        Connection conn = null;
+        boolean check = false;
+        PreparedStatement pst;
+
+        try{
+            conn = DriverManager.getConnection(url, user, pw);
+            if(conn != null){
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+
+            Statement st = conn.createStatement();
+            String sql = "SELECT * FROM docente WHERE idDocente = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setInt(1, idDocente);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()) {
+                check = true;
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return check;
+
     }
 
     // INSERIMENTO DI UN CORSO

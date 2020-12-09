@@ -21,4 +21,19 @@
     <session-config>
         <session-timeout>60</session-timeout>
     </session-config>
+    <filter>
+        <filter-name>CorsFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+        //add below config
+        <init-param>
+            <param-name>cors.allowed.origins</param-name>
+            <param-value>http://localhost:8081</param-value>
+        </init-param>
+
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CorsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

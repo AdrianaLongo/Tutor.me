@@ -27,7 +27,7 @@ public class LogoutServlet extends HttpServlet {
         response.setContentType("text/html, charset=UTF-8");
 
         HttpSession s = request.getSession(false);//Distruggo la sessione per evitare che logout+rilogin segnino parametri a cazzo
-        System.out.println(s.getAttribute("ruoloUtente"));
+        //System.out.println(s.getAttribute("ruoloUtente"));
         s.invalidate();
 
         /*Cookie cookies[] =request.getCookies();

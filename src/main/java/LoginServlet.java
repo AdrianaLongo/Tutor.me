@@ -58,8 +58,8 @@ public class LoginServlet extends HttpServlet {
                 throw new ServletException(e.getMessage());
             }
             finally {
-                if (nome.equals(user.getNome()) && cognome.equals(user.getCognome())) {
-                    HttpSession session = request.getSession();
+                if (user != null) {
+                    HttpSession session = request.getSession(); //se l'utente corrisponde ai dati inseriti, creo la sessione
                     System.out.println("Sei loggato");
                     /*
                     Cookie cookies[] =request.getCookies();
@@ -71,29 +71,23 @@ public class LoginServlet extends HttpServlet {
                         }
                     }
                      */
-                    session.setAttribute("Login", "true");
+                    session.setAttribute("Login", "true");  //setto degli attributi nella session da far persistere
                     session.setAttribute("User", nome);
-                    session.setAttribute("ruoloUtente", user.getRuolo());
-                    session.setAttribute("Idutente", user.getId());
+                    session.setAttribute("ruoloUtente", user.getRuolo()); //setto il ruolo per definire i componenti in cui ha accesso l'utente
+                    session.setAttribute("Idutente", user.getId()); //un pò un capriccio ma magari serve
                     Useful error = new Useful("Successful login", 1);
                     String Json = gson.toJson(error);
                     //out.println(Json);//mando un json al fronto di mancata operazione
                     //out.flush();
-                    reqDisp.forward(request,response);
+                    reqDisp.forward(request,response); //questo è necessario ???
                 }
-                else if (!nome.equals(user.getNome())) {
-                    System.out.println("Spiace il nome non corrisponde");
+                else  {
+                    System.out.println("Spiace o nome o cognome non non corrispondono");
                     Useful error = new Useful("Login unsuccessful", -1);
                     String Json = gson.toJson(error);
                     out.println(Json);//mando un json al fronto di mancata operazione
                     out.flush();
 
-                }
-                else if (!cognome.equals(user.getCognome())) {
-                    Useful error = new Useful("Login unsuccessful", -1);
-                    String Json = gson.toJson(error);
-                    out.println(Json);//mando un json al fronto di mancata operazione
-                    out.flush();
                 }
             }
     }
