@@ -9,9 +9,9 @@
 
     <course-select></course-select>
     <tutor-select v-if="this.$store.getters.courseName !== ''"></tutor-select>
-    <availability v-if="this.$store.getters.tutorId !== ''"></availability>
-<!--    <availability></availability>-->
-
+<!--    <availability v-if="this.$store.getters.tutorId !== ''"></availability>-->
+    <availability></availability>
+<!--     todo creare matrice/calendario in modo che si riempia con celle che hanno come id "lun1, mar2, ..."-->
   </div>
 
 </template>
