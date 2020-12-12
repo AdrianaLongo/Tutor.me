@@ -1,9 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
-import dao.Docente;
 import dao.Prenotazione;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -47,7 +45,7 @@ public class PopolaStoricoServlet extends HttpServlet {
         HttpSession s = request.getSession(false);
         if (s != null) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente == "Admin") {
+            if (ruoloUtente.equals("Admin")) {
                 try {
                     prenotazioni = dao.retrievePrenotazioni(); //click tasto destro goTO
                     Type type = new TypeToken<ArrayList<Prenotazione>>() {

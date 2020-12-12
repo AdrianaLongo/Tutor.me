@@ -203,6 +203,52 @@ public class DAO {
         return out;
     }
 
+    public ArrayList<Slot> getSlotOccupati(int idDocente) throws SQLException{
+        Connection conn = null;
+
+        // 2. Creazione lista di slot occupati del docente
+        ArrayList<Slot> out = new ArrayList<>();
+
+        try{
+            conn = DriverManager.getConnection(url, user, pw);
+            if(conn != null){
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+
+            // Estrazione id dei docenti che insegnano quel corso e che sono disponibili
+            String sql = "SELECT prenotazione.slot FROM prenotazione" +
+                    " WHERE prenotazione.idDocente = ?";
+
+            // Controllo disponibilita' del docente
+
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1, idDocente);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                Slot d = new Slot(rs.getString("slot"));
+                out.add(d);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+            System.out.println("Occhio che magari non hai tolto disponibilità dalla query");
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return out;
+    }
+
+
+
     // STAMPA ELENCO DEI CORSI IN CATALOGO
     public ArrayList<Corso> mostraCorsi() throws SQLException{
         // 1. Apertura della connessione
@@ -647,7 +693,7 @@ public class DAO {
         return out;
     }
 
-    public boolean verificaDisponibilità (String slotlezione, int idDocente) throws SQLException {
+    public boolean verificaDisponibilita(String slotlezione, int idDocente) throws SQLException {
         PreparedStatement pst= null;
         Connection conn = null;
 

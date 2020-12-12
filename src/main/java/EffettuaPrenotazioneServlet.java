@@ -42,12 +42,12 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
         PrintWriter out = response.getWriter(); //per comunicazione messaggio "Avvenuto"
         if (s != null) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente == "Utente" || ruoloUtente == "Admin") {
-                String utente =(String) s.getAttribute("idUtente"); //getParameter recupera dal campo Nome nell'<input>Html il valore
+            if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
+                String utente = (String) s.getAttribute("idUtente"); //getParameter recupera dal campo Nome nell'<input>Html il valore
                 String docente = request.getParameter("idDocente");
                 String slot = request.getParameter("slot");
                 String nomeCorso = request.getParameter("nomeCorso");
-                ; //sostituire con il parsin Json forse
+                 //sostituire con il parsin Json forse
                 try {
                     int utenteint = Integer.parseInt(utente); //Trasforma in int la stringa utente
                     int docenteint = Integer.parseInt(docente);
