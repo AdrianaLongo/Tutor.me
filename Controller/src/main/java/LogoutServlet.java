@@ -28,12 +28,8 @@ public class LogoutServlet extends HttpServlet {
         */
         response.setContentType("text/html, charset=UTF-8");
 
-        /** Il parametro false indica che, se non trova una session, non ne crea una nuova rovinando il logout */
-        HttpSession s = request.getSession(false);//Distruggo la sessione per evitare che logout+rilogin segnino
-        // parametri a cazzo
-        System.out.println(s.getAttribute("ruoloUtente"));
-        /** s.invalidate invalida la sessione, la distrugge, distruggendo i dati che si avevano del login settati
-         * dalla servlet Login.*/
+        HttpSession s = request.getSession(false);//Distruggo la sessione per evitare che logout+rilogin segnino parametri a cazzo
+        //System.out.println(s.getAttribute("ruoloUtente"));
         s.invalidate();
 
         /*Cookie cookies[] =request.getCookies();
@@ -44,7 +40,6 @@ public class LogoutServlet extends HttpServlet {
                 }
             }
         }
-
          */
         RequestDispatcher reqDisp = request.getRequestDispatcher("/index.html");
         reqDisp.forward(request,response);

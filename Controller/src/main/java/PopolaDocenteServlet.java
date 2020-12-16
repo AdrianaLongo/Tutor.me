@@ -45,16 +45,15 @@ public class PopolaDocenteServlet extends HttpServlet {
         //RequestDispatcher reqDisp = request.getRequestDispatcher("Logout.html");
         PrintWriter out = response.getWriter();
         try {
-            docenti = dao.mostraDocenti();
-            System.out.print("Tutor recuperati");
-            Type type = new TypeToken<ArrayList<Docente>>() {}.getType();
-            String jsonDocenti = gson.toJson(docenti, type); //e se io voglio passare più dati Json sulla stessa pagina ?
+            docenti = dao.mostraDocenti(); //recupera tutti i docenti
+            System.out.print("Corsi recuperati");
+            Type type = new TypeToken<ArrayList<Docente>>() {}.getType(); //stabilisce il tipo di ArrayList docente
+            String jsonDocenti = gson.toJson(docenti, type); //
             out.print(jsonDocenti);
-            System.out.println(jsonDocenti);
             out.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            Useful error = new Useful("Tutor not retrieved", -1);
+            Useful error = new Useful("Courses not retrieved", -1);
             String Json = gson.toJson(error);
             out.println(Json);//mando un json al fronto di mancata operazione
             out.flush();

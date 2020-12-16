@@ -1,9 +1,7 @@
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import dao.Corso;
 import dao.DAO;
-
-//import javax.json.Json;
-import javax.servlet.RequestDispatcher;
+import dao.Slot;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -16,15 +14,14 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import com.google.gson.Gson;
 
-/** Restituisce tutti i corsi sotto forma di Json */
-@WebServlet(name = "PopulateCorsiServlet", urlPatterns = "/PopulateCorsiServlet")
-public class PopulateCorsiServlet extends HttpServlet {
-    DAO dao = null;
-    ArrayList<Corso> corso;
+@WebServlet(name = "DisponibilitaTutorServlet", urlPatterns = "/DisponibilitaTutorServlet")
+public class DisponibilitaTutorServlet extends HttpServlet {
+
+    DAO dao;
     Gson gson = new Gson();
-    String Json;
+    ArrayList<Slot> slotOccupati;
+    ArrayList<Slot> slotLiberi;
     Type type;
 
     public void init(ServletConfig conf) throws ServletException {
@@ -35,32 +32,34 @@ public class PopulateCorsiServlet extends HttpServlet {
         String user = ctx.getInitParameter("user");
         String pwd = ctx.getInitParameter("password");
         dao = new DAO(url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         response.setContentType("application/json, charset=UTF-8");
-        //RequestDispatcher reqDisp = request.getRequestDispatcher("Logout.html");
         PrintWriter out = response.getWriter();
+        String idDocente = request.getParameter("idDocente");
+
         try {
-            corso = dao.mostraCorsi(); //prende tutti i corsi
-            System.out.print("Corsi recuperati");
-            type = new TypeToken<ArrayList<Corso>>() {}.getType(); //crea il token corrisp all'argomento passato
-            String jsonCorsi = gson.toJson(corso, type); //e se io voglio passare più dati Json sulla stessa pagina ?
+            int idTutor = Integer.parseInt(idDocente);
+            slotOccupati = dao.getSlotOccupati(idTutor);
+            slotLiberi = Useful.getSlotLiberi(slotOccupati);
+            type = new TypeToken<ArrayList<Slot>>() {}.getType(); //crea il token corrisp all'argomento passato
+            String jsonCorsi = gson.toJson(slotLiberi, type); //e se io voglio passare più dati Json sulla stessa pagina ?
             out.print(jsonCorsi); //printa il Json
-            System.out.println(jsonCorsi);
             out.close();
-        } catch (SQLException e) {
+        }
+        catch(SQLException | NumberFormatException e) {
             System.out.println(e.getMessage());
-            Useful error = new Useful("Courses not retrieved", -1); //oggetto messaggio da passare al front
+            Useful error = new Useful("Error in getting slots", -1); //oggetto messaggio da passare al front
             String Json = gson.toJson(error);//converte in Stringa l'oggetto messaggio
             out.println(Json);//mando un json al fronto di mancata operazione
             out.flush();
         }
-
     }
 }

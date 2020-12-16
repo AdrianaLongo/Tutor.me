@@ -28,8 +28,8 @@ public class RegisterServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //sto usando Post perchè son dati sensibili e non voglio che si vedano nella barra dell'url
-            response.setContentType("text/html, charset=UTF-8");
-            PrintWriter out = response.getWriter();
+        response.setContentType("text/html, charset=UTF-8");
+        PrintWriter out = response.getWriter();
 
         String utente = request.getParameter("Nome"); //getParameter recupera dal campo Nome nell'<input>Html il valore
         String cognome = request.getParameter("Cognome");

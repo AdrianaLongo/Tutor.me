@@ -48,7 +48,7 @@ public class PopolaStoricoServlet extends HttpServlet {
         HttpSession s = request.getSession(false);
         if (s != null) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente == "Admin") {
+            if (ruoloUtente.equals("Admin")) {
                 try {
                     prenotazioni = dao.retrievePrenotazioni(); //click tasto destro goTO
                     Type type = new TypeToken<ArrayList<Prenotazione>>() {

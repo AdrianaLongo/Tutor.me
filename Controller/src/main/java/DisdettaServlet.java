@@ -38,17 +38,20 @@ public class DisdettaServlet extends HttpServlet {
 
     DAO dao;
     int resstate = 0;
-    String Json;
+    String JsonResponse;
     Gson gson = new Gson();
     Useful message;
+    boolean checkDocente = false;
 
     public void init(ServletConfig conf) throws ServletException {
+
         super.init(conf);
         ServletContext ctx = conf.getServletContext(); //prendo il context per accedere a web.xml
         String url = ctx.getInitParameter("DB-Url"); //indirizzo DB nel web.xml
         String user = ctx.getInitParameter("user");
         String pwd = ctx.getInitParameter("password");
         dao = new DAO(url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -60,21 +63,33 @@ public class DisdettaServlet extends HttpServlet {
         String completeURL = requestURL.toString();
         useful.fetchJson(completeURL); //queste prime 5 righe siam sicuri che servano a qualcosa ?
         */
+
         PrintWriter out = response.getWriter();
         HttpSession s = request.getSession(false);
+        response.setContentType("application/json, charset=UTF-8");
         if (s != null) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
             if (ruoloUtente == "Utente" || ruoloUtente == "Admin") {
-                response.setContentType("application/json, charset=UTF-8");
-                String utente = request.getParameter("idUtente"); //getParameter recupera dal campo Nome nell'<input>Html il valore
+                String utente =(String) s.getAttribute("idUtente");
                 String docente = request.getParameter("idDocente");
-                int utenteint = Integer.parseInt(utente); //Trasforma in int la stringa utente
-                int docenteint = Integer.parseInt(docente);
                 String slot = request.getParameter("slot"); //sostituire con il parsing Json forse
                 String nomeCorso = request.getParameter("nomeCorso"); //sostituire con il parsin Json forse
                 try {
-                    dao.deletePrenotazione(nomeCorso, docenteint, utenteint, slot);
-                    resstate = 1;
+                    int utenteint = Integer.parseInt(utente);
+                    int docenteint = Integer.parseInt(docente);
+                    //int utenteint = Integer.parseInt(utente);
+                    checkDocente = dao.checkTutor(docenteint);
+                    if(checkDocente) {
+                        dao.deletePrenotazione(nomeCorso, docenteint,utenteint, slot);//trasforma stato prenotazione in disdetta
+                        resstate = 1;
+                    }
+                    else {
+                        Useful error = new Useful("Tutor doesn't exist", -1); //vedere class Useful
+                        Type type = new TypeToken<Useful>() {}.getType();
+                        String Json = gson.toJson(error, type); //serializza l'oggetto in una stringa formato Json
+                        out.println(Json);//mando un json al fronto di mancata operazione
+                        out.flush();
+                    }
                 } catch (SQLException | NumberFormatException e) {
                     System.out.println(e.getMessage());
                     resstate = -1;
@@ -93,10 +108,10 @@ public class DisdettaServlet extends HttpServlet {
         else {
             message = new Useful("Sorry you're not logged", -1);
         }
-        Type type = new TypeToken<Useful>() {}.getType();
-        Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
-        out.print(Json);
-        out.flush();
+        Type type = new TypeToken<Useful>() {}.getType(); //stabilisco il tipo di Useful
+        JsonResponse = gson.toJson(message, type); //serializzo l'oggetto in Json
+        out.print(JsonResponse); //printa la stringa geson
+        out.flush(); //chiudo la chiamata
         //reqDisp.forward(request,response);
 
     }
