@@ -17,6 +17,9 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/** Recupera il nome del corso inserito da utente ed mostra una lista di tutor disponibili per quel corso
+ * Mancherebbe il caso in cui il corso sia inesistente
+ * */
 @WebServlet(name = "cercaTutorServlet", urlPatterns = "/cercaTutorServlet")
 public class cercaTutorServlet extends HttpServlet {
     DAO dao = null;

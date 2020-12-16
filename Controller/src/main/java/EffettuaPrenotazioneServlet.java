@@ -15,6 +15,17 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 
+/**
+ * 1) Prendo l'http session con parametro false per [???]
+ * 2) Controllo che la sessione esista, controllo il ruolo Utente, prendo il parametro idUtente dalla sessione (creato
+ * 3) durante il login; il resto dei parametri li prendo dallla quest
+ * 4) Faccio un tentativo di parsare i due id, in caso non siano numeri lancio l'eccezione
+ * 5) Verifico la disponibilità del docente in quello slot: in caso la prenotazione sia possibile prenoto
+ * Mando 3 messaggi diversi...
+ * 1) in caso la reservation sia avvenuta
+ * 2) in caso in cui catturo un errore SQL con i dati
+ * 3) in caso in cui si sia capito che il tutor sia già occupato
+ */
 @WebServlet(name = "EffettuaPrenotazioneServlet", urlPatterns = "/EffettuaPrenotazioneServlet")
 public class EffettuaPrenotazioneServlet extends HttpServlet {
 

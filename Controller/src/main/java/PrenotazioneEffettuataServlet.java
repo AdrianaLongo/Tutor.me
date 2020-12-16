@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 
+/** Segna la prenotazione come effettua, cambia quindi il campo stato della prenotazione */
 @WebServlet(name = "PrenotazioneEffettuataServlet", urlPatterns = "/PrenotazioneEffettuataServlet")
 public class PrenotazioneEffettuataServlet extends HttpServlet {
     DAO dao;

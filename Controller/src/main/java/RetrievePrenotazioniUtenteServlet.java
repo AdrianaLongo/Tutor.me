@@ -17,6 +17,10 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/** Recupera le prenotazioni dell'utente basandosi sull'attributo segnato nella sessione recuperata ad inizio e
+ * creata al login.
+ * Il parametro false in request.getSession impedisce di creare una sessione nuova in caso non esista (rovinerebbe
+ * i parametri segnati al login) */
 @WebServlet(name = "RetrievePrenotazioniUtenteServlet", urlPatterns = "/RetrievePrenotazioniUtenteServlet")
 public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
     DAO dao;

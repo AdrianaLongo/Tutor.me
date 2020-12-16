@@ -18,6 +18,7 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/** Restituisce tutte le prenotazione attive, effettuate e disdette */
 @WebServlet(name = "PopolaStoricoServlet", urlPatterns = "/PopolaStoricoServlet")
 public class PopolaStoricoServlet extends HttpServlet {
     DAO dao;

@@ -17,6 +17,7 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/** Restituisce sottoforma di Json tutti i docenti */
 @WebServlet(name = "PopolaDocenteServlet", urlPatterns = "/PopolaDocenteServlet")
 public class PopolaDocenteServlet extends HttpServlet {
     DAO dao = null;

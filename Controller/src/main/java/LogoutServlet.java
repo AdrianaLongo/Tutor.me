@@ -8,6 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
+/** Si prende cura dell'operazione di Logout: per farlo recupera la session. */
+
 @WebServlet(name = "LogoutServlet", urlPatterns = "/LogoutServlet")
 public class LogoutServlet extends HttpServlet {
 
@@ -26,8 +28,12 @@ public class LogoutServlet extends HttpServlet {
         */
         response.setContentType("text/html, charset=UTF-8");
 
-        HttpSession s = request.getSession(false);//Distruggo la sessione per evitare che logout+rilogin segnino parametri a cazzo
+        /** Il parametro false indica che, se non trova una session, non ne crea una nuova rovinando il logout */
+        HttpSession s = request.getSession(false);//Distruggo la sessione per evitare che logout+rilogin segnino
+        // parametri a cazzo
         System.out.println(s.getAttribute("ruoloUtente"));
+        /** s.invalidate invalida la sessione, la distrugge, distruggendo i dati che si avevano del login settati
+         * dalla servlet Login.*/
         s.invalidate();
 
         /*Cookie cookies[] =request.getCookies();

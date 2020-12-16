@@ -21,6 +21,7 @@ public class AddAssociationServlet extends HttpServlet {
     String Json;
 
     public void init(ServletConfig conf) throws ServletException {
+
         super.init(conf);
         ServletContext ctx = conf.getServletContext(); //prendo il context per accedere a web.xml
         String url = ctx.getInitParameter("DB-Url"); //indirizzo DB nel web.xml
@@ -34,9 +35,9 @@ public class AddAssociationServlet extends HttpServlet {
         String nomeDocente = request.getParameter("nomeDocente");
         String cognomeDocente = request.getParameter("cognomeDocente");
 
-       // try{
-            //dao.insertCorsoDocenteAssociation();
-       // }
+        // try{
+        //dao.insertCorsoDocenteAssociation();
+        // }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

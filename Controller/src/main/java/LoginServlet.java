@@ -14,6 +14,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
+/** Si prende cura dell'operazione di Login:
+ * 1) Recupera i campi Nome e Cognome dalla request inviata dal frontend
+ * 2) Prova a recuperare dal db l'oggetto Utente con i valori presi prima dalla request
+ * 3) Se l'oggetto recuperato è diverso da null (quindi nel db esistono nome e cognome dell'Utente), creo un'HTTP
+ * session e setto degli attributi per indicare dei dati dell'Utente in un posto accesibile anche al frontend
+ * 4) Se il login non va, do al frontend un Json composto da due parti: un messaggio ed un numero generale di failure -1
+ * */
 @WebServlet(name = "LoginServlet", urlPatterns = "/LoginServlet")
 public class LoginServlet extends HttpServlet {
 

@@ -17,6 +17,11 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/** Recupera i corsi in base ad un idDocente fornito
+ * All'interno del blocco try cerca di trasformare il valore fornito che prima era una stringa in Int0
+ * In caso non si recuperi nessun corso restituisce un messaggio Json vuoto per lasciare alla frontend
+ * la libertà di dire che niente è sbagliato, semplicemente con quel professore non ci sono corsi associati
+ * */
 //Fatta per poter cercare un corso in base al docente
 @WebServlet(name = "cercaCorsoServlet", urlPatterns = "/cercaCorsoServlet")
 public class cercaCorsoServlet extends HttpServlet {
