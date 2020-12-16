@@ -1,16 +1,40 @@
 <template>
   <div>
-    <h3>Per il corso di {{this.$store.getters.courseName}} sono disponibili i seguenti tutor: </h3>
+    <b-container>
+      <div>
+        <b-form-group
+            id="fieldset-horizontal"
+            label-cols-sm="4"
+            label-cols-lg="3"
+            description="Seleziona un tutor per il corso scelto."
+            label="Seleziona un tutor: "
+            label-for="input-horizontal"
+        >
+          <b-select v-model="tutor">
+            <option v-for="elem in json" :key="elem.id" :value="{id: elem.id, nome: elem.nome, cognome:elem.cognome}">{{
+                elem.nome }}
+            {{elem
+                .cognome}}</option>
+          </b-select>
 
-    <b-select v-model="tutor">
-      <option v-for="elem in json" :key="elem.id" :value="{id: elem.id}">{{ elem.nome }} {{elem
-          .cognome}}</option>
-    </b-select>
-
-    <div v-if="tutor.id !== undefined">
-      <b-button @click="selectTutor">Prenota tutor</b-button>
+          <div v-if="tutor.id !== undefined">
+            <b-button @click="selectTutor" variant="success">Prenota tutor</b-button>
+          </div>
+        </b-form-group>
     </div>
 
+
+<!--    <h3>Per il corso di {{this.$store.getters.courseName}} sono disponibili i seguenti tutor: </h3>-->
+
+<!--    <b-select v-model="tutor">-->
+<!--      <option v-for="elem in json" :key="elem.id" :value="{id: elem.id}">{{ elem.nome }} {{elem-->
+<!--          .cognome}}</option>-->
+<!--    </b-select>-->
+
+<!--    <div v-if="tutor.id !== undefined">-->
+<!--      <b-button @click="selectTutor" variant="success">Prenota tutor</b-button>-->
+<!--    </div>-->
+    </b-container>
   </div>
 </template>
 
@@ -48,8 +72,11 @@ export default {
   methods: {
     selectTutor: function(){
       // console.log(this.tutor.id); // torna l'id
-      this.$store.commit("selectTutor", this.tutor.id);
-      console.log(this.$store.getters.tutorId); // torna l'id
+      this.$store.commit("selectTutorId", this.tutor.id);
+      this.$store.commit("selectTutorName", this.tutor.nome);
+      this.$store.commit("selectTutorSurname", this.tutor.cognome);
+      console.log("courseName in store = " + this.$store.getters.courseName); // torna il corso
+      console.log("tutorId in store = " + this.$store.getters.tutorId); // torna l'id
     }
   }
 

@@ -1,20 +1,35 @@
 <template>
   <div>
-<!--    <p>Questa è la select dei corsi:</p>-->
-<!--    <b-form-select>-->
-<!--      <option v-for="elem in json" :key="elem.corso">{{ elem.nome }}</option>-->
-<!--    </b-form-select>-->
-    <h3>Seleziona un corso: </h3>
-    <b-select v-model="courseName">
-      <option v-for="elem in json" :key="elem.corso" :value="{nome: elem.nome}">{{ elem.nome }}</option>
-    </b-select>
+    <b-container>
+      <b-form-group
+          id="fieldset-horizontal"
+          label-cols-sm="4"
+          label-cols-lg="3"
+          description="Seleziona il corso per cui cerchi un tutor."
+          label="Seleziona un corso: "
+          label-for="input-horizontal"
+      >
+        <b-select v-model="courseName">
+          <option v-for="elem in json" :key="elem.corso" :value="{nome: elem.nome}">{{ elem.nome }}</option>
+        </b-select>
+        <!--    <p>Corso selezionato in courseSelect: {{ courseName.nome }}</p>-->
+
+        <div v-if="courseName.nome !== undefined">
+          <b-button @click="selectCourse" variant="success">Cerca tutor per questo corso</b-button>
+
+        </div>
+      </b-form-group>
+<!--    <h3>Seleziona un corso: </h3>-->
+<!--    <b-select v-model="courseName">-->
+<!--      <option v-for="elem in json" :key="elem.corso" :value="{nome: elem.nome}">{{ elem.nome }}</option>-->
+<!--    </b-select>-->
 <!--    <p>Corso selezionato in courseSelect: {{ courseName.nome }}</p>-->
 
-    <div v-if="courseName.nome !== undefined">
-      <b-button @click="selectCourse">Cerca tutor per questo corso</b-button>
+<!--    <div v-if="courseName.nome !== undefined">-->
+<!--      <b-button @click="selectCourse" variant="success">Cerca tutor per questo corso</b-button>-->
 
-    </div>
-
+<!--    </div>-->
+    </b-container>
   </div>
 </template>
 
@@ -114,8 +129,9 @@ export default {
     // }
 
     selectCourse: function(){
-      console.log(this.courseName.nome);
       this.$store.commit("selectCourse", this.courseName.nome);
+      console.log("this.courseName.nome in selectCourse = " + this.courseName.nome);
+      console.log("courseName in store = " + this.$store.getters.courseName);
     }
 
     // selectCourse: function () {

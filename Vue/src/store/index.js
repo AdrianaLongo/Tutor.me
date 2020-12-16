@@ -18,12 +18,13 @@ export default new Vuex.Store({
             id: ''
         },
         prenotazione: {
-            idPrenotazione: '',
+            // idPrenotazione: '',
             idDocente: '',
             nomeCorso: '',
-            idUtente: '',
+            // idUtente: '',
             slot: '',
-            stato: ''
+            // stato: ''
+            // todo aggiungere disponibilita prof
         }
     },
 
@@ -44,12 +45,16 @@ export default new Vuex.Store({
         tutorName: state => {
             return state.tutor.nome;
         },
+        tutorFullName: state => {
+            return state.tutor.nome + " " + state.tutor.cognome;
+        },
         tutorId: state => {
             return state.tutor.id;
         },
         prenotazioneSlot: state => {
             return state.prenotazione.slot;
         }
+
     },
 
     // Cambiamenti sincroni
@@ -60,8 +65,17 @@ export default new Vuex.Store({
         selectCourse(state, payload){
             state.course.nome = payload;
         },
-        selectTutor(state, payload){
+        selectTutorName(state, payload){
+            state.tutor.nome = payload;
+        },
+        selectTutorSurname(state, payload){
+            state.tutor.cognome = payload;
+        },
+        selectTutorId(state, payload){
             state.tutor.id = payload;
+        },
+        selectSlot(state, payload){
+            state.prenotazione.slot = payload;
         }
     },
 
