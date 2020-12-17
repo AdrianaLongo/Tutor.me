@@ -52,6 +52,7 @@ public class DisponibilitaTutorServlet extends HttpServlet {
             type = new TypeToken<ArrayList<Slot>>() {}.getType(); //crea il token corrisp all'argomento passato
             String jsonCorsi = gson.toJson(slotLiberi, type); //e se io voglio passare più dati Json sulla stessa pagina ?
             out.print(jsonCorsi); //printa il Json
+            System.out.println("Slot per il tutor " + idTutor + ": " + jsonCorsi);
             out.close();
         }
         catch(SQLException | NumberFormatException e) {

@@ -9,9 +9,7 @@
 
     <course-select></course-select>
     <tutor-select v-if="this.$store.getters.courseName !== ''"></tutor-select>
-    <availabilityTable v-if="this.$store.getters.tutorId !== ''"></availabilityTable>
-<!--    <availability></availability>-->
-<!--     todo creare matrice/calendario in modo che si riempia con celle che hanno come id "lun1, mar2, ..."-->
+<!--    <availabilityTable v-if="this.$store.getters.tutorId !== ''"></availabilityTable>-->
   </div>
 
 </template>
@@ -19,14 +17,14 @@
 <script>
 import courseSelect from "@/components/obtainDataFromServlet/courseSelect";
 import tutorSelect from "@/components/obtainDataFromServlet/tutorSelect";
-import availabilityTable from "@/components/obtainDataFromServlet/availabilityTable";
+// import availabilityTable from "@/components/obtainDataFromServlet/availabilityTable";
 
 export default {
   name: "PageHome",
   components: {
     courseSelect,
     tutorSelect,
-    availabilityTable
+    // availabilityTable
   },
   data() {
     return {

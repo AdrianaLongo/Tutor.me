@@ -24,7 +24,9 @@ export default new Vuex.Store({
             // idUtente: '',
             slot: '',
             // stato: ''
-            // todo aggiungere disponibilita prof
+        },
+        disponibilita: {
+            slot: ''
         }
     },
 
@@ -53,6 +55,9 @@ export default new Vuex.Store({
         },
         prenotazioneSlot: state => {
             return state.prenotazione.slot;
+        },
+        disponibilitaDocente: state => {
+            return state.disponibilita.slot;
         }
 
     },
@@ -76,16 +81,26 @@ export default new Vuex.Store({
         },
         selectSlot(state, payload){
             state.prenotazione.slot = payload;
+        },
+        popolaCalendarioDocente(state, payload){
+            console.log("sto caricando: state.disponibilita.slot = " + state.disponibilita.slot);
+            state.disponibilita.slot = payload;
+            console.log("caricato! state.disponibilita.slot = " + state.disponibilita.slot);
         }
     },
 
     // Cambiamenti asincroni
-    // actions: {
+    actions: {
     //     changeName (context, payload) {
     //         setTimeout(() => {
     //             context.commit("changeName", payload);
     //         }, 2000);
     //     }
-    // }
+    //     popolaCalendarioDocente(context, payload){
+    //         setTimeout(() => {
+    //             context.commit("popolaCalendarioDocente", payload);
+    //         }, 20);
+    //     }
+    }
 });
 
