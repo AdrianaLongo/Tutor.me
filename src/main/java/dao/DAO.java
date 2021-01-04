@@ -26,7 +26,7 @@ public class DAO {
     }
 
 
-    public Utente retrieveUtente (String nomeUser, String cognomeUser) throws SQLException {
+    public Utente retrieveUtente (String username, String password) throws SQLException {
 
         PreparedStatement pst = null;
         Connection conn = null;
@@ -35,6 +35,8 @@ public class DAO {
         String nome = "";
         String cognome = "";
         String ruolo = "";
+        String nickname = "";
+        String pwd = "";
 
         try{
 
@@ -42,16 +44,18 @@ public class DAO {
             if(conn != null) {
                 System.out.println("Connected to DB");
             }
-            String sql = "SELECT idUtente, nomeUtente, cognomeUtente, ruolo FROM utente WHERE nomeUtente=? AND cognomeUtente=?";
+            String sql = "SELECT idUtente, username, password, nomeUtente, cognomeUtente, ruolo FROM utente WHERE username=? AND password=?";
             pst = conn.prepareStatement(sql);
-            pst.setString(1,nomeUser);
-            pst.setString(2,cognomeUser);
+            pst.setString(1,username);
+            pst.setString(2,password);
             ResultSet userValues = pst.executeQuery();
             while (userValues.next()){
                 id = userValues.getString("idUtente");
                 nome = userValues.getString("nomeUtente");
                 cognome = userValues.getString("cognomeUtente");
                 ruolo = userValues.getString("ruolo");
+                pwd = userValues.getString("passowrd");
+                nickname = userValues.getString("username");
             }
             System.out.println("Retrieve Utente fatto");
         }
@@ -68,7 +72,7 @@ public class DAO {
                 }
             }
         }
-        return new Utente(id, nome, cognome, ruolo);
+        return new Utente(id, nome, cognome, ruolo, pwd,nickname );
     }
 
 
