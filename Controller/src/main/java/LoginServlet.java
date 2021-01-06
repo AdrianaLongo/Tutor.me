@@ -26,7 +26,6 @@ public class LoginServlet extends HttpServlet {
 
     DAO dao = null;
     Utente user;
-    String Json;
     Gson gson = new Gson();
 
     public void init(ServletConfig conf) throws ServletException {
@@ -36,12 +35,16 @@ public class LoginServlet extends HttpServlet {
         String user = ctx.getInitParameter("user");
         String pwd = ctx.getInitParameter("password");
         dao = new DAO (url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
+        System.out.println("LoginServlet inizializzata");
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("Entrato in doPost");
         response.setContentType("text/html, charset=UTF-8");
+        System.out.println("seContentType fatta");
         RequestDispatcher reqDisp = request.getRequestDispatcher("/Logout.html"); //stabilisce la risorsa a cui andrà/tornerà
-
+        System.out.println("reqDisp fatta");
         //ContainerRequestContext requestContext = null;
         /*
         if(session.USER_AGENT == "Android") { // è un soft check sul nome del parametro e non il contenuto, minchiata ?
@@ -54,20 +57,26 @@ public class LoginServlet extends HttpServlet {
         //prendo la sessione
         PrintWriter out = response.getWriter();
 
+
         //Questo andrà cambiato per accettare Json e non parametri html
-        String nome = request.getParameter("Nome"); //getParameter recupera dal campo Nome nell'<input>Html il valore
-        String cognome = request.getParameter("Cognome");
+        String username = request.getParameter("username"); //getParameter recupera dal campo Nome nell'<input>Html il valore
+        System.out.println("username arrivato nella servlet: " + username);
+        String password = request.getParameter("password");
+        System.out.println("pw arrivata nella servlet: " + password);
+
 
         try {
-            user = dao.retrieveUtente(nome, cognome);
+            user = dao.retrieveUtente(username, password);
+            System.out.println("L'utente esiste");
         }
         catch (SQLException e) {
             throw new ServletException(e.getMessage());
         }
         finally {
             if (user != null) {
-                HttpSession session = request.getSession(); //se l'utente corrisponde ai dati inseriti, creo la sessione
-                System.out.println("Sei loggato");
+                if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                    HttpSession session = request.getSession(); //se l'utente corrisponde ai dati inseriti, creo la sessione
+                    System.out.println("Sei loggato");
                     /*
                     Cookie cookies[] =request.getCookies();
                     if (cookies != null) {
@@ -78,18 +87,26 @@ public class LoginServlet extends HttpServlet {
                         }
                     }
                      */
-                session.setAttribute("Login", "true");  //setto degli attributi nella session da far persistere
-                session.setAttribute("User", nome);
-                session.setAttribute("ruoloUtente", user.getRuolo()); //setto il ruolo per definire i componenti in cui ha accesso l'utente
-                session.setAttribute("Idutente", user.getId()); //un pò un capriccio ma magari serve
-                Useful error = new Useful("Successful login", 1);
-                String Json = gson.toJson(error);
-                //out.println(Json);//mando un json al fronto di mancata operazione
-                //out.flush();
-                reqDisp.forward(request,response); //questo è necessario ???
+                    session.setAttribute("login", "true");  //setto degli attributi nella session da far persistere
+                    session.setAttribute("username", user.getUsername());
+                    session.setAttribute("ruoloUtente", user.getRuolo()); //setto il ruolo per definire i componenti in cui ha accesso l'utente
+                    session.setAttribute("idUtente", user.getId()); //un pò un capriccio ma magari serve
+                    Useful error = new Useful("Successful login", 1);
+                    String Json = gson.toJson(error);
+                    out.println(Json);//mando un json al fronto di mancata operazione
+                    out.flush();
+//                    reqDisp.forward(request, response); //questo è necessario ???
+                }
+                else {
+                    System.out.println("Spiace username/password non corrispondono");
+                    Useful error = new Useful("Login unsuccessful", -1);
+                    String Json = gson.toJson(error);
+                    out.println(Json);//mando un json al fronto di mancata operazione
+                    out.flush();
+                }
             }
             else  {
-                System.out.println("Spiace o nome o cognome non non corrispondono");
+                System.out.println("User è null");
                 Useful error = new Useful("Login unsuccessful", -1);
                 String Json = gson.toJson(error);
                 out.println(Json);//mando un json al fronto di mancata operazione

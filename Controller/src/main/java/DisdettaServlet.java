@@ -69,7 +69,7 @@ public class DisdettaServlet extends HttpServlet {
         response.setContentType("application/json, charset=UTF-8");
         if (s != null) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente == "Utente" || ruoloUtente == "Admin") {
+            if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
                 String utente =(String) s.getAttribute("idUtente");
                 String docente = request.getParameter("idDocente");
                 String slot = request.getParameter("slot"); //sostituire con il parsing Json forse

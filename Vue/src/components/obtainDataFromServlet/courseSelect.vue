@@ -15,7 +15,7 @@
         <!--    <p>Corso selezionato in courseSelect: {{ courseName.nome }}</p>-->
 
         <div v-if="courseName.nome !== undefined">
-          <b-button @click="selectCourse" variant="success">Cerca tutor per questo corso</b-button>
+          <b-button @click="selectCourse" variant="primary">Cerca tutor per questo corso</b-button>
 
         </div>
       </b-form-group>

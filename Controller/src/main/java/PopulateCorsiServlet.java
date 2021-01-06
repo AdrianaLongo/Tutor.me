@@ -3,7 +3,7 @@ import dao.Corso;
 import dao.DAO;
 
 //import javax.json.Json;
-import javax.servlet.RequestDispatcher;
+//import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -24,7 +24,7 @@ public class PopulateCorsiServlet extends HttpServlet {
     DAO dao = null;
     ArrayList<Corso> corso;
     Gson gson = new Gson();
-    String Json;
+//    String Json;
     Type type;
 
     public void init(ServletConfig conf) throws ServletException {

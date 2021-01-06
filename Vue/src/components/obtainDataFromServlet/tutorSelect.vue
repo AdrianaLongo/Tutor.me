@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-container>
+<!-- SELEZIONA TUTOR-->
       <div>
         <b-form-group
             id="fieldset-horizontal"
@@ -11,147 +12,132 @@
             label-for="input-horizontal"
         >
           <b-select v-model="tutor">
-            <option v-for="elem in jsonTutor" :key="elem.id" :value="{id: elem.id, nome: elem.nome, cognome:elem.cognome}">{{
-                elem.nome }}
-            {{elem
-                .cognome}}</option>
+            <option v-for="elem in jsonTutor" :key="elem.id" :value="{id: elem.id, nome: elem.nome, cognome:elem.cognome}">
+              {{ elem.nome }} {{elem.cognome}}
+            </option>
           </b-select>
 
           <div v-if="tutor.id !== undefined">
-            <b-button @click="selectTutor" variant="success">Prenota tutor</b-button>
+            <b-button @click="selectTutor" variant="primary">Prenota tutor</b-button>
           </div>
 
-          <div>
-            <ul v-for="elem in jsonDisponibilita" :key="elem.sezione" :value="{s: elem.sezione}">
-              {{elem.sezione}}
-            </ul>
-          </div>
+          <!--          <div>-->
+          <!--            <ul v-for="elem in jsonDisponibilita" :key="elem.sezione" :value="{s: elem.sezione}">-->
+          <!--              {{elem.sezione}}-->
+          <!--            </ul>-->
+          <!--          </div>-->
         </b-form-group>
+      </div>
 
-        <div v-if="this.$store.getters.tutorId !== ''">
-          <b-container  v-model="prenotazione">
-            <b-table class="availabilityTable" :fields="fields" :items="items">
-              <!--        <template #cell(lun)="data">-->
-              <!--          &lt;!&ndash; `data.value` is the value after formatted by the Formatter &ndash;&gt;-->
-              <!--          <b-button v-if="Object.values(this.$store.getters.disponibilitaDocente).includes(data.value)" @click="selectSlot(data.value)"-->
-              <!--                    variant="primary" v-b-modal.modal-1>-->
-              <!--            Prenota-->
-              <!--          </b-button>-->
-              <!--        </template>-->
+      <!-- DISPONIBILITA' DOCENTE -->
+      <div v-if="this.$store.getters.tutorId !== ''">
+        <b-container  v-model="prenotazione">
+          <b-table class="availabilityTable" :fields="fields" :items="items">
+            <!--        <template #cell(lun)="data">-->
+            <!--          &lt;!&ndash; `data.value` is the value after formatted by the Formatter &ndash;&gt;-->
+            <!--          <b-button v-if="Object.values(this.$store.getters.disponibilitaDocente).includes(data.value)" @click="selectSlot(data.value)"-->
+            <!--                    variant="primary" v-b-modal.modal-1>-->
+            <!--            Prenota-->
+            <!--          </b-button>-->
+            <!--        </template>-->
 
-              <template #cell(lun)="data">
-                <!-- `data.value` is the value after formatted by the Formatter -->
-                <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
+            <template #cell(lun)="data">
+              <!-- `data.value` is the value after formatted by the Formatter -->
+              <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
-                           @click="selectSlot(data.value)"
-                           variant="success"
-                           v-b-modal.modal-1>
-                  Prenota
-                </b-button>
-                <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
+                         @click="selectSlot(data.value)"
+                         variant="success"
+                         v-b-modal.modal-1>
+                Prenota
+              </b-button>
+              <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
-                          variant="danger"
-                          v-b-modal.modal-1>
-                  Tutor non disponibile
-                </b-button>
-              </template>
+                        variant="danger"
+                        v-b-modal.modal-1>
+                Tutor non disponibile
+              </b-button>
+            </template>
 
-              <template #cell(mar)="data">
-                <!-- `data.value` is the value after formatted by the Formatter -->
-                <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
+            <template #cell(mar)="data">
+              <!-- `data.value` is the value after formatted by the Formatter -->
+              <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
-                           @click="selectSlot(data.value)"
-                           variant="success"
-                           v-b-modal.modal-1>
-                  Prenota
-                </b-button>
-                <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
+                         @click="selectSlot(data.value)"
+                         variant="success"
+                         v-b-modal.modal-1>
+                Prenota
+              </b-button>
+              <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
-                          variant="danger"
-                          v-b-modal.modal-1>
-                  Tutor non disponibile
-                </b-button>
-              </template>
+                        variant="danger"
+                        v-b-modal.modal-1>
+                Tutor non disponibile
+              </b-button>
+            </template>
 
-              <template #cell(mer)="data">
-                <!-- `data.value` is the value after formatted by the Formatter -->
-                <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
+            <template #cell(mer)="data">
+              <!-- `data.value` is the value after formatted by the Formatter -->
+              <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
-                           @click="selectSlot(data.value)"
-                           variant="success"
-                           v-b-modal.modal-1>
-                  Prenota
-                </b-button>
-                <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
+                         @click="selectSlot(data.value)"
+                         variant="success"
+                         v-b-modal.modal-1>
+                Prenota
+              </b-button>
+              <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
-                          variant="danger"
-                          v-b-modal.modal-1>
-                  Tutor non disponibile
-                </b-button>
-              </template>
+                        variant="danger"
+                        v-b-modal.modal-1>
+                Tutor non disponibile
+              </b-button>
+            </template>
 
-              <template #cell(gio)="data">
-                <!-- `data.value` is the value after formatted by the Formatter -->
-                <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
+            <template #cell(gio)="data">
+              <!-- `data.value` is the value after formatted by the Formatter -->
+              <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
-                           @click="selectSlot(data.value)"
-                           variant="success"
-                           v-b-modal.modal-1>
-                  Prenota
-                </b-button>
-                <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
+                         @click="selectSlot(data.value)"
+                         variant="success"
+                         v-b-modal.modal-1>
+                Prenota
+              </b-button>
+              <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
-                          variant="danger"
-                          v-b-modal.modal-1>
-                  Tutor non disponibile
-                </b-button>
-              </template>
+                        variant="danger"
+                        v-b-modal.modal-1>
+                Tutor non disponibile
+              </b-button>
+            </template>
 
-              <template #cell(ven)="data">
-                <!-- `data.value` is the value after formatted by the Formatter -->
-                <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
+            <template #cell(ven)="data">
+              <!-- `data.value` is the value after formatted by the Formatter -->
+              <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
-                           @click="selectSlot(data.value)"
-                           variant="success"
-                           v-b-modal.modal-1>
-                  Prenota
-                </b-button>
-                <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
+                         @click="selectSlot(data.value)"
+                         variant="success"
+                         v-b-modal.modal-1>
+                Prenota
+              </b-button>
+              <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
-                          variant="danger"
-                          v-b-modal.modal-1>
-                  Tutor non disponibile
-                </b-button>
-              </template>
+                        variant="danger"
+                        v-b-modal.modal-1>
+                Tutor non disponibile
+              </b-button>
+            </template>
 
-            </b-table>
-            <b-modal id="modal-1" title="Vuoi confermare la prenotazione?" align="center">
-              <p class="my-4"> Corso: {{ this.$store.getters.courseName }} </p>
-              <p class="my-4"> Tutor: {{ this.$store.getters.tutorFullName }} </p>
-              <p class="my-4"> Data e ora: {{ day }}, {{ hours }}</p>
-            </b-modal>
-          </b-container>
+          </b-table>
+          <b-modal id="modal-1" title="Vuoi confermare la prenotazione?" align="center"
+                   @ok="creaPrenotazione(course, tutor, slot)">
+            <p class="my-4"> Corso: {{ this.$store.getters.courseName }} </p>
+            <p class="my-4"> Tutor: {{ this.$store.getters.tutorFullName }} </p>
+            <p class="my-4"> Data e ora: {{ day }}, {{ hours }}</p>
+          </b-modal>
+        </b-container>
 
-          <div>
-            <ul v-for="elem in this.$store.getters.prenotazioneSlot" :key="elem.sezione" :value="{s: elem.sezione}">
-              {{elem.sezione}}
-            </ul>
-          </div>
-        </div>
-
-    </div>
+      </div>
 
 
-<!--    <h3>Per il corso di {{this.$store.getters.courseName}} sono disponibili i seguenti tutor: </h3>-->
-
-<!--    <b-select v-model="tutor">-->
-<!--      <option v-for="elem in json" :key="elem.id" :value="{id: elem.id}">{{ elem.nome }} {{elem-->
-<!--          .cognome}}</option>-->
-<!--    </b-select>-->
-
-<!--    <div v-if="tutor.id !== undefined">-->
-<!--      <b-button @click="selectTutor" variant="success">Prenota tutor</b-button>-->
-<!--    </div>-->
     </b-container>
   </div>
 </template>
@@ -306,6 +292,10 @@ export default {
       //   console.log("sto caricando........")
       // }
       console.log("Slot in store (checkDisponibilita): " + this.$store.getters.prenotazioneSlot);
+    },
+    creaPrenotazione: function(corso, tutor, slot){
+      // checkLogin();
+      console.log(corso + tutor + slot);
     }
   }
 
@@ -313,5 +303,8 @@ export default {
 </script>
 
 <style scoped>
-
+.availabilityTable {
+  background-color: white !important;
+  text-align: center;
+}
 </style>

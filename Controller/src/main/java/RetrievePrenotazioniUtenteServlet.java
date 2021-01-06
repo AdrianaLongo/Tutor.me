@@ -49,7 +49,7 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
         HttpSession s = request.getSession(false);
         if (s != null) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente == "Utente" || ruoloUtente == "Admin"){
+            if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")){
                 try {
                     String idUtentee =(String) s.getAttribute("idUtente");
                     int idUtente = Integer.parseInt(idUtentee);

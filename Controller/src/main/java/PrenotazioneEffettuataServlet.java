@@ -40,12 +40,11 @@ public class PrenotazioneEffettuataServlet extends HttpServlet {
         HttpSession s = request.getSession(false);
         if (s != null) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente == "Utente" || ruoloUtente == "Admin") {
-                try {
+            if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {                try {
                     int idPrenotazione = Integer.parseInt(request.getParameter("idPrenotazione"));
                     dao.prenotazioneEffettuata(idPrenotazione);
-                    Useful error = new Useful("Prenotazione effettuata", 1);
-                    Json = gson.toJson(error);
+                    Useful confirmation = new Useful("Prenotazione effettuata", 1);
+                    Json = gson.toJson(confirmation);
                     out.println(Json);//mando un json al fronto di mancata operazione
                     out.flush();
                 } catch (SQLException | NumberFormatException ex) {

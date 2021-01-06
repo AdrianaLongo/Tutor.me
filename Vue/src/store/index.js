@@ -1,7 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import jQuery from 'jquery'
+window.jQuery = jQuery()
+
 Vue.use(Vuex)
+
 
 export default new Vuex.Store({
     state: {
@@ -27,7 +31,8 @@ export default new Vuex.Store({
         },
         disponibilita: {
             slot: ''
-        }
+        },
+        token: localStorage.getItem('access_token') || null
     },
 
     // Quello che mettiamo in getters puo essere visto da altri componenti
@@ -86,7 +91,10 @@ export default new Vuex.Store({
             console.log("sto caricando: state.disponibilita.slot = " + state.disponibilita.slot);
             state.disponibilita.slot = payload;
             console.log("caricato! state.disponibilita.slot = " + state.disponibilita.slot);
-        }
+        },
+        // retrieveToken(state, token){
+        //     state.token = token
+        // }
     },
 
     // Cambiamenti asincroni
@@ -101,6 +109,26 @@ export default new Vuex.Store({
     //             context.commit("popolaCalendarioDocente", payload);
     //         }, 20);
     //     }
+        retrieveToken(context, credentials){
+            jQuery.post('http://localhost:8081/TWEB_war_exploded/LoginServlet', {
+                username: credentials.username,
+                password: credentials.password,
+            })
+                .then(response => {
+                    console.log("risposta: " + response)
+                    // todo: la response e' undefined
+                    console.log("credentials.username: " + credentials.username)
+                    console.log("credentials.password: " + credentials.password)
+                    console.log("header: " + response.headers)
+                    // const token = response.data.access_token
+                    // console.log("token: " + token)
+                    // localStorage.setItem('access_token', token)
+                    // context.commit('retrieveToken', token)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
     }
 });
 
