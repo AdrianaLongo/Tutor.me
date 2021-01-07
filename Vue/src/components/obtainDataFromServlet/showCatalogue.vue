@@ -5,30 +5,23 @@
           id="fieldset-horizontal"
           label-cols-sm="4"
           label-cols-lg="3"
-          description="Seleziona il corso per cui cerchi un tutor."
           label="Seleziona un corso: "
           label-for="input-horizontal"
       >
-        <b-select v-model="courseName">
-          <option v-for="elem in json" :key="elem.corso" :value="{nome: elem.nome}">{{ elem.nome }}</option>
-        </b-select>
+        <b-form-select
+            v-model="courseName"
+            @change.native="courseHasChanged"
+        >
+          <option v-for="course in jsonCourses" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
+        </b-form-select>
+
         <!--    <p>Corso selezionato in courseSelect: {{ courseName.nome }}</p>-->
 
         <div v-if="courseName.nome !== undefined">
-          <b-button @click="selectCourse" variant="primary">Cerca tutor per questo corso</b-button>
+          <b-button @click="showTutors" variant="primary">Cerca tutor per questo corso</b-button>
 
         </div>
       </b-form-group>
-<!--    <h3>Seleziona un corso: </h3>-->
-<!--    <b-select v-model="courseName">-->
-<!--      <option v-for="elem in json" :key="elem.corso" :value="{nome: elem.nome}">{{ elem.nome }}</option>-->
-<!--    </b-select>-->
-<!--    <p>Corso selezionato in courseSelect: {{ courseName.nome }}</p>-->
-
-<!--    <div v-if="courseName.nome !== undefined">-->
-<!--      <b-button @click="selectCourse" variant="success">Cerca tutor per questo corso</b-button>-->
-
-<!--    </div>-->
     </b-container>
   </div>
 </template>
@@ -37,12 +30,12 @@
 import $ from "jquery";
 
 export default {
-  name: "courseSelect",
+  name: "showCatalogue",
   data() {
     return {
-      url: 'http://localhost:8081/TWEB_war_exploded/PopulateServlet', // è il JSON!
-      json: null,
-      courseName: ''
+      jsonCourses: null,
+      courseName: '',
+      courseChange: false,
     }
   },
   // OPZIONE 1
@@ -101,17 +94,13 @@ export default {
   // }
 
   // OPZIONE 5 (abilitare import jquery)
-  created: function() {
+  beforeCreate: function() {
     var _this = this;
-    $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateCorsiServlet', function (json) {
-      _this.json = json;
-      // console.log(json); // array di 7 elementi
+    $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
+      _this.jsonCourses = jsonCourses;
+      // console.log(jsonCourses); // array di 7 elementi
     });
-    // console.log(this.json); // null
-
-  },
-  mounted () {
-    console.log(this.$store.state.course.nome);
+    // console.log(this.jsonCourses); // null
   },
   methods: {
     // mut: function(){
@@ -128,24 +117,22 @@ export default {
     //   });
     // }
 
-    selectCourse: function(){
-      this.$store.commit("selectCourse", this.courseName.nome);
-      console.log("this.courseName.nome in selectCourse = " + this.courseName.nome);
-      console.log("courseName in store = " + this.$store.getters.courseName);
-    }
+    courseHasChanged(evt){
+      let val = evt.target.value;
+      console.log("cambio corso" + val);
+      this.$store.commit("resetTutors", '');
+      this.$store.commit("resetAvailability", '');
+    },
 
-    // selectCourse: function () {
-    //   console.log(this.courseName.nome);
-    //   this.$store.commit({
-    //     type: "selectCourse",
-    //     nome: this.courseName.nome
-    //   })
-    // }
+    showTutors: function(){
+      this.$store.commit("selectCourse", this.courseName.nome);
+      console.log("Corso in store = " + this.$store.getters.courseName);
+      this.$store.dispatch('retrieveTutors', this.courseName.nome);
+    },
   }
 
 }
 </script>
 
 <style scoped>
-
 </style>

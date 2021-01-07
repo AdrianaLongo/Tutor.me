@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import jQuery from 'jquery'
+import $ from "jquery";
 window.jQuery = jQuery()
 
 Vue.use(Vuex)
@@ -16,6 +17,7 @@ export default new Vuex.Store({
         course: {
             nome: ''
         },
+        tutorJSON: '',
         tutor: {
             nome: '',
             cognome: '',
@@ -29,10 +31,11 @@ export default new Vuex.Store({
             slot: '',
             // stato: ''
         },
+        disponibilitaJSON: '',
         disponibilita: {
             slot: ''
         },
-        token: localStorage.getItem('access_token') || null
+        // token: localStorage.getItem('access_token') || null
     },
 
     // Quello che mettiamo in getters puo essere visto da altri componenti
@@ -58,11 +61,17 @@ export default new Vuex.Store({
         tutorId: state => {
             return state.tutor.id;
         },
+        elencoTutor: state => {
+            return state.tutorJSON;
+        },
         prenotazioneSlot: state => {
             return state.prenotazione.slot;
         },
         disponibilitaDocente: state => {
             return state.disponibilita.slot;
+        },
+        elencoDisponibilita: state => {
+            return state.disponibilitaJSON;
         }
 
     },
@@ -95,6 +104,15 @@ export default new Vuex.Store({
         // retrieveToken(state, token){
         //     state.token = token
         // }
+        // retrieveTutors(state, tutors){
+        //     state.tutorJSON = tutors
+        // }
+        resetTutors(state, payload){
+            state.tutorJSON = payload;
+        },
+        resetAvailability(state, payload){
+            state.disponibilitaJSON = payload;
+        }
     },
 
     // Cambiamenti asincroni
@@ -128,7 +146,46 @@ export default new Vuex.Store({
                 .catch(error => {
                     console.log(error)
                 })
-        }
+        },
+
+        retrieveTutors(context, course){
+            var _this = this;
+            jQuery.getJSON({
+                type: "GET",
+                url: 'http://localhost:8081/TWEB_war_exploded/cercaTutorServlet',
+                data: 'corso='+course,
+                success: function (jsonTutor) {
+                    _this.jsonTutor = jsonTutor;
+                    // console.log(jsonTutor);
+                    // console.log(jsonTutor);
+                    // this.$store.commit("retrieveTutors", jsonTutor)
+                    // console.log("tutor in memoria " + this.$store.getters.elencoTutor);
+
+                    _this.state.tutorJSON = jsonTutor;
+                    console.log(_this.state.tutorJSON);
+
+                }
+            });
+        },
+
+        retrieveAvailability(context, tutor){
+            var _this = this;
+            $.getJSON({
+                type: "GET",
+                url: 'http://localhost:8081/TWEB_war_exploded/DisponibilitaTutorServlet',
+                data: 'idDocente='+tutor,
+                success: function (jsonDisponibilita) {
+                    _this.jsonDisponibilita = jsonDisponibilita;
+                    console.log("Slot disponibili per il tutor " + tutor + ": " + jsonDisponibilita);
+                    _this.state.disponibilitaJSON = jsonDisponibilita;
+                    console.log(_this.state.disponibilitaJSON);
+                }
+            });
+            console.log("sto caricando: state.disponibilita.slot = " + this.state.disponibilita.slot);
+            this.state.disponibilita.slot = this.state.disponibilitaJSON;
+            console.log("caricato! state.disponibilita.slot = " + this.state.disponibilita.slot);
+        },
+
     }
 });
 

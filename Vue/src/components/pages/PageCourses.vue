@@ -86,7 +86,7 @@
 <!--              </ul>-->
 <!--            </b-card-text>-->
 
-            <!--            <b-button variant="light" @click="selectCourse()">Controlla tutor disponibili</b-button>-->
+            <!--            <b-button variant="light" @click="showTutors()">Controlla tutor disponibili</b-button>-->
 
           </b-card>
         </div>
@@ -146,7 +146,7 @@ export default {
     },
     selectTutor: function(){
       // console.log(this.tutor.id); // torna l'id
-      this.$store.commit("selectTutor", this.tutor.id);
+      this.$store.commit("showAvailiability", this.tutor.id);
       console.log(this.$store.getters.tutorId); // torna l'id
     },
   }
