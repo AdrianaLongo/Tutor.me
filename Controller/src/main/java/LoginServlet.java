@@ -95,7 +95,7 @@ public class LoginServlet extends HttpServlet {
                     String Json = gson.toJson(error);
                     out.println(Json);//mando un json al fronto di mancata operazione
                     out.flush();
-//                    reqDisp.forward(request, response); //questo è necessario ???
+                    reqDisp.forward(request, response); //questo è necessario ???
                 }
                 else {
                     System.out.println("Spiace username/password non corrispondono");

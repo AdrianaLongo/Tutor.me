@@ -24,17 +24,21 @@ export default new Vuex.Store({
             id: ''
         },
         prenotazione: {
-            // idPrenotazione: '',
-            idDocente: '',
+            idPrenotazione: '',
             nomeCorso: '',
-            // idUtente: '',
+            idDocente: '',
+            idUtente: '',
             slot: '',
-            // stato: ''
+            stato: ''
         },
         disponibilitaJSON: '',
         disponibilita: {
             slot: ''
         },
+        personalHistoryJSON: '',
+        personalHistory:{
+            slot: ''
+        }
         // token: localStorage.getItem('access_token') || null
     },
 
@@ -67,12 +71,18 @@ export default new Vuex.Store({
         prenotazioneSlot: state => {
             return state.prenotazione.slot;
         },
-        disponibilitaDocente: state => {
-            return state.disponibilita.slot;
-        },
+        // disponibilitaDocente: state => {
+        //     return state.disponibilita.slot;
+        // },
         elencoDisponibilita: state => {
             return state.disponibilitaJSON;
-        }
+        },
+        elencoMiePrenotazioni: state => {
+            return state.personalHistoryJSON;
+        },
+        // miePrenotazioni: state => {
+        //     return state.personalHistory.slot;
+        // }
 
     },
 
@@ -133,7 +143,7 @@ export default new Vuex.Store({
                 password: credentials.password,
             })
                 .then(response => {
-                    console.log("risposta: " + response)
+                    console.log("risposta: " + JSON.stringify(response))
                     // todo: la response e' undefined
                     console.log("credentials.username: " + credentials.username)
                     console.log("credentials.password: " + credentials.password)
@@ -185,6 +195,21 @@ export default new Vuex.Store({
             this.state.disponibilita.slot = this.state.disponibilitaJSON;
             console.log("caricato! state.disponibilita.slot = " + this.state.disponibilita.slot);
         },
+
+        retrievePersonalHistory(context, user){
+            var _this = this;
+            $.getJSON({
+                type: "GET",
+                url: 'http://localhost:8081/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet',
+                data: 'idUtente='+ user,
+                success: function (jsonPersonalHistory) {
+                    _this.jsonPersonalHistory = jsonPersonalHistory;
+                    console.log("Elenco prenotazioni " + jsonPersonalHistory);
+                    _this.state.personalHistoryJSON = jsonPersonalHistory;
+                    console.log(_this.state.personalHistoryJSON);
+                }
+            })
+        }
 
     }
 });

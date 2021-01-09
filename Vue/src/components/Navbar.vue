@@ -64,10 +64,11 @@
 <!--          <router-link class="nav-link ml-2" to="calendar">Calendario disponibilità</router-link>-->
 <!--        </b-nav-item>-->
         <b-nav-item>
-          <router-link class="nav-link ml-2" to="history">Le mie prenotazioni</router-link>
+          <router-link class="nav-link ml-2" to="lemieprenotazioni">Le mie prenotazioni</router-link>
         </b-nav-item>
 
         <b-nav-item-dropdown class="m-2" text="Funzionalità amministratore" >
+<!--          TODO: Rendere dark il dropdown menu-->
           <b-dropdown-item>
             <router-link to="prenotazioniclienti">
               Prenotazioni clienti

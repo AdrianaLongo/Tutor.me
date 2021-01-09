@@ -98,7 +98,7 @@ export default {
     var _this = this;
     $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
       _this.jsonCourses = jsonCourses;
-      // console.log(jsonCourses); // array di 7 elementi
+      // console.log(jsonCourses);
     });
     // console.log(this.jsonCourses); // null
   },

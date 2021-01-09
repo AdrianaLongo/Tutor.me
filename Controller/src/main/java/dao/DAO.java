@@ -773,7 +773,7 @@ public class DAO {
         try{
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
-            String sql ="SELECT * FROM prenotazioni WHERE idUtente = ?";
+            String sql ="SELECT * FROM prenotazione WHERE idUtente = ?";
             pst = conn.prepareStatement(sql);
             pst.setInt(1, idUtente);
             ResultSet rs = pst.executeQuery();

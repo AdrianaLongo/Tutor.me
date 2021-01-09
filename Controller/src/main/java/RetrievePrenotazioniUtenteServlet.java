@@ -46,18 +46,25 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
         PrintWriter out = response.getWriter();
-        HttpSession s = request.getSession(false);
-        if (s != null) {
-            String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")){
+//        HttpSession s = request.getSession(false);
+        // TODO: ripristinare recupero sessione tramite login
+//        if (s != null) { // momentaneamente commentato per bypassare il login
+
+//            String ruoloUtente = (String) s.getAttribute("ruoloUtente"); // momentaneamente commentato per bypassare recupero sessione
+//            String ruoloUtente = request.getParameter("ruoloUtente");
+
+//        if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")){
                 try {
-                    String idUtentee =(String) s.getAttribute("idUtente");
+//                    String idUtentee =(String) s.getAttribute("idUtente"); // // momentaneamente commentato per bypassare recupero sessione
+                    String idUtentee = request.getParameter("idUtente");
                     int idUtente = Integer.parseInt(idUtentee);
                     prenotazioni = dao.retrievePrenotazioniUtente(idUtente);
                     Type type = new TypeToken<ArrayList<Prenotazione>>() {
                     }.getType();
                     String jsonPrenotazioni = gson.toJson(prenotazioni, type); //e se io voglio passare più dati Json sulla stessa pagina ?
                     out.print(jsonPrenotazioni);
+                    System.out.println("Stampo prenotazioni per idUtente " + idUtente);
+                    System.out.println(jsonPrenotazioni);
                     out.close();
                 } catch (SQLException | NumberFormatException ex) {
                     System.out.println(ex.getMessage());
@@ -66,16 +73,16 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
                     out.println(Json);//mando un json al fronto di mancata operazione
                     out.flush();
                 }
-            }
-        }
-        else {
-            message = new Useful("Sorry you're not logged", -1);
-            Type type = new TypeToken<Useful>() {
-            }.getType();
-            Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
-            out.print(Json);
-            out.flush();
-        }
+//            }
+//        } // else momentaneamente commentato per bypassare il login
+//        else {
+//            message = new Useful("Sorry you're not logged", -1);
+//            Type type = new TypeToken<Useful>() {
+//            }.getType();
+//            Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
+//            out.print(Json);
+//            out.flush();
+//        }
 
     }
 }

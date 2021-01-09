@@ -18,7 +18,7 @@ export default new Router({
         { path: '/jsonTutor', name: "Tutors", component: PageTutors },
         { path: '/calendar', name: "Availability", component: PageAvailability},
         { path: '/login', name: "Login", component: Login },
-        { path: '/mieprenotazioni', name: "MiePrenotazioni", component: PagePersonalHistory },
+        { path: '/lemieprenotazioni', name: "MiePrenotazioni", component: PagePersonalHistory },
         { path: '/prenotazioniclienti', name: "PrenotazioniClienti", component: PageClientsHistory },
         { path: '/modificacatalogo', name: "ModificaCatalogo", component: PageEditCatalogue }
     ]

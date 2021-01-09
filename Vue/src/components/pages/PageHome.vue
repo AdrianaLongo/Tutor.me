@@ -7,25 +7,25 @@
       </p>
     </b-jumbotron>
 
-    <show-catalogue></show-catalogue>
-    <tutor-select v-if="this.$store.getters.elencoTutor !== ''"></tutor-select>
-    <availabilityTable v-if="this.$store.getters.elencoDisponibilita !== ''"></availabilityTable>
+    <select-course></select-course>
+    <select-tutor v-if="this.$store.getters.elencoTutor !== ''"></select-tutor>
+    <table-availability v-if="this.$store.getters.elencoDisponibilita !== ''"></table-availability>
 
   </div>
 
 </template>
 
 <script>
-import showCatalogue from "@/components/obtainDataFromServlet/showCatalogue";
-import tutorSelect from "@/components/obtainDataFromServlet/tutorSelect";
-import availabilityTable from "@/components/obtainDataFromServlet/availabilityTable";
+import SelectCourse from "@/components/obtainDataFromServlet/SelectCourse";
+import SelectTutor from "@/components/obtainDataFromServlet/SelectTutor";
+import TableAvailability from "@/components/obtainDataFromServlet/TableAvailability";
 
 export default {
   name: "PageHome",
   components: {
-    showCatalogue,
-    tutorSelect,
-    availabilityTable
+    SelectCourse,
+    SelectTutor,
+    TableAvailability
   },
   data() {
     return {

@@ -1,15 +1,21 @@
 <template>
-  <div>
-    <!--TODO: tabella con proprie prenotazioni (attive, effettuate, disdette con colori diversi)-->
-    <!--TODO: bottone per disdire la prenotazione selezionata-->
-    <!--TODO: segnare ripetizione come effettuata-->
-  </div>
+  <b-container>
+    <h1 class="h1">Le mie prenotazioni</h1>
+    <table-personal-history></table-personal-history>
+  </b-container>
+
 
 </template>
 
 <script>
+import TablePersonalHistory from "@/components/obtainDataFromServlet/TablePersonalHistory";
+
 export default {
   name: "PagePersonalHistory",
+  components: {
+    TablePersonalHistory
+  }
+
 }
 </script>
 
