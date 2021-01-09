@@ -1,14 +1,14 @@
 package dao;
 
 public class Utente {
-    private String id;
+    private int id;
     private String nome;
     private String cognome;
     private String ruolo;
     private String password;
     private String username;
 
-    public Utente(String id, String nome, String cognome, String ruolo, String password, String user) {
+    public Utente(int id, String nome, String cognome, String ruolo, String password, String user) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -17,7 +17,7 @@ public class Utente {
         this.username = user;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

@@ -31,7 +31,7 @@ public class DAO {
         PreparedStatement pst = null;
         Connection conn = null;
 
-        String id = "";
+        int id = 0;
         String nome = "";
         String cognome = "";
         String ruolo = "";
@@ -50,7 +50,7 @@ public class DAO {
             pst.setString(2,password);
             ResultSet userValues = pst.executeQuery();
             while (userValues.next()){
-                id = userValues.getString("idUtente");
+                id = userValues.getInt("idUtente");
                 nome = userValues.getString("nomeUtente");
                 cognome = userValues.getString("cognomeUtente");
                 ruolo = userValues.getString("ruolo");
@@ -251,8 +251,6 @@ public class DAO {
         return out;
     }
 
-
-
     // STAMPA ELENCO DEI CORSI IN CATALOGO
     public ArrayList<Corso> mostraCorsi() throws SQLException{
         // 1. Apertura della connessione
@@ -290,6 +288,7 @@ public class DAO {
 
         return out;
     }
+
     public boolean checkCourse (String course) throws SQLException {
         Connection conn = null;
         boolean check = false;
