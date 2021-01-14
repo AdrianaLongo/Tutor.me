@@ -1,6 +1,5 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import dao.Corso;
 import dao.DAO;
 import dao.Docente;
 
@@ -19,10 +18,10 @@ import java.util.ArrayList;
 
 @WebServlet(name = "cercaTutorServlet", urlPatterns = "/cercaTutorServlet")
 public class cercaTutorServlet extends HttpServlet {
+
     DAO dao = null;
     ArrayList<Docente> tutor;
     Gson gson = new Gson();
-    String Json;
     boolean checkCourse = false;
 
     public void init(ServletConfig conf) throws ServletException {
@@ -44,7 +43,7 @@ public class cercaTutorServlet extends HttpServlet {
     try{
         String corso = request.getParameter("corso");
         checkCourse = dao.checkCourse(corso);
-        if (checkCourse == true) {
+        if (checkCourse) {
             tutor = dao.mostraDocentiConCorso(corso); //mostra i tutor in base al corso scelto
             System.out.print("Tutor recuperati");
             Type type = new TypeToken<ArrayList<Docente>>() {

@@ -1,9 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
-import dao.Docente;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -16,7 +14,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 @WebServlet(name = "DisdettaServlet", urlPatterns = "/DisdettaServlet")
 public class DisdettaServlet extends HttpServlet {
@@ -54,7 +51,7 @@ public class DisdettaServlet extends HttpServlet {
         response.setContentType("application/json, charset=UTF-8");
         if (s != null) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente == "Utente" || ruoloUtente == "Admin") {
+            if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
                 String utente =(String) s.getAttribute("idUtente");
                 String docente = request.getParameter("idDocente");
                 String slot = request.getParameter("slot"); //sostituire con il parsing Json forse

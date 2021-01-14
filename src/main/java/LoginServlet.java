@@ -19,7 +19,6 @@ public class LoginServlet extends HttpServlet {
 
     DAO dao = null;
     Utente user;
-    String Json;
     Gson gson = new Gson();
 
     public void init(ServletConfig conf) throws ServletException {
@@ -76,9 +75,11 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("ruoloUtente", user.getRuolo()); //setto il ruolo per definire i componenti in cui ha accesso l'utente
                     session.setAttribute("Idutente", user.getId()); //un pò un capriccio ma magari serve
                     Useful error = new Useful("Successful login", 1);
+                    String idUtente = (String) session.getAttribute("idUtente");
+                    response.addHeader("idUtente",idUtente);
                     String Json = gson.toJson(error);
-                    //out.println(Json);//mando un json al fronto di mancata operazione
-                    //out.flush();
+                    out.println(Json);//mando un json al fronto di mancata operazione
+                    out.flush();
                     reqDisp.forward(request,response); //questo è necessario ???
                 }
                 else  {

@@ -21,7 +21,6 @@ public class PopolaDocenteServlet extends HttpServlet {
     DAO dao = null;
     ArrayList<Docente> docenti;
     Gson gson = new Gson();
-    String Json;
 
     public void init(ServletConfig conf) throws ServletException {
 

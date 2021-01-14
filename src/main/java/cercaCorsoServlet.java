@@ -2,8 +2,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.Corso;
 import dao.DAO;
-import dao.Docente;
 
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -24,7 +25,6 @@ public class cercaCorsoServlet extends HttpServlet {
         DAO dao = null;
         ArrayList<Corso> corsi;
         Gson gson = new Gson();
-        String Json;
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -44,9 +44,9 @@ public class cercaCorsoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
         PrintWriter out = response.getWriter();
-        boolean checkId = false;
+        boolean checkId;
         String idDocenteS = request.getParameter("idDocente");//recupera il campo idDocente mandato dal frontend
-
+        RequestDispatcher rd = request.getRequestDispatcher("/")
         try {
             int idDocente = Integer.parseInt(idDocenteS);
             checkId = dao.checkTutor(idDocente);
