@@ -18,11 +18,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 @WebServlet(name = "cercaTutorServlet", urlPatterns = "/cercaTutorServlet")
-public class cercaTutorServlet extends HttpServlet {
+public class CercaTutorServlet extends HttpServlet implements IAction{
     DAO dao = null;
     ArrayList<Docente> tutor;
     Gson gson = new Gson();
-    String Json;
+    boolean checkCourse = false;
+    private final String name;
+
+    public CercaTutorServlet(){
+        this.name = "searchProf";
+    }
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -39,23 +44,72 @@ public class cercaTutorServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
-
         PrintWriter out = response.getWriter();
-    try{
-        String corso = request.getParameter("corso");
-        tutor = dao.mostraDocentiConCorso(corso);
-        System.out.print("Tutor recuperati");
-        Type type = new TypeToken<ArrayList<Docente>>() {}.getType();
-        String jsonTutor = gson.toJson(tutor, type); //e se io voglio passare più dati Json sulla stessa pagina ?
-        out.print(jsonTutor);
-        out.close();
-    } catch (SQLException e) {
-        System.out.println(e.getMessage());
-        Useful error = new Useful("Courses not retrieved", -1);
-        String Json = gson.toJson(error);
-        out.println(Json);//mando un json al fronto di mancata operazione
-        out.flush();
+        try{
+            String corso = request.getParameter("corso");
+            checkCourse = dao.checkCourse(corso);
+            if (checkCourse) {
+                tutor = dao.mostraDocentiConCorso(corso); //mostra i tutor in base al corso scelto
+                System.out.print("Tutor recuperati");
+                Type type = new TypeToken<ArrayList<Docente>>() {
+                }.getType(); //stabilisce il tipo di Docente
+                String jsonTutor = gson.toJson(tutor, type); //e se io voglio passare più dati Json sulla stessa pagina ?
+                out.print(jsonTutor);//stampa il tutor
+                out.close(); //chiude il PrintWriter della response
+            }
+            else {
+                Useful error = new Useful("Course doesn't exist", -1); //vedere class Useful
+                Type type = new TypeToken<Useful>() {}.getType();
+                String Json = gson.toJson(error, type); //serializza l'oggetto in una stringa formato Json
+                out.println(Json);//mando un json al fronto di mancata operazione
+                out.flush();
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage()); //recupera messaggio possibile errore query
+            Useful error = new Useful("Courses not retrieved", -1); //vedere class Useful
+            String Json = gson.toJson(error); //serializza l'oggetto in una stringa formato Json
+            out.println(Json);//mando un json al fronto di mancata operazione
+            out.flush();
+        }
+
     }
 
+    @Override
+    public void execute(HttpServletRequest request, HttpServletResponse response, DAO dao) throws ServletException, IOException {
+        response.setContentType("application/json, charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        try{
+            String corso = request.getParameter("corso");
+            checkCourse = dao.checkCourse(corso);
+            if (checkCourse) {
+                tutor = dao.mostraDocentiConCorso(corso); //mostra i tutor in base al corso scelto
+                System.out.print("Tutor recuperati");
+                Type type = new TypeToken<ArrayList<Docente>>() {
+                }.getType(); //stabilisce il tipo di Docente
+                String jsonTutor = gson.toJson(tutor, type); //e se io voglio passare più dati Json sulla stessa pagina ?
+                out.print(jsonTutor);//stampa il tutor
+                out.close(); //chiude il PrintWriter della response
+            }
+            else {
+                Useful error = new Useful("Course doesn't exist", -1); //vedere class Useful
+                Type type = new TypeToken<Useful>() {}.getType();
+                String Json = gson.toJson(error, type); //serializza l'oggetto in una stringa formato Json
+                out.println(Json);//mando un json al fronto di mancata operazione
+                out.flush();
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage()); //recupera messaggio possibile errore query
+            Useful error = new Useful("Courses not retrieved", -1); //vedere class Useful
+            String Json = gson.toJson(error); //serializza l'oggetto in una stringa formato Json
+            out.println(Json);//mando un json al fronto di mancata operazione
+            out.flush();
+        }
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
     }
 }

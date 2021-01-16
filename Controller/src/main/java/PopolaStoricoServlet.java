@@ -1,9 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
-import dao.Docente;
 import dao.Prenotazione;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -19,12 +17,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 @WebServlet(name = "PopolaStoricoServlet", urlPatterns = "/PopolaStoricoServlet")
-public class PopolaStoricoServlet extends HttpServlet {
+public class PopolaStoricoServlet extends HttpServlet implements IAction {
     DAO dao;
     ArrayList<Prenotazione> prenotazioni;
     String Json;
     Gson gson = new Gson();
     Useful message;
+    private final String name;
+
+    public PopolaStoricoServlet() {
+        this.name = "searchHistory";
+    }
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -47,7 +50,7 @@ public class PopolaStoricoServlet extends HttpServlet {
         HttpSession s = request.getSession(false);
         if (s != null) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente == "Admin") {
+            if (ruoloUtente.equals("Admin")) {
                 try {
                     prenotazioni = dao.retrievePrenotazioni(); //click tasto destro goTO
                     Type type = new TypeToken<ArrayList<Prenotazione>>() {
@@ -72,5 +75,44 @@ public class PopolaStoricoServlet extends HttpServlet {
             out.print(Json);
             out.flush();
         }
+    }
+
+    @Override
+    public void execute(HttpServletRequest request, HttpServletResponse response, DAO dao) throws ServletException, IOException {
+        response.setContentType("application/json, charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        HttpSession s = request.getSession(false);
+        if (s != null) {
+            String ruoloUtente = (String) s.getAttribute("ruoloUtente");
+            if (ruoloUtente.equals("Admin")) {
+                try {
+                    prenotazioni = dao.retrievePrenotazioni(); //click tasto destro goTO
+                    Type type = new TypeToken<ArrayList<Prenotazione>>() {
+                    }.getType();
+                    String jsonPrenotazioni = gson.toJson(prenotazioni, type); //e se io voglio passare più dati Json sulla stessa pagina ?
+                    out.print(jsonPrenotazioni);
+                    out.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                    Useful error = new Useful("Courses not retrieved", -1);
+                    String Json = gson.toJson(error);
+                    out.println(Json);//mando un json al fronto di mancata operazione
+                    out.flush();
+                }
+            }
+        }
+        else {
+            message = new Useful("Sorry you're not logged", -1);
+            Type type = new TypeToken<Useful>() {
+            }.getType();
+            Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
+            out.print(Json);
+            out.flush();
+        }
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

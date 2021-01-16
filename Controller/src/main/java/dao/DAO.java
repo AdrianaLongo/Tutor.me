@@ -26,7 +26,7 @@ public class DAO {
     }
 
 
-    public Utente retrieveUtente (String nomeUser, String cognomeUser) throws SQLException {
+    public Utente retrieveUtente (String username, String password) throws SQLException {
 
         PreparedStatement pst = null;
         Connection conn = null;
@@ -35,23 +35,28 @@ public class DAO {
         String nome = "";
         String cognome = "";
         String ruolo = "";
+        //TODO aggiunto nickname e pwd
+        String nickname = "";
+        String pwd = "";
 
         try{
 
-            conn = DriverManager.getConnection(url, user, pw);
+            conn = DriverManager.getConnection(url, DAO.user, pw);
             if(conn != null) {
                 System.out.println("Connected to DB");
             }
-            String sql = "SELECT idUtente, nomeUtente, cognomeUtente, ruolo FROM utente WHERE nomeUtente=? AND cognomeUtente=?";
+            String sql = "SELECT idUtente, username, password, nomeUtente, cognomeUtente, ruolo FROM utente WHERE username =? AND password =?";
             pst = conn.prepareStatement(sql);
-            pst.setString(1,nomeUser);
-            pst.setString(2,cognomeUser);
+            pst.setString(1,username);
+            pst.setString(2,password);
             ResultSet userValues = pst.executeQuery();
             while (userValues.next()){
                 id = userValues.getString("idUtente");
                 nome = userValues.getString("nomeUtente");
                 cognome = userValues.getString("cognomeUtente");
                 ruolo = userValues.getString("ruolo");
+                pwd = userValues.getString("password");
+                nickname = userValues.getString("username");
             }
             System.out.println("Retrieve Utente fatto");
         }
@@ -68,10 +73,10 @@ public class DAO {
                 }
             }
         }
-        return new Utente(id, nome, cognome, ruolo);
+        return new Utente(id, nome, cognome, ruolo, pwd, nickname);
     }
 
-
+    //TODO aggiornare addUtente
     public void addUtente (String nomeUtente, String cognomeUtente) throws SQLException {
         PreparedStatement pst = null;
         Connection conn = null;
@@ -82,7 +87,7 @@ public class DAO {
                 System.out.println("Connected to DB");
             }
             String sql = "INSERT INTO utente (nomeUtente, cognomeUtente, ruolo)" +
-                            " VALUES ( ?,?,?)";
+                    " VALUES ( ?,?,?)";
             pst = conn.prepareStatement(sql);
             pst.setString(1, nomeUtente);
             pst.setString(2, cognomeUtente);
@@ -179,7 +184,7 @@ public class DAO {
             }
 
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM DOCENTE");
+            ResultSet rs = st.executeQuery("SELECT * FROM docente");
             while(rs.next()){
                 Docente d = new Docente(rs.getString("nomeDocente"), rs.getString("cognomeDocente"), rs.getInt(
                         "idDocente"));
@@ -202,6 +207,52 @@ public class DAO {
 
         return out;
     }
+
+    public ArrayList<Slot> getSlotOccupati(int idDocente) throws SQLException{
+        Connection conn = null;
+
+        // 2. Creazione lista di slot occupati del docente
+        ArrayList<Slot> out = new ArrayList<>();
+
+        try{
+            conn = DriverManager.getConnection(url, user, pw);
+            if(conn != null){
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+
+            // Estrazione id dei docenti che insegnano quel corso e che sono disponibili
+            String sql = "SELECT prenotazione.slot FROM prenotazione" +
+                    " WHERE prenotazione.idDocente = ?";
+
+            // Controllo disponibilita' del docente
+
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1, idDocente);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                Slot d = new Slot(rs.getString("slot"));
+                out.add(d);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+            System.out.println("Occhio che magari non hai tolto disponibilità dalla query");
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return out;
+    }
+
+
 
     // STAMPA ELENCO DEI CORSI IN CATALOGO
     public ArrayList<Corso> mostraCorsi() throws SQLException{
@@ -239,6 +290,80 @@ public class DAO {
         }
 
         return out;
+    }
+    public boolean checkCourse (String course) throws SQLException {
+        Connection conn = null;
+        boolean check = false;
+        PreparedStatement pst;
+
+        try{
+            conn = DriverManager.getConnection(url, user, pw);
+            if(conn != null){
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+
+            Statement st = conn.createStatement();
+            String sql = "SELECT * FROM corso WHERE nomeCorso = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, course);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()) {
+                check = true;
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return check;
+
+    }
+    public boolean checkTutor (int idDocente) throws SQLException {
+        Connection conn = null;
+        boolean check = false;
+        PreparedStatement pst;
+
+        try{
+            conn = DriverManager.getConnection(url, user, pw);
+            if(conn != null){
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+
+            Statement st = conn.createStatement();
+            String sql = "SELECT * FROM docente WHERE idDocente = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setInt(1, idDocente);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()) {
+                check = true;
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return check;
+
     }
 
     // INSERIMENTO DI UN CORSO
@@ -541,7 +666,7 @@ public class DAO {
                 System.out.println("Connected to the database \"ripetizioni\".");
             }
             //If(devo verificare la disponibilità prima del docente tramite la tavola prenotazioni)
-                    //e poi fare tutto il ramo sotto dentro l'if (Questo lo faccio nella servlet, faccio due chiamate al dato
+            //e poi fare tutto il ramo sotto dentro l'if (Questo lo faccio nella servlet, faccio due chiamate al dato
 
             // Estrazione id dei docenti che insegnano quel corso e che sono disponibili
             String sql = "SELECT insegna.nomeCorso FROM insegna" +
@@ -573,7 +698,7 @@ public class DAO {
         return out;
     }
 
-    public boolean verificaDisponibilità (String slotlezione, int idDocente) throws SQLException {
+    public boolean verificaDisponibilita(String slotlezione, int idDocente) throws SQLException {
         PreparedStatement pst= null;
         Connection conn = null;
 
@@ -588,7 +713,7 @@ public class DAO {
             pst.setString(1,slotlezione);
             pst.setInt(2,idDocente);
             ResultSet rs = pst.executeQuery();
-                    //devo verificare che in prenotazione il professore con quell'idDocente non sia impegnato nello slot
+            //devo verificare che in prenotazione il professore con quell'idDocente non sia impegnato nello slot
             //richiesto
             if(rs == null) {
                 return true;
@@ -708,7 +833,7 @@ public class DAO {
         }
 
         return out;
-        }
+    }
 
     public boolean isDisponibile (String slot, int idDocente) throws SQLException {
         PreparedStatement pstControllaDisponibilita = null;
@@ -771,24 +896,23 @@ public class DAO {
             pstControllaDisponibilita.setString(3, slot);
             pstControllaDisponibilita.setString(4,"attiva");
             ResultSet rsDisponibilita = pstControllaDisponibilita.executeQuery();
-
             while(rsDisponibilita.next()){
                 isDisponibile = false;
             }
             */
 
             //if(isDisponibile){ // quello slot e' libero, quindi posso inserire una prenotazione
-               // System.out.println("Il docente è disponibile in quello slot");
-                String sqlInserisciPrenotazione="INSERT INTO prenotazione(nomeCorso, idDocente, idUtente, slot, stato) " +
-                        "VALUES (?, ?, ?, ?,?)";
-                pstInserisciPrenotazione = conn.prepareStatement(sqlInserisciPrenotazione);
-                pstInserisciPrenotazione.setString(1, nomeCorso);
-                pstInserisciPrenotazione.setInt(2, idDocente);
-                pstInserisciPrenotazione.setInt(3, idUtente);
-                pstInserisciPrenotazione.setString(4, slot);
-                pstInserisciPrenotazione.setString(5,"attiva");
-                pstInserisciPrenotazione.execute();
-                System.out.println("Prenotazione aggiunta correttamente.");
+            // System.out.println("Il docente è disponibile in quello slot");
+            String sqlInserisciPrenotazione="INSERT INTO prenotazione(nomeCorso, idDocente, idUtente, slot, stato) " +
+                    "VALUES (?, ?, ?, ?,?)";
+            pstInserisciPrenotazione = conn.prepareStatement(sqlInserisciPrenotazione);
+            pstInserisciPrenotazione.setString(1, nomeCorso);
+            pstInserisciPrenotazione.setInt(2, idDocente);
+            pstInserisciPrenotazione.setInt(3, idUtente);
+            pstInserisciPrenotazione.setString(4, slot);
+            pstInserisciPrenotazione.setString(5,"attiva");
+            pstInserisciPrenotazione.execute();
+            System.out.println("Prenotazione aggiunta correttamente.");
 
 
 

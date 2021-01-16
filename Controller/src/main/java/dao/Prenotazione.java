@@ -1,7 +1,7 @@
 package dao;
 
 public class Prenotazione {
-    private int idPrenotazione;
+    private int idPrenotazione; //
     private int idDocente;
     private String nomeCorso;
     private int idUtente;

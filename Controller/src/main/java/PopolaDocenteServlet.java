@@ -1,6 +1,5 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import dao.Corso;
 import dao.DAO;
 import dao.Docente;
 
@@ -18,11 +17,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 @WebServlet(name = "PopolaDocenteServlet", urlPatterns = "/PopolaDocenteServlet")
-public class PopolaDocenteServlet extends HttpServlet {
+public class PopolaDocenteServlet extends HttpServlet{
     DAO dao = null;
     ArrayList<Docente> docenti;
     Gson gson = new Gson();
-    String Json;
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -44,11 +42,11 @@ public class PopolaDocenteServlet extends HttpServlet {
         //RequestDispatcher reqDisp = request.getRequestDispatcher("Logout.html");
         PrintWriter out = response.getWriter();
         try {
-            docenti = dao.mostraDocenti();
+            docenti = dao.mostraDocenti(); //recupera tutti i docenti
             System.out.print("Corsi recuperati");
-            Type type = new TypeToken<ArrayList<Docente>>() {}.getType();
-            String jsonCorsi = gson.toJson(docenti, type); //e se io voglio passare più dati Json sulla stessa pagina ?
-            out.print(jsonCorsi);
+            Type type = new TypeToken<ArrayList<Docente>>() {}.getType(); //stabilisce il tipo di ArrayList docente
+            String jsonDocenti = gson.toJson(docenti, type); //
+            out.print(jsonDocenti);
             out.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -59,4 +57,5 @@ public class PopolaDocenteServlet extends HttpServlet {
         }
 
     }
+
 }

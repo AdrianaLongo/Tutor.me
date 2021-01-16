@@ -4,6 +4,7 @@ import dao.Corso;
 import dao.DAO;
 import dao.Docente;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -24,7 +25,6 @@ public class cercaCorsoServlet extends HttpServlet {
         DAO dao = null;
         ArrayList<Corso> corsi;
         Gson gson = new Gson();
-        String Json;
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -44,16 +44,27 @@ public class cercaCorsoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
         PrintWriter out = response.getWriter();
+        boolean checkId;
         String idDocenteS = request.getParameter("idDocente"); //recupera il campo idDocente mandato dal frontend
-
+        RequestDispatcher rd = request.getRequestDispatcher("/");
         try {
             int idDocente = Integer.parseInt(idDocenteS);
-            corsi = dao.mostraCorsiConDocenti(idDocente); //recupera i corsi tramite l'id del docente
-            System.out.print("Corsi recuperati");
-            Type type = new TypeToken<ArrayList<Corso>>() {}.getType(); //trova il tipo dell'oggetto
-            String jsonCorso = gson.toJson(corsi, type); //e se io voglio passare più dati Json sulla stessa pagina ?
-            out.print(jsonCorso);
-            out.close();
+            checkId = dao.checkTutor(idDocente);
+            if(checkId) {
+                corsi = dao.mostraCorsiConDocenti(idDocente); //recupera i corsi tramite l'id del docente
+                System.out.print("Corsi recuperati");
+                Type type = new TypeToken<ArrayList<Corso>>() {
+                }.getType(); //trova il tipo dell'oggetto
+                String jsonCorso = gson.toJson(corsi, type); //e se io voglio passare più dati Json sulla stessa pagina ?
+                out.print(jsonCorso);
+                out.close();
+            }else{
+                Useful error = new Useful("Professor doesn't exist", -1);
+                Type type = new TypeToken<Useful>(){}.getType();
+                String json = gson.toJson(error, type);
+                out.println(json);
+                out.flush();
+            }
         } catch(SQLException | NumberFormatException ex){
             System.out.println(ex.getMessage());
             Useful error = new Useful("Courses not retrieved", -1);
