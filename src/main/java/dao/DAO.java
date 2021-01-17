@@ -26,15 +26,17 @@ public class DAO {
     }
 
 
-    public Utente retrieveUtente (String nomeUser, String cognomeUser) throws SQLException {
+    public Utente retrieveUtente (String username, String password) throws SQLException {
 
         PreparedStatement pst = null;
         Connection conn = null;
 
-        String id = "";
+        int id = 0;
         String nome = "";
         String cognome = "";
         String ruolo = "";
+        String usernameExtracted = "";
+        String passwordExtracted = "";
 
         try{
 
@@ -42,13 +44,15 @@ public class DAO {
             if(conn != null) {
                 System.out.println("Connected to DB");
             }
-            String sql = "SELECT idUtente, nomeUtente, cognomeUtente, ruolo FROM utente WHERE nomeUtente=? AND cognomeUtente=?";
+            String sql = "SELECT idUtente, username, password nomeUtente, cognomeUtente, ruolo FROM utente WHERE username=? AND password=?";
             pst = conn.prepareStatement(sql);
-            pst.setString(1,nomeUser);
-            pst.setString(2,cognomeUser);
+            pst.setString(1,username);
+            pst.setString(2,password);
             ResultSet userValues = pst.executeQuery();
             while (userValues.next()){
-                id = userValues.getString("idUtente");
+                id = userValues.getInt("idUtente");
+                usernameExtracted = userValues.getString("username");
+                passwordExtracted = userValues.getString("password");
                 nome = userValues.getString("nomeUtente");
                 cognome = userValues.getString("cognomeUtente");
                 ruolo = userValues.getString("ruolo");
@@ -68,7 +72,7 @@ public class DAO {
                 }
             }
         }
-        return new Utente(id, nome, cognome, ruolo);
+        return new Utente(id,usernameExtracted, passwordExtracted, nome, cognome, ruolo);
     }
 
 
@@ -769,7 +773,7 @@ public class DAO {
         try{
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
-            String sql ="SELECT * FROM prenotazioni WHERE idUtente = ?";
+            String sql ="SELECT p.*, nomeDocente, cognomeDocente FROM prenotazione p JOIN docente d ON (p.idDocente = d.idDocente) WHERE idUtente = ?";
             pst = conn.prepareStatement(sql);
             pst.setInt(1, idUtente);
             ResultSet rs = pst.executeQuery();
@@ -777,7 +781,7 @@ public class DAO {
 
             while(rs.next()){
                 Prenotazione pren = new Prenotazione(rs.getInt("idPrenotazione"), rs.getString("nomeCorso"), rs.getInt(
-                        "idDocente"), rs.getInt("idUtente"), rs.getString("slot"), rs.getString("stato"));
+                        "idDocente"),rs.getString("nomeDocente"),rs.getString("cognomeDocente"), rs.getInt("idUtente"), rs.getString("slot"), rs.getString("stato"));
                 out.add(pren);
             }
         } catch (SQLException e){
@@ -800,16 +804,17 @@ public class DAO {
 
 
     public ArrayList<Prenotazione> retrievePrenotazioni() throws SQLException {
+
         ArrayList<Prenotazione> out = new ArrayList<>();
         Connection conn = null;
         try{
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM prenotazione");
+            ResultSet rs = st.executeQuery("SELECT p.*, nomeDocente, cognomeDocente FROM prenotazione p  JOIN docente d ON (p.idDocente = d.idDocente)");
             while(rs.next()){
                 Prenotazione pren = new Prenotazione(rs.getInt("idPrenotazione"), rs.getString("nomeCorso"), rs.getInt(
-                        "idDocente"), rs.getInt("idUtente"), rs.getString("slot"), rs.getString("stato"));
+                        "idDocente"),rs.getString("nomeDocente"),rs.getString("cognomeDocente"), rs.getInt("idUtente"), rs.getString("slot"), rs.getString("stato"));
                 out.add(pren);
             }
         } catch (SQLException e){

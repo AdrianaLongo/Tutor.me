@@ -56,7 +56,7 @@ public class DisponibilitaTutorServlet extends HttpServlet {
         }
         catch(SQLException | NumberFormatException e) {
             System.out.println(e.getMessage());
-            Useful error = new Useful("Error in getting slots", -1); //oggetto messaggio da passare al front
+            Useful error = new Useful("Error in getting slots", -1, null); //oggetto messaggio da passare al front
             String Json = gson.toJson(error);//converte in Stringa l'oggetto messaggio
             out.println(Json);//mando un json al fronto di mancata operazione
             out.flush();

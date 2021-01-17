@@ -63,20 +63,20 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
                     resstate = -1;
                 } finally {
                     if (resstate == 1) {
-                        message = new Useful("Successfully added reservation", 1); //vedere class Useful
+                        message = new Useful("Successfully added reservation", 1, null); //vedere class Useful
                         System.out.println("Successfully deleted reservation");
                     } else if (resstate == -1) {
-                        message = new Useful("Unsuccessfully added reservation", -1);
+                        message = new Useful("Unsuccessfully added reservation", -1, null);
                         System.out.println("Unsuccessfully deleted reservation");
                     } else if (resstate == 0) {
-                        message = new Useful("That tutor is already occupied", -1);
+                        message = new Useful("That tutor is already occupied", -1, null);
                         System.out.println("Unsuccessfully deleted reservation");
                     }
                 }
             }
         }
         else {
-            message = new Useful("Sorry you're not logged", -1);
+            message = new Useful("Sorry you're not logged", -1, null);
         }
         Type type = new TypeToken<Useful>() {}.getType(); //genera il token corrispondente ad oggetto Useful
         Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json

@@ -57,7 +57,7 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
                     out.close();
                 } catch (SQLException | NumberFormatException ex) {
                     System.out.println(ex.getMessage());
-                    Useful error = new Useful("Unable to retrieve reservations", -1);
+                    Useful error = new Useful("Unable to retrieve reservations", -1, null);
                     String Json = gson.toJson(error);
                     out.println(Json);//mando un json al fronto di mancata operazione
                     out.flush();
@@ -65,7 +65,7 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
             }
         }
         else {
-            message = new Useful("Sorry you're not logged", -1);
+            message = new Useful("Sorry you're not logged", -1, null);
             Type type = new TypeToken<Useful>() {
             }.getType();
             Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json

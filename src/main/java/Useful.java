@@ -1,6 +1,6 @@
 import com.google.gson.Gson;
 import dao.Slot;
-import org.apache.taglibs.standard.tag.common.core.UrlSupport;
+
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,10 +11,12 @@ import java.util.Map;
 public class Useful {
     String message;
     int success;
+    Object object;
 // serve a creare un oggetto da passare al metodo toJson (library Gson)
-    public Useful (String message, int success) {
+    public Useful (String message, int success, Object object) {
         this.message = message;
         this.success = success;
+        this.object = object;
     }
 
     public String getMessage () {

@@ -50,7 +50,7 @@ public class PopolaDocenteServlet extends HttpServlet {
             out.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            Useful error = new Useful("Courses not retrieved", -1);
+            Useful error = new Useful("Courses not retrieved", -1, null);
             String Json = gson.toJson(error);
             out.println(Json);//mando un json al fronto di mancata operazione
             out.flush();

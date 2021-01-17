@@ -53,7 +53,7 @@ public class cercaTutorServlet extends HttpServlet {
             out.close(); //chiude il PrintWriter della response
         }
         else {
-            Useful error = new Useful("Course doesn't exist", -1); //vedere class Useful
+            Useful error = new Useful("Course doesn't exist", -1, null); //vedere class Useful
             Type type = new TypeToken<Useful>() {}.getType();
             String Json = gson.toJson(error, type); //serializza l'oggetto in una stringa formato Json
             out.println(Json);//mando un json al fronto di mancata operazione
@@ -62,7 +62,7 @@ public class cercaTutorServlet extends HttpServlet {
         }
     } catch (SQLException e) {
         System.out.println(e.getMessage()); //recupera messaggio possibile errore query
-        Useful error = new Useful("Courses not retrieved", -1); //vedere class Useful
+        Useful error = new Useful("Courses not retrieved", -1, null); //vedere class Useful
         String Json = gson.toJson(error); //serializza l'oggetto in una stringa formato Json
         out.println(Json);//mando un json al fronto di mancata operazione
         out.flush();

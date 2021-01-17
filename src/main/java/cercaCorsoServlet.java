@@ -46,7 +46,7 @@ public class cercaCorsoServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         boolean checkId;
         String idDocenteS = request.getParameter("idDocente");//recupera il campo idDocente mandato dal frontend
-        RequestDispatcher rd = request.getRequestDispatcher("/")
+        //RequestDispatcher rd = request.getRequestDispatcher("/")
         try {
             int idDocente = Integer.parseInt(idDocenteS);
             checkId = dao.checkTutor(idDocente);
@@ -60,7 +60,7 @@ public class cercaCorsoServlet extends HttpServlet {
                 out.close();
             }
             else {
-                Useful error = new Useful("Professor doesn't exist", -1); //vedere class Useful
+                Useful error = new Useful("Professor doesn't exist", -1,null); //vedere class Useful
                 Type type = new TypeToken<Useful>() {}.getType();
                 String Json = gson.toJson(error, type); //serializza l'oggetto in una stringa formato Json
                 out.println(Json);//mando un json al fronto di mancata operazione
@@ -68,7 +68,7 @@ public class cercaCorsoServlet extends HttpServlet {
             }
         } catch(SQLException | NumberFormatException ex){
             System.out.println(ex.getMessage());
-            Useful error = new Useful("Courses not retrieved", -1);
+            Useful error = new Useful("Courses not retrieved", -1, null);
             Type typer = new TypeToken<Useful>() {}.getType(); //genero il tipo di Useful
             String Json = gson.toJson(error, typer); //serializzo l'oggetto Useful
             out.println(Json);//mando un json al front di mancata operazione
