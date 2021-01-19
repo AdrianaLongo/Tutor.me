@@ -31,8 +31,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html, charset=UTF-8");
-        RequestDispatcher reqDisp = request.getRequestDispatcher("/Logout.html"); //stabilisce la risorsa a cui andrà/tornerà
+        response.setContentType("text/html, charset=UTF-8");//stabilisce la risorsa a cui andrà/tornerà
 
         //ContainerRequestContext requestContext = null;
         /*
@@ -74,16 +73,16 @@ public class LoginServlet extends HttpServlet {
                         session.setAttribute("Login", "true");  //setto degli attributi nella session da far persistere
                         session.setAttribute("User", user.getUsername());
                         session.setAttribute("ruoloUtente", user.getRuolo()); //setto il ruolo per definire i componenti in cui ha accesso l'utente
-                        session.setAttribute("Idutente", user.getId()); //un pò un capriccio ma magari serve
-                        Useful error = new Useful("Successful login", 1);
+                        session.setAttribute("Idutente", user.getId());//un pò un capriccio ma magari serve
+
+                        Useful error = new Useful("Successful login", 1, session.getId());
                         String Json = gson.toJson(error);
                         out.println(Json);//mando un json al fronto di mancata operazione
-                        out.flush();
-                        reqDisp.forward(request, response); //questo è necessario ???
+                        out.flush();//questo è necessario ???
                     }
                     else {
                         System.out.println("Spiace username/password non corrispondono");
-                        Useful error = new Useful("Login unsuccessful", -1);
+                        Useful error = new Useful("Login unsuccessful", -1, null);
                         String Json = gson.toJson(error);
                         out.println(Json);//mando un json al fronto di mancata operazione
                         out.flush();
@@ -91,7 +90,7 @@ public class LoginServlet extends HttpServlet {
                 }
                 else  {
                     System.out.println("Spiace username/password non corrispondono");
-                    Useful error = new Useful("Login unsuccessful", -1);
+                    Useful error = new Useful("Login unsuccessful", -1, null);
                     String Json = gson.toJson(error);
                     out.println(Json);//mando un json al fronto di mancata operazione
                     out.flush();

@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class Useful {
-    String message;
-    int success;
-    Object object;
+    private String message;
+    private int success;
+    private Object object;
 // serve a creare un oggetto da passare al metodo toJson (library Gson)
     public Useful (String message, int success, Object object) {
         this.message = message;
@@ -23,15 +23,9 @@ public class Useful {
         return this.message;
     }
 
+    public int getSuccess() {return this.success;}
 
-    public static Gson fetchJson (String address) throws IOException { //at least I think should receive something as a string
-
-        Gson gson = new Gson();
-        URL indirizzo = new URL(address);  //Exception MalformedUrl
-        InputStreamReader reader = new InputStreamReader(indirizzo.openStream()); //Exception IOEx
-        gson.fromJson(reader, Gson.class);
-        return gson;
-    }
+    public Object getObject() {return this.object;}
 
     public static ArrayList<Slot> getSlotLiberi (ArrayList<Slot> slotOccupati) {
 

@@ -44,7 +44,7 @@ public class DAO {
             if(conn != null) {
                 System.out.println("Connected to DB");
             }
-            String sql = "SELECT idUtente, username, password nomeUtente, cognomeUtente, ruolo FROM utente WHERE username=? AND password=?";
+            String sql = "SELECT idUtente, username, password, nomeUtente, cognomeUtente, ruolo FROM utente WHERE username=? AND password=?";
             pst = conn.prepareStatement(sql);
             pst.setString(1,username);
             pst.setString(2,password);
@@ -72,7 +72,7 @@ public class DAO {
                 }
             }
         }
-        return new Utente(id,usernameExtracted, passwordExtracted, nome, cognome, ruolo);
+        return new Utente(id, nome, cognome, ruolo, usernameExtracted, passwordExtracted);
     }
 
 
