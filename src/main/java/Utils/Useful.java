@@ -1,3 +1,5 @@
+package Utils;
+
 import com.google.gson.Gson;
 import dao.Slot;
 
@@ -17,6 +19,9 @@ public class Useful {
         this.message = message;
         this.success = success;
         this.object = object;
+    }
+
+    public Useful() {
     }
 
     public String getMessage () {

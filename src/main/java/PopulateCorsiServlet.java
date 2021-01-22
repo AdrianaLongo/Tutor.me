@@ -1,3 +1,4 @@
+import Utils.Useful;
 import com.google.gson.reflect.TypeToken;
 import dao.Corso;
 import dao.DAO;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
+/** Restituisce tutti i corsi sotto forma di Json */
 
 @WebServlet(name = "PopulateCorsiServlet", urlPatterns = "/PopulateCorsiServlet")
 public class PopulateCorsiServlet extends HttpServlet {

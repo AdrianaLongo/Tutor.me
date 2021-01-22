@@ -1,3 +1,5 @@
+package logged;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
@@ -17,10 +19,15 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/** Recupera le prenotazioni dell'utente basandosi sull'attributo segnato nella sessione recuperata ad inizio e
+ * creata al login.
+ * Il parametro false in request.getSession impedisce di creare una sessione nuova in caso non esista (rovinerebbe
+ * i parametri segnati al login) */
+
 @WebServlet(name = "RetrievePrenotazioniUtenteServlet", urlPatterns = "/RetrievePrenotazioniUtenteServlet")
 public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
     DAO dao;
-    ArrayList<Prenotazione> prenotazioni;
+
     String Json;
     Gson gson = new Gson();
     Useful message;
@@ -40,27 +47,42 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         response.setContentType("application/json, charset=UTF-8");
-        PrintWriter out = response.getWriter();
         HttpSession s = request.getSession(false);
+
+        ArrayList<Prenotazione> prenotazioni;
+        PrintWriter out = response.getWriter();
+
         if (s != null) {
-            String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")){
-                try {
-                    String idUtentee =(String) s.getAttribute("idUtente");
-                    int idUtente = Integer.parseInt(idUtentee);
-                    prenotazioni = dao.retrievePrenotazioniUtente(idUtente);
-                    Type type = new TypeToken<ArrayList<Prenotazione>>() {
-                    }.getType();
-                    String jsonPrenotazioni = gson.toJson(prenotazioni, type); //e se io voglio passare più dati Json sulla stessa pagina ?
-                    out.print(jsonPrenotazioni);
-                    out.close();
-                } catch (SQLException | NumberFormatException ex) {
-                    System.out.println(ex.getMessage());
-                    Useful error = new Useful("Unable to retrieve reservations", -1, null);
-                    String Json = gson.toJson(error);
-                    out.println(Json);//mando un json al fronto di mancata operazione
-                    out.flush();
+
+            String jSessionId = s.getId().toString();
+            String idToVerify = request.getParameter("jSessionId");
+
+            if(jSessionId.equals(idToVerify)) {
+                String ruoloUtente = (String) s.getAttribute("ruoloUtente");
+                if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
+
+                    try {
+                        String idUtentee = (String) s.getAttribute("idUtente");
+                        int idUtente = Integer.parseInt(idUtentee);
+                        prenotazioni = dao.retrievePrenotazioniUtente(idUtente);
+
+                        Type type = new TypeToken<ArrayList<Prenotazione>>() {
+                        }.getType();
+                        String jsonPrenotazioni = gson.toJson(prenotazioni, type);
+
+                        out.print(jsonPrenotazioni);
+                        out.close();
+
+                    } catch (SQLException | NumberFormatException ex) {
+                        System.out.println(ex.getMessage());
+                        Useful error = new Useful("Unable to retrieve reservations", -1, null);
+                        String Json = gson.toJson(error);
+
+                        out.println(Json);//mando un json al fronto di mancata operazione
+                        out.flush();
+                    }
                 }
             }
         }
@@ -69,6 +91,7 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
             Type type = new TypeToken<Useful>() {
             }.getType();
             Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
+
             out.print(Json);
             out.flush();
         }
