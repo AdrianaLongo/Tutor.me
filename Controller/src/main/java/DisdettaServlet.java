@@ -84,7 +84,7 @@ public class DisdettaServlet extends HttpServlet {
                         resstate = 1;
                     }
                     else {
-                        Useful error = new Useful("Tutor doesn't exist", -1); //vedere class Useful
+                        Useful error = new Useful("Tutor doesn't exist", -1, null); //vedere class Useful
                         Type type = new TypeToken<Useful>() {}.getType();
                         String Json = gson.toJson(error, type); //serializza l'oggetto in una stringa formato Json
                         out.println(Json);//mando un json al fronto di mancata operazione
@@ -95,10 +95,10 @@ public class DisdettaServlet extends HttpServlet {
                     resstate = -1;
                 } finally {
                     if (resstate == 1) {
-                        message = new Useful("Successfully deleted reservation", 1); //vedere class Useful
+                        message = new Useful("Successfully deleted reservation", 1, null); //vedere class Useful
                         System.out.println("Successfully deleted reservation");
                     } else {
-                        message = new Useful("Unsuccessfully deleted reservation", -1);
+                        message = new Useful("Unsuccessfully deleted reservation", -1, null);
                         System.out.println("Unsuccessfully deleted reservation");
 
                     }
@@ -106,7 +106,7 @@ public class DisdettaServlet extends HttpServlet {
             }
         }
         else {
-            message = new Useful("Sorry you're not logged", -1);
+            message = new Useful("Sorry you're not logged", -1, null);
         }
         Type type = new TypeToken<Useful>() {}.getType(); //stabilisco il tipo di Useful
         JsonResponse = gson.toJson(message, type); //serializzo l'oggetto in Json

@@ -5,16 +5,16 @@ public class Utente {
     private String nome;
     private String cognome;
     private String ruolo;
-    private String password;
     private String username;
+    private String password;
 
-    public Utente(int id, String nome, String cognome, String ruolo, String password, String user) {
+    public Utente(int id, String nome, String cognome, String ruolo, String username, String password){
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.ruolo = ruolo;
+        this.username = username;
         this.password = password;
-        this.username = user;
     }
 
     public int getId() {
@@ -33,16 +33,12 @@ public class Utente {
         return ruolo;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getUsername() {return username;}
 
-    public String getUsername() {
-        return username;
-    }
+    public String getPassword() {return password;}
 
     @Override
-    public String toString() {
+    public String toString(){
         return id + " " + nome + " " + cognome + " " + ruolo;
     }
 }

@@ -52,12 +52,11 @@ public class DisponibilitaTutorServlet extends HttpServlet {
             type = new TypeToken<ArrayList<Slot>>() {}.getType(); //crea il token corrisp all'argomento passato
             String jsonCorsi = gson.toJson(slotLiberi, type); //e se io voglio passare più dati Json sulla stessa pagina ?
             out.print(jsonCorsi); //printa il Json
-            System.out.println("Slot per il tutor " + idTutor + ": " + jsonCorsi);
             out.close();
         }
         catch(SQLException | NumberFormatException e) {
             System.out.println(e.getMessage());
-            Useful error = new Useful("Error in getting slots", -1); //oggetto messaggio da passare al front
+            Useful error = new Useful("Error in getting slots", -1, null); //oggetto messaggio da passare al front
             String Json = gson.toJson(error);//converte in Stringa l'oggetto messaggio
             out.println(Json);//mando un json al fronto di mancata operazione
             out.flush();

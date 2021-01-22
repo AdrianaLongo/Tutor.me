@@ -35,8 +35,8 @@ public class DAO {
         String nome = "";
         String cognome = "";
         String ruolo = "";
-        String nickname = "";
-        String pwd = "";
+        String usernameExtracted = "";
+        String passwordExtracted = "";
 
         try{
 
@@ -51,11 +51,11 @@ public class DAO {
             ResultSet userValues = pst.executeQuery();
             while (userValues.next()){
                 id = userValues.getInt("idUtente");
+                usernameExtracted = userValues.getString("username");
+                passwordExtracted = userValues.getString("password");
                 nome = userValues.getString("nomeUtente");
                 cognome = userValues.getString("cognomeUtente");
                 ruolo = userValues.getString("ruolo");
-                pwd = userValues.getString("password");
-                nickname = userValues.getString("username");
             }
             System.out.println("Retrieve Utente fatto");
         }
@@ -72,7 +72,7 @@ public class DAO {
                 }
             }
         }
-        return new Utente(id, nome, cognome, ruolo, pwd, nickname );
+        return new Utente(id, nome, cognome, ruolo, usernameExtracted, passwordExtracted);
     }
 
 
@@ -251,6 +251,8 @@ public class DAO {
         return out;
     }
 
+
+
     // STAMPA ELENCO DEI CORSI IN CATALOGO
     public ArrayList<Corso> mostraCorsi() throws SQLException{
         // 1. Apertura della connessione
@@ -288,7 +290,6 @@ public class DAO {
 
         return out;
     }
-
     public boolean checkCourse (String course) throws SQLException {
         Connection conn = null;
         boolean check = false;
@@ -772,7 +773,7 @@ public class DAO {
         try{
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
-            String sql ="SELECT * FROM prenotazione WHERE idUtente = ?";
+            String sql ="SELECT p.*, nomeDocente, cognomeDocente FROM prenotazione p JOIN docente d ON (p.idDocente = d.idDocente) WHERE idUtente = ?";
             pst = conn.prepareStatement(sql);
             pst.setInt(1, idUtente);
             ResultSet rs = pst.executeQuery();
@@ -780,7 +781,7 @@ public class DAO {
 
             while(rs.next()){
                 Prenotazione pren = new Prenotazione(rs.getInt("idPrenotazione"), rs.getString("nomeCorso"), rs.getInt(
-                        "idDocente"), rs.getInt("idUtente"), rs.getString("slot"), rs.getString("stato"));
+                        "idDocente"),rs.getString("nomeDocente"),rs.getString("cognomeDocente"), rs.getInt("idUtente"), rs.getString("slot"), rs.getString("stato"));
                 out.add(pren);
             }
         } catch (SQLException e){
@@ -803,16 +804,17 @@ public class DAO {
 
 
     public ArrayList<Prenotazione> retrievePrenotazioni() throws SQLException {
+
         ArrayList<Prenotazione> out = new ArrayList<>();
         Connection conn = null;
         try{
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM prenotazione");
+            ResultSet rs = st.executeQuery("SELECT p.*, nomeDocente, cognomeDocente FROM prenotazione p  JOIN docente d ON (p.idDocente = d.idDocente)");
             while(rs.next()){
                 Prenotazione pren = new Prenotazione(rs.getInt("idPrenotazione"), rs.getString("nomeCorso"), rs.getInt(
-                        "idDocente"), rs.getInt("idUtente"), rs.getString("slot"), rs.getString("stato"));
+                        "idDocente"),rs.getString("nomeDocente"),rs.getString("cognomeDocente"), rs.getInt("idUtente"), rs.getString("slot"), rs.getString("stato"));
                 out.add(pren);
             }
         } catch (SQLException e){

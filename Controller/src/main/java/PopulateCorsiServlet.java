@@ -24,7 +24,6 @@ public class PopulateCorsiServlet extends HttpServlet {
     DAO dao = null;
     ArrayList<Corso> corso;
     Gson gson = new Gson();
-//    String Json;
     Type type;
 
     public void init(ServletConfig conf) throws ServletException {
@@ -52,11 +51,10 @@ public class PopulateCorsiServlet extends HttpServlet {
             type = new TypeToken<ArrayList<Corso>>() {}.getType(); //crea il token corrisp all'argomento passato
             String jsonCorsi = gson.toJson(corso, type); //e se io voglio passare più dati Json sulla stessa pagina ?
             out.print(jsonCorsi); //printa il Json
-            System.out.println(jsonCorsi);
             out.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            Useful error = new Useful("Courses not retrieved", -1); //oggetto messaggio da passare al front
+            Useful error = new Useful("Courses not retrieved", -1, null); //oggetto messaggio da passare al front
             String Json = gson.toJson(error);//converte in Stringa l'oggetto messaggio
             out.println(Json);//mando un json al fronto di mancata operazione
             out.flush();

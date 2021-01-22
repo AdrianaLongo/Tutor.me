@@ -50,15 +50,17 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
         HttpSession s = request.getSession(false);
+        String jSession = request.getParameter("jSessionId");
         PrintWriter out = response.getWriter(); //per comunicazione messaggio "Avvenuto"
-        if (s != null) {
+        if (s.getId().equals(jSession)) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
-                String utente = (String) s.getAttribute("idUtente"); //getParameter recupera dal campo Nome nell'<input>Html il valore
+            if (ruoloUtente.equals("utente") || ruoloUtente.equals("admin")) {
+
+                String utente = s.getAttribute("Idutente").toString(); //getParameter recupera dal campo Nome nell'<input>Html il valore
                 String docente = request.getParameter("idDocente");
                 String slot = request.getParameter("slot");
                 String nomeCorso = request.getParameter("nomeCorso");
-                //sostituire con il parsin Json forse
+
                 try {
                     int utenteint = Integer.parseInt(utente); //Trasforma in int la stringa utente
                     int docenteint = Integer.parseInt(docente);
@@ -74,20 +76,20 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
                     resstate = -1;
                 } finally {
                     if (resstate == 1) {
-                        message = new Useful("Successfully added reservation", 1); //vedere class Useful
-                        System.out.println("Successfully deleted reservation");
+                        message = new Useful("Successfully added reservation", 1, null); //vedere class Useful
+                        System.out.println("Successfully made reservation reservation");
                     } else if (resstate == -1) {
-                        message = new Useful("Unsuccessfully added reservation", -1);
-                        System.out.println("Unsuccessfully deleted reservation");
+                        message = new Useful("Unsuccessfully added reservation", -1, null);
+                        System.out.println("Unsuccessful  reservation");
                     } else if (resstate == 0) {
-                        message = new Useful("That tutor is already occupied", -1);
+                        message = new Useful("That tutor is already occupied", -1, null);
                         System.out.println("Unsuccessfully deleted reservation");
                     }
                 }
             }
         }
         else {
-            message = new Useful("Sorry you're not logged", -1);
+            message = new Useful("Sorry you're not logged", -1, null);
         }
         Type type = new TypeToken<Useful>() {}.getType(); //genera il token corrispondente ad oggetto Useful
         Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json

@@ -21,10 +21,10 @@ import java.util.ArrayList;
  * */
 @WebServlet(name = "cercaTutorServlet", urlPatterns = "/cercaTutorServlet")
 public class cercaTutorServlet extends HttpServlet {
+
     DAO dao = null;
     ArrayList<Docente> tutor;
     Gson gson = new Gson();
-//    String Json;
     boolean checkCourse = false;
 
     public void init(ServletConfig conf) throws ServletException {
@@ -49,14 +49,14 @@ public class cercaTutorServlet extends HttpServlet {
             if (checkCourse) {
                 tutor = dao.mostraDocentiConCorso(corso); //mostra i tutor in base al corso scelto
                 System.out.print("Tutor recuperati");
-                Type type = new TypeToken<ArrayList<Docente>>() {}.getType(); //stabilisce il tipo di Docente
+                Type type = new TypeToken<ArrayList<Docente>>() {
+                }.getType(); //stabilisce il tipo di Docente
                 String jsonTutor = gson.toJson(tutor, type); //e se io voglio passare più dati Json sulla stessa pagina ?
                 out.print(jsonTutor);//stampa il tutor
-                System.out.println(jsonTutor);
                 out.close(); //chiude il PrintWriter della response
             }
             else {
-                Useful error = new Useful("Course doesn't exist", -1); //vedere class Useful
+                Useful error = new Useful("Course doesn't exist", -1, null); //vedere class Useful
                 Type type = new TypeToken<Useful>() {}.getType();
                 String Json = gson.toJson(error, type); //serializza l'oggetto in una stringa formato Json
                 out.println(Json);//mando un json al fronto di mancata operazione
@@ -65,7 +65,7 @@ public class cercaTutorServlet extends HttpServlet {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage()); //recupera messaggio possibile errore query
-            Useful error = new Useful("Courses not retrieved", -1); //vedere class Useful
+            Useful error = new Useful("Courses not retrieved", -1, null); //vedere class Useful
             String Json = gson.toJson(error); //serializza l'oggetto in una stringa formato Json
             out.println(Json);//mando un json al fronto di mancata operazione
             out.flush();
