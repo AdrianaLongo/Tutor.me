@@ -53,13 +53,12 @@ public class LoginServlet extends HttpServlet {
             throw new ServletException(e.getMessage());
         }
         finally {
-            if (user != null) {
+            if (user != null) { //il controllo sullo user non funziona con campi vuoti
                 if(user.getUsername().equals(username) && user.getPassword().equals(password)) {
                     HttpSession session = request.getSession();
                     String jSessionId = session.getId();//se l'utente corrisponde ai dati inseriti, creo la sessione
                     System.out.println("Sei loggato");
 
-                    session.setAttribute("Login", "true");  //setto degli attributi nella session da far persistere
                     session.setAttribute("User", username);
                     session.setAttribute("ruoloUtente", user.getRuolo()); //setto il ruolo per definire i componenti in cui ha accesso l'utente
                     session.setAttribute("Idutente", user.getId()); //un pò un capriccio ma magari serve
@@ -68,6 +67,7 @@ public class LoginServlet extends HttpServlet {
                     Useful success = new Useful("Successful login", 1, jSessionId);
                     String Json = gson.toJson(success);
                     out.println(Json);//mando un json al fronto di mancata operazione
+
                 }else{
                     System.out.println("Spiacente o nome o cognome non non corrispondono");
                     Useful error = new Useful("Login unsuccessful", -1, null);

@@ -27,46 +27,43 @@ public class DispatcherServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         if (action.equals("login"))
-            page = "LoginServlet";
-
-        if(action.equals("getCourses"))
-            page = "PopulateCorsiServlet";
+            page = ctx.getInitParameter("LoginServlet");
 
         if(action.equals("searchProf"))
-            page = "cercaTutorServlet";
+            page = ctx.getInitParameter("cercaTutorServlet");
 
         if(action.equals("doBooking"))
-            page = "EffettuaPrenotazioneServlet";
+            page = ctx.getInitParameter("EffettuaPrenotazioneServlet");
 
         if(action.equals("getUserHistory"))
-            page = "RetrievePrenotazioniUtenteServlet";
+            page = ctx.getInitParameter("RetrievePrenotazioniUtenteServlet");
 
         if(action.equals("lessonDone"))
-            page = "PrenotazioneEffettuataServlet";
+            page = ctx.getInitParameter("PrenotazioneEffettuataServlet");
 
         if(action.equals("logout"))
-            page = "LogoutServlet";
+            page = ctx.getInitParameter("LogoutServlet");
 
         if(action.equals("cancelReservation"))
-            page = "DisdettaServlet";
+            page = ctx.getInitParameter("DisdettaServlet");
 
         if(action.equals("getGlobalHistory"))
-            page = "PopolaStoricoServlet";
+            page = ctx.getInitParameter("PopolaStoricoServlet");
 
         if(action.equals("getCourses"))
-            page = "CercaCorsoServlet";
+            page = ctx.getInitParameter("CercaCorsoServlet");
 
         if(action.equals("getTutor"))
-            page = "cercaTutorServlet";
+            page = ctx.getInitParameter("cercaTutorServlet");
 
         if(action.equals("getTutorAvailability"))
-            page = "DisponibilitaTutorServlet";
+            page = ctx.getInitParameter("DisponibilitaTutorServlet");
 
         if(action.equals("populateTutors"))
-            page = "PopolaDocenteServlet";
+            page = ctx.getInitParameter("PopolaDocenteServlet");
 
         if(action.equals("populateCourses"))
-            page = "PopulateCorsiServlet";
+            page = ctx.getInitParameter("PopulateCorsiServlet");
 
         RequestDispatcher reqDisp = ctx.getRequestDispatcher(page);
         reqDisp.forward(request,response);
