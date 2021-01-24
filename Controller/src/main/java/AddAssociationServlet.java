@@ -35,9 +35,9 @@ public class AddAssociationServlet extends HttpServlet {
         String nomeDocente = request.getParameter("nomeDocente");
         String cognomeDocente = request.getParameter("cognomeDocente");
 
-        // try{
-        //dao.insertCorsoDocenteAssociation();
-        // }
+       // try{
+            //dao.insertCorsoDocenteAssociation();
+       // }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

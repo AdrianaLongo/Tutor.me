@@ -1,3 +1,6 @@
+package logged;
+
+import Utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
@@ -16,7 +19,7 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 
 /**
- * 1) Prendo l'http session con parametro false per [???]
+ * 1) Prendo l'http session con parametro false per non creare una session nuova
  * 2) Controllo che la sessione esista, controllo il ruolo Utente, prendo il parametro idUtente dalla sessione (creato
  * 3) durante il login; il resto dei parametri li prendo dallla quest
  * 4) Faccio un tentativo di parsare i due id, in caso non siano numeri lancio l'eccezione
@@ -26,15 +29,11 @@ import java.sql.SQLException;
  * 2) in caso in cui catturo un errore SQL con i dati
  * 3) in caso in cui si sia capito che il tutor sia già occupato
  */
+
 @WebServlet(name = "EffettuaPrenotazioneServlet", urlPatterns = "/EffettuaPrenotazioneServlet")
 public class EffettuaPrenotazioneServlet extends HttpServlet {
 
     DAO dao;
-    int resstate = 0;
-    String Json;
-    Gson gson = new Gson();
-    Useful message;
-    boolean disponibilita;
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -49,11 +48,21 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
+
+        PrintWriter out = response.getWriter(); //per comunicazione messaggio "Avvenuto"
+
+        int resstate = 0;
+        String Json;
+        Gson gson = new Gson();
+        Useful message = new Useful();
+        boolean disponibilita;
+
         HttpSession s = request.getSession(false);
         String jSession = request.getParameter("jSessionId");
-        PrintWriter out = response.getWriter(); //per comunicazione messaggio "Avvenuto"
+
         if (s.getId().equals(jSession)) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
+
             if (ruoloUtente.equals("utente") || ruoloUtente.equals("admin")) {
 
                 String utente = s.getAttribute("Idutente").toString(); //getParameter recupera dal campo Nome nell'<input>Html il valore
@@ -62,21 +71,26 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
                 String nomeCorso = request.getParameter("nomeCorso");
 
                 try {
+
                     int utenteint = Integer.parseInt(utente); //Trasforma in int la stringa utente
                     int docenteint = Integer.parseInt(docente);
                     disponibilita = dao.isDisponibile(slot, docenteint); //controlla la disponibilità del prof
+
                     if (disponibilita) {
                         dao.prenotaRipetizione(nomeCorso, docenteint, utenteint, slot); //scrive nel db la prenotazione
-                        resstate = 1; //stato risposte per poi creare l'oggetto Useful giusto (giusto messaggio)
+                        resstate = 1; //stato risposte per poi creare l'oggetto Utils.Useful giusto (giusto messaggio)
                     } else {
                         resstate = 0;
                     }
+
                 } catch (SQLException | NumberFormatException e) {
                     System.out.println(e.getMessage());
                     resstate = -1;
+
                 } finally {
+
                     if (resstate == 1) {
-                        message = new Useful("Successfully added reservation", 1, null); //vedere class Useful
+                        message = new Useful("Successfully added reservation", 1, null); //vedere class Utils.Useful
                         System.out.println("Successfully made reservation reservation");
                     } else if (resstate == -1) {
                         message = new Useful("Unsuccessfully added reservation", -1, null);
@@ -85,17 +99,23 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
                         message = new Useful("That tutor is already occupied", -1, null);
                         System.out.println("Unsuccessfully deleted reservation");
                     }
+
+                    Type type = new TypeToken<Useful>() {}.getType(); //genera il token corrispondente ad oggetto Utils.Useful
+                    Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
+
+                    out.print(Json);
+                    out.flush();
                 }
             }
         }
         else {
             message = new Useful("Sorry you're not logged", -1, null);
+            Type type = new TypeToken<Useful>() {}.getType(); //genera il token corrispondente ad oggetto Utils.Useful
+            Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
+
+            out.print(Json);
+            out.flush();
         }
-        Type type = new TypeToken<Useful>() {}.getType(); //genera il token corrispondente ad oggetto Useful
-        Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
-        out.print(Json);
-        out.flush(); //chiude la stampa della risposta
-        //reqDisp.forward(request,response);
 
     }
 

@@ -1,6 +1,6 @@
+import Utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import dao.Corso;
 import dao.DAO;
 import dao.Docente;
 
@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /** Restituisce sottoforma di Json tutti i docenti */
+
 @WebServlet(name = "PopolaDocenteServlet", urlPatterns = "/PopolaDocenteServlet")
 public class PopolaDocenteServlet extends HttpServlet {
     DAO dao = null;

@@ -1,8 +1,10 @@
+import Utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.Corso;
 import dao.DAO;
-import javax.servlet.RequestDispatcher;
+
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -21,13 +23,11 @@ import java.util.ArrayList;
  * In caso non si recuperi nessun corso restituisce un messaggio Json vuoto per lasciare alla frontend
  * la libertà di dire che niente è sbagliato, semplicemente con quel professore non ci sono corsi associati
  * */
-//Fatta per poter cercare un corso in base al docente
+
 @WebServlet(name = "cercaCorsoServlet", urlPatterns = "/cercaCorsoServlet")
 public class cercaCorsoServlet extends HttpServlet {
 
-    DAO dao = null;
-    ArrayList<Corso> corsi;
-    Gson gson = new Gson();
+        DAO dao = null;
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -45,35 +45,47 @@ public class cercaCorsoServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         response.setContentType("application/json, charset=UTF-8");
         PrintWriter out = response.getWriter();
+
+        ArrayList<Corso> corsi;
+        Gson gson = new Gson();
+
         boolean checkId;
+
         String idDocenteS = request.getParameter("idDocente");//recupera il campo idDocente mandato dal frontend
-        //RequestDispatcher rd = request.getRequestDispatcher("/")
+
         try {
+
             int idDocente = Integer.parseInt(idDocenteS);
             checkId = dao.checkTutor(idDocente);
+
             if (checkId) {
                 corsi = dao.mostraCorsiConDocenti(idDocente); //recupera i corsi tramite l'id del docente
                 System.out.print("Corsi recuperati");
-                Type type = new TypeToken<ArrayList<Corso>>() {
-                }.getType(); //trova il tipo dell'oggetto
+                Type type = new TypeToken<ArrayList<Corso>>() {}.getType(); //trova il tipo dell'oggetto
                 String jsonCorso = gson.toJson(corsi, type);
+
                 out.print(jsonCorso);
                 out.close();
             }
             else {
-                Useful error = new Useful("Professor doesn't exist", -1,null); //vedere class Useful
+                Useful error = new Useful("Professor doesn't exist", -1,null); //vedere class Utils.Useful
                 Type type = new TypeToken<Useful>() {}.getType();
                 String Json = gson.toJson(error, type); //serializza l'oggetto in una stringa formato Json
+
                 out.println(Json);//mando un json al fronto di mancata operazione
                 out.flush();
             }
         } catch(SQLException | NumberFormatException ex){
+
             System.out.println(ex.getMessage());
+
             Useful error = new Useful("Courses not retrieved", -1, null);
-            Type typer = new TypeToken<Useful>() {}.getType(); //genero il tipo di Useful
-            String Json = gson.toJson(error, typer); //serializzo l'oggetto Useful
+            Type typer = new TypeToken<Useful>() {}.getType(); //genero il tipo di Utils.Useful
+            String Json = gson.toJson(error, typer); //serializzo l'oggetto Utils.Useful
+
             out.println(Json);//mando un json al front di mancata operazione
             out.flush();
         }

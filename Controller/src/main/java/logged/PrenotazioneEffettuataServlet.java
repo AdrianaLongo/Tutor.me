@@ -1,8 +1,9 @@
+package logged;
+
+import Utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
-import dao.Docente;
-import dao.Prenotazione;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -16,13 +17,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-/** Restituisce tutte le prenotazione attive, effettuate e disdette */
-@WebServlet(name = "PopolaStoricoServlet", urlPatterns = "/PopolaStoricoServlet")
-public class PopolaStoricoServlet extends HttpServlet {
+/** Segna la prenotazione come effettua, cambia quindi il campo stato della prenotazione */
+
+@WebServlet(name = "PrenotazioneEffettuataServlet", urlPatterns = "/PrenotazioneEffettuataServlet")
+public class PrenotazioneEffettuataServlet extends HttpServlet {
     DAO dao;
-    ArrayList<Prenotazione> prenotazioni;
     String Json;
     Gson gson = new Gson();
     Useful message;
@@ -37,31 +37,41 @@ public class PopolaStoricoServlet extends HttpServlet {
         dao = new DAO(url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
 
     }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
-        PrintWriter out = response.getWriter();
         HttpSession s = request.getSession(false);
+
+        PrintWriter out = response.getWriter();
+
         if (s != null) {
-            String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente.equals("Admin")) {
-                try {
-                    prenotazioni = dao.retrievePrenotazioni(); //click tasto destro goTO
-                    Type type = new TypeToken<ArrayList<Prenotazione>>() {
-                    }.getType();
-                    String jsonPrenotazioni = gson.toJson(prenotazioni, type); //e se io voglio passare più dati Json sulla stessa pagina ?
-                    out.print(jsonPrenotazioni);
-                    out.close();
-                } catch (SQLException ex) {
-                    System.out.println(ex.getMessage());
-                    Useful error = new Useful("Courses not retrieved", -1, null);
-                    String Json = gson.toJson(error);
-                    out.println(Json);//mando un json al fronto di mancata operazione
-                    out.flush();
+
+            String jSessionId = s.getId().toString();
+            String idToVerify = request.getParameter("jSessionId");
+
+            if(jSessionId.equals(idToVerify)) {
+                String ruoloUtente = (String) s.getAttribute("ruoloUtente");
+                if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
+                    try {
+
+                        int idPrenotazione = Integer.parseInt(request.getParameter("idPrenotazione"));
+                        dao.prenotazioneEffettuata(idPrenotazione);
+
+                        Useful confirmation = new Useful("Prenotazione effettuata", 1, null);
+                        Json = gson.toJson(confirmation);
+
+                        out.println(Json);//mando un json al fronto di mancata operazione
+                        out.flush();
+
+                    } catch (SQLException | NumberFormatException ex) {
+
+                        System.out.println(ex.getMessage());
+                        Useful error = new Useful("Reservation unsuccessful", -1, null);
+                        Json = gson.toJson(error);
+
+                        out.println(Json);//mando un json al fronto di mancata operazione
+                        out.flush();
+                    }
                 }
             }
         }
@@ -73,5 +83,9 @@ public class PopolaStoricoServlet extends HttpServlet {
             out.print(Json);
             out.flush();
         }
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 }

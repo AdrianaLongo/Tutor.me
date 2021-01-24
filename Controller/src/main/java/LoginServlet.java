@@ -1,8 +1,8 @@
+import Utils.Useful;
 import com.google.gson.Gson;
 import dao.DAO;
 import dao.Utente;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -21,6 +21,7 @@ import java.sql.SQLException;
  * session e setto degli attributi per indicare dei dati dell'Utente in un posto accesibile anche al frontend
  * 4) Se il login non va, do al frontend un Json composto da due parti: un messaggio ed un numero generale di failure -1
  * */
+
 @WebServlet(name = "LoginServlet", urlPatterns = "/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
@@ -40,19 +41,8 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html, charset=UTF-8");//stabilisce la risorsa a cui andrà/tornerà
 
-        //ContainerRequestContext requestContext = null;
-        /*
-        if(session.USER_AGENT == "Android") { // è un soft check sul nome del parametro e non il contenuto, minchiata ?
-            response.setContentType("application/json, charset=UTF-8");
-        }//chiedere a Giorgio il nome dell'HTTP session parameter al posto di USER_AGENT
-        else {
-            response.setContentType("text/html, charset=UTF-8"); //nope deve comunicare in json in entrambi i lati
-        }
-        */
-        //prendo la sessione
         PrintWriter out = response.getWriter();
 
-        //Questo andrà cambiato per accettare Json e non parametri html
         String username = request.getParameter("username"); //getParameter recupera dal campo Nome nell'<input>Html il valore
         String password = request.getParameter("password");
 
