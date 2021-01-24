@@ -1,9 +1,8 @@
 package logged;
 
-import Utils.Useful;
+import utils.Useful;
 import com.google.gson.Gson;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

@@ -1,6 +1,5 @@
-package Utils;
+package utils;
 
-import com.google.gson.Gson;
 import dao.Slot;
 
 
@@ -9,9 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Useful {
     private String message;

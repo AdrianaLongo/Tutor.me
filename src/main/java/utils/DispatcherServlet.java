@@ -1,6 +1,4 @@
-package Utils;
-
-import logged.EffettuaPrenotazioneServlet;
+package utils;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
