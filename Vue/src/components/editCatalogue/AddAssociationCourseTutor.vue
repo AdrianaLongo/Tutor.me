@@ -70,6 +70,8 @@ export default {
     addAssociation: function(){
       this.makeToast()
       console.log("Associazione inserita!")
+      setTimeout(() => {this.reset()}, 100)
+
     },
     makeToast(){
       this.$bvToast.toast(
@@ -80,6 +82,10 @@ export default {
             variant: 'success',
             solid: true
           })
+    },
+    reset() {
+      this.tutorSelected = ''
+      this.courseSelected = ''
     },
   }
 }

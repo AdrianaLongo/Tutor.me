@@ -40,7 +40,7 @@
 
         <div v-if="tutorToAdd !== '' && courseToAdd !== ''">
         <!-- TODO: quando si inserisce nuovo docente, far comparire il bottone dopo inserimento-->
-        <b-button @click="insertCourse" variant="primary">Inserisci tutor e corso</b-button>
+        <b-button @click="insertTutor" variant="primary">Inserisci tutor e corso</b-button>
       </div>
 
 
@@ -79,6 +79,7 @@ export default {
   methods:{
     insertTutor: function(){
       this.makeToast()
+      setTimeout(() => {this.reset()}, 100)
       console.log("Ho inserito un tutor!")
     },
     makeToast(){
@@ -90,6 +91,10 @@ export default {
             variant: 'success',
             solid: true
           })
+    },
+    reset() {
+      this.tutorToAdd = ''
+      this.courseSelected = ''
     },
   }
 }

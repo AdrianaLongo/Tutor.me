@@ -79,6 +79,7 @@ export default {
   methods:{
     deleteTutor: function(){
       this.makeToast()
+      setTimeout(() => {this.reset()}, 100)
       console.log("Tutor eliminato!")
     },
     makeToast(){
@@ -89,6 +90,9 @@ export default {
             variant: 'success',
             solid: true
       })
+    },
+    reset() {
+      this.tutorSelected = ''
     },
   }
 }

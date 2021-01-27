@@ -38,14 +38,16 @@
         <div v-if="courseToAdd !== '' && tutorSelected !== ''">
           <!-- TODO: quando si inserisce nuovo docente, far comparire il bottone dopo inserimento-->
           <b-button @click="insertCourse" variant="primary">Inserisci corso</b-button>
+        </div>
 
-        </div><div v-if="courseToAdd !== '' && tutorToAdd !== ''">
-        <!-- TODO: quando si inserisce nuovo docente, far comparire il bottone dopo inserimento-->
-        <b-button @click="insertCourse" variant="primary">Inserisci corso e docente</b-button>
-      </div>
+        <div v-if="courseToAdd !== '' && tutorToAdd !== ''">
+          <!-- TODO: quando si inserisce nuovo docente, far comparire il bottone dopo inserimento-->
+          <b-button @click="insertCourse" variant="primary">Inserisci corso e docente</b-button>
+        </div>
 
 
       </b-form-group>
+
     </b-card>
   </b-container>
 </template>
@@ -75,6 +77,7 @@ export default {
   methods: {
     insertCourse: function (){
       this.courseAdded = true;
+      setTimeout(() => {this.reset()}, 100)
       this.makeToast();
       console.log("Ho inserito il corso: " + this.courseToAdd.charAt(0).toUpperCase() + this.courseToAdd.slice(1))
     },
@@ -87,6 +90,10 @@ export default {
             variant: 'success',
             solid: true
           })
+    },
+    reset() {
+      this.courseToAdd = ''
+      this.tutorSelected = ''
     },
     pairCourseToTutor:function(){
       console.log("Ho associato il corso al tutor!")

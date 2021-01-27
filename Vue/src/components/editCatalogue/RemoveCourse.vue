@@ -45,6 +45,7 @@ export default {
   methods:{
     deleteCourse: function(){
       this.makeToast()
+      setTimeout(() => {this.reset()}, 100)
       console.log("Corso eliminato!")
     },
     makeToast(){
@@ -55,6 +56,9 @@ export default {
             variant: 'success',
             solid: true
           })
+    },
+    reset() {
+      this.courseToDelete = ''
     },
   }
 }
