@@ -24,8 +24,6 @@
     </b-col>
 
     <b-modal id="modal-1" title="Login" align="center" hide-footer>
-      <!-- TODO: fare ok con enter-->
-      <!-- TODO: messaggio di errore per credenziali sbagliate-->
       <b-form @submit.stop.prevent>
         <b-form-input id="input-username" v-model="username" required placeholder="Username"></b-form-input>
         <!--          <b-form-input id="input-password" v-model="password" required placeholder="Password" class="mt-3"></b-form-input>-->
