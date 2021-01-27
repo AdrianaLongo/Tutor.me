@@ -63,12 +63,12 @@
 <!--        <b-nav-item>-->
 <!--          <router-link class="nav-link ml-2" to="calendar">Calendario disponibilità</router-link>-->
 <!--        </b-nav-item>-->
-        <b-nav-item>
+        <b-nav-item v-show="this.$store.getters.currentToken !== ''">
           <router-link class="nav-link ml-2" to="lemieprenotazioni">Le mie prenotazioni</router-link>
         </b-nav-item>
 
-        <b-nav-item-dropdown class="m-2" text="Funzionalità amministratore" >
-<!--          TODO: Rendere dark il dropdown menu-->
+        <b-nav-item-dropdown v-show="this.$store.getters.currentToken !== ''" class="m-2"  text="Funzionalità amministratore" >
+        <!-- TODO: Rendere dark il dropdown menu-->
           <b-dropdown-item>
             <router-link to="prenotazioniclienti">
               Prenotazioni clienti
@@ -84,8 +84,19 @@
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
-        <b-nav-item>
-          <router-link class="nav-link ml-2 mr-2" to="login">Login</router-link>
+<!--        PAGINA-->
+<!--        <b-nav-item v-show="this.$store.getters.currentToken === ''">-->
+<!--          <b-button @click="login">Login</b-button>-->
+<!--          &lt;!&ndash;            <a href="#LogInButton" role="button" class="btn btn-outline" data-toggle="modal">Login</a>&ndash;&gt;-->
+<!--        </b-nav-item>-->
+
+        <b-nav-item v-show="!this.$store.getters.userLogged">
+          <login></login>
+        </b-nav-item>
+
+
+        <b-nav-item v-show="this.$store.getters.userLogged">
+          <a href="#" class="btn bg-danger" @click="logout">Log out</a>
           <!--            <a href="#LogInButton" role="button" class="btn btn-outline" data-toggle="modal">Login</a>-->
         </b-nav-item>
 <!--        <b-nav-item>-->
@@ -93,29 +104,27 @@
 <!--        </b-nav-item>-->
       </b-navbar-nav>
     </b-collapse>
+
   </b-navbar>
+
 
 
 
 </template>
 
 <script>
+import Login from "@/components/authentication/Login";
+
 export default {
   name: "navbar",
-  // data(){
-  //   return{
-  //     show: true
-  //   }
-  // },
-  // methods: {
-  //   toggleNavbar(){
-  //     this.show = !this.show
-  //   }
-  // }
+  components:{
+    Login
+  },
 
   data() {
     return {
-      showCollapse: false
+      showCollapse: false,
+      isLogged: false
     }
   },
   watch: {
@@ -124,10 +133,27 @@ export default {
       // including query, params, hash, name, or path
       this.showCollapse = false
     }
+  },
+  methods: {
+    logout: function(){
+      // TODO: sistemare logout (serve sessione)
+      localStorage.access_token = '';
+      this.isLogged = false;
+      console.log("token in localstorage: " + localStorage.access_token)
+      console.log("token in store: " + this.$store.getters.currentToken)
+
+    },
+    checkLogin: function(){
+      if(localStorage.access_token !== null){
+        this.isLogged = true;
+      }
+    },
+    login: function(){
+
+    }
   }
 }
 </script>
 
 <style scoped>
-
 </style>
