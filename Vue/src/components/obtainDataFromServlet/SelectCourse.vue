@@ -7,6 +7,7 @@
           label-cols-lg="3"
           label="Seleziona un corso: "
           label-for="input-horizontal"
+
       >
         <b-form-select
             v-model="courseName"
@@ -38,62 +39,6 @@ export default {
       courseChange: false,
     }
   },
-  // OPZIONE 1
-  // created() {
-  //   fetch('http://localhost:8081/TWEB_war_exploded/PopulateServlet')
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         this.courses = data.courses;
-  //         console.log(data);
-  //       });
-  // }
-
-  // OPZIONE 2
-  // mounted() {
-  //   fetch('http://localhost:8081/TWEB_war_exploded/PopulateServlet')
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         this.courses = data.courses;
-  //         console.log(data); //array
-  //         // console.log(data.courses); // undefined
-  //       });
-  // }
-
-  // OPZIONE 3 (abilitare import jquery) MA NON CREA JSON
-  // created() {
-  //   $(window).on('load', function(){
-  //     $.get("PopulateServlet", function(response){
-  //       console.log(response);
-  //     });
-  //   });
-  //   this.getCourses();
-  // },
-  // methods: {
-  //   getCourses: function () {
-  //     var self = this;
-  //     $.get(this.url, function (data) {
-  //       self.courses = data;
-  //     });
-  //   }
-  // }
-
-  // OPZIONE 4 (abilitare import jquery) MA NON CREA JSON
-  // mounted() {
-  //   var self = this;
-  //   $.getJSON(this.link, function(data){
-  //     self.courses = data;
-  //   })
-  // },
-  // methods: {
-  //   getCourses: function () {
-  //     var self = this;
-  //     $.get(this.link, function (data) {
-  //       self.courses = data;
-  //     });
-  //   }
-  // }
-
-  // OPZIONE 5 (abilitare import jquery)
   beforeCreate: function() {
     var _this = this;
     $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
@@ -101,7 +46,17 @@ export default {
       // console.log(jsonCourses);
     });
     // console.log(this.jsonCourses); // null
+
+    // // VERSIONE CON DISPATCHER
+    // var _this = this;
+    // $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
+    //   _this.jsonCourses = jsonCourses;
+    //   // console.log(jsonCourses);
+    // });
+    // console.log(this.jsonCourses); // null
+
   },
+
   methods: {
     // mut: function(){
     //   this.$store.commit("changeName", "New Name");

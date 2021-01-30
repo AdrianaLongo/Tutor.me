@@ -1,9 +1,10 @@
 <template>
   <div>
     <b-container class="m-4">
-      <b-button @click="simulaLogin">Simula login</b-button>
+<!--      <b-button @click="simulaLogin">Simula login</b-button>-->
 
-      <b-table v-if="loginSucceded" class="personalHistoryTable" :fields="fields" :items="items" :jsonPersonalHistory="jsonPersonalHistory">
+<!--      <b-table v-if="loginSucceded" class="personalHistoryTable" :fields="fields" :items="items" :jsonPersonalHistory="jsonPersonalHistory">-->
+      <b-table class="personalHistoryTable" :fields="fields" :items="items" :jsonPersonalHistory="jsonPersonalHistory">
 
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
@@ -207,24 +208,29 @@ export default {
     }
   },
   beforeCreate() {
-    // TODO: sostituire questo metodo con vero login
-    this.$store.dispatch("retrievePersonalHistory", "123");
-    console.log("Log simulato con idUtente 123");
+    // TODO: gestire sessione
+    // this.$store.dispatch("retrievePersonalHistory", this.$store.getters.currentToken);
+    // console.log("Login con token " + this.$store.getters.currentToken);
 
+    this.$store.dispatch("retrievePersonalHistory", localStorage.access_token);
+    console.log("Login con token " + localStorage.access_token);
+  },
+  created() {
+    console.log("this.sessionId = " + this.sessionId);
   },
   methods: {
-    simulaLogin: function(){
-      this.loginSucceded = true;
-      this.jsonPersonalHistory = this.$store.getters.elencoMiePrenotazioni;
-      console.log("Elenco prenotazioni: ");
-      console.log(this.jsonPersonalHistory);
-      this.jsonAttive = this.jsonPersonalHistory.filter( element => element.stato === 'attiva');
-      console.log(this.jsonAttive);
-      this.jsonEffettuate = this.jsonPersonalHistory.filter( element => element.stato === 'effettuata');
-      this.jsonCancellate = this.jsonPersonalHistory.filter( element => element.stato === 'cancellata');
-
-
-    },
+    // simulaLogin: function(){
+    //   this.loginSucceded = true;
+    //   this.jsonPersonalHistory = this.$store.getters.elencoMiePrenotazioni;
+    //   console.log("Elenco prenotazioni: ");
+    //   console.log(this.jsonPersonalHistory);
+    //   this.jsonAttive = this.jsonPersonalHistory.filter( element => element.stato === 'attiva');
+    //   console.log(this.jsonAttive);
+    //   this.jsonEffettuate = this.jsonPersonalHistory.filter( element => element.stato === 'effettuata');
+    //   this.jsonCancellate = this.jsonPersonalHistory.filter( element => element.stato === 'cancellata');
+    //
+    //
+    // },
     selectSlot: function(s){
       this.$store.commit("selectSlot", s);
       console.log("corso = " + this.$store.getters.courseName);
