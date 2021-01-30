@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <h1 class="h1">Le mie prenotazioni</h1>
+    <h1>Le mie prenotazioni</h1>
     <table-personal-history></table-personal-history>
   </b-container>
 
@@ -14,6 +14,11 @@ export default {
   name: "PagePersonalHistory",
   components: {
     TablePersonalHistory
+  },
+  beforeCreate() {
+    // console.log("token in localstorage: " + localStorage.access_token)
+    console.log("token in store: " + this.$store.getters.currentToken)
+
   }
 
 }
