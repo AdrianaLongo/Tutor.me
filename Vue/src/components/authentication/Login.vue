@@ -52,7 +52,7 @@ export default {
         username: this.username,
         password: this.password,
       });
-      setTimeout(() => {this.makeToast()}, 100)
+      setTimeout(() => {this.makeToast()}, 200)
       console.log("Username inserito: " + this.username);
       console.log("Password inserita: " + this.password);
     },
