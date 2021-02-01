@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Useful {
     private String message;
@@ -67,17 +68,11 @@ public class Useful {
         return slotGenerici;
     }
 
-    public static String getPage(ServletContext ctx, String page) throws IOException {
-        InputStream is = ctx.getResourceAsStream(page);
-        if (is != null) {
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader reader = new BufferedReader(isr);
-            String buffer;
-            StringBuilder text = new StringBuilder();
-            while ((buffer = reader.readLine()) != null)
-                text.append(buffer);
-            return text.toString();
-        } else return "Missing Component";
-
+    public static int generateId() {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        return random.nextInt(10, 1000000000);
     }
+
 }
+
+

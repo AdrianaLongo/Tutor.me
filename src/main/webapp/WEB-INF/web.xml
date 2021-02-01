@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+
     <context-param>
         <description>Url di MySql</description>
         <param-name>DB-Url</param-name>
@@ -54,7 +55,7 @@
 
     <context-param>
         <param-name>AddAssociationServlet</param-name>
-        <param-value>/AddAssociationServlet</param-value>
+        <param-value>/logged.CourseTutorAssociation</param-value>
     </context-param>
 
     <context-param>
