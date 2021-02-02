@@ -2,6 +2,7 @@ package com.example.progetto_android.conndata.utils;
 
 import java.io.IOException;
 
+//contiene i risultati ottenuti dalla chiamata alle servlet
 public class HttpTaskResult<T> {
     private T result;
     private IOException ex;
