@@ -29,8 +29,8 @@
     </context-param>
 
     <context-param>
-        <param-name>EffettuaPrenotazioniServlet</param-name>
-        <param-value>/EffettuaPrenotazioniServlet</param-value>
+        <param-name>EffettuaPrenotazioneServlet</param-name>
+        <param-value>/EffettuaPrenotazioneServlet</param-value>
     </context-param>
 
     <context-param>

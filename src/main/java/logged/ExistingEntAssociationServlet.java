@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-@WebServlet(name = "ExistingEntAssociationServlet", value = "/ExistingEntAssociationServlet")
+@WebServlet(name = "ExistingEntAssociationServlet", urlPatterns = "/ExistingEntAssociationServlet")
 public class ExistingEntAssociationServlet extends HttpServlet {
 
     DAO dao = null;

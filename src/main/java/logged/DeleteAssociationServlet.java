@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-@WebServlet(name = "DeleteAssociationServlet", value = "/DeleteAssociationServlet")
+@WebServlet(name = "DeleteAssociationServlet", urlPatterns = "/DeleteAssociationServlet")
 public class DeleteAssociationServlet extends HttpServlet {
 
     DAO dao = null;

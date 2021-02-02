@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-@WebServlet(name = "DeleteCourseServlet", value = "/DeleteCourseServlet")
+@WebServlet(name = "DeleteCourseServlet", urlPatterns = "/DeleteCourseServlet")
 public class DeleteCourseServlet extends HttpServlet {
 
     DAO dao = null;

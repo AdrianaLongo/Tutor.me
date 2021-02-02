@@ -44,19 +44,20 @@ public class DAO {
             conn = DriverManager.getConnection(url, user, pw);
             if (conn != null) {
                 System.out.println("Connected to DB");
-            }
-            String sql = "SELECT idUtente, username, password, nomeUtente, cognomeUtente, ruolo FROM utente WHERE username=? AND password=?";
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, username);
-            pst.setString(2, password);
-            ResultSet userValues = pst.executeQuery();
-            while (userValues.next()) {
-                id = userValues.getInt("idUtente");
-                usernameExtracted = userValues.getString("username");
-                passwordExtracted = userValues.getString("password");
-                nome = userValues.getString("nomeUtente");
-                cognome = userValues.getString("cognomeUtente");
-                ruolo = userValues.getString("ruolo");
+
+                String sql = "SELECT idUtente, username, password, nomeUtente, cognomeUtente, ruolo FROM utente WHERE username=? AND password=?";
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, username);
+                pst.setString(2, password);
+                ResultSet userValues = pst.executeQuery();
+                while (userValues.next()) {
+                    id = userValues.getInt("idUtente");
+                    usernameExtracted = userValues.getString("username");
+                    passwordExtracted = userValues.getString("password");
+                    nome = userValues.getString("nomeUtente");
+                    cognome = userValues.getString("cognomeUtente");
+                    ruolo = userValues.getString("ruolo");
+                }
             }
             System.out.println("Retrieve Utente fatto");
         } catch (SQLException e) {
@@ -802,7 +803,7 @@ public class DAO {
             pst = conn.prepareStatement(sql);
             pst.setInt(1, 1);
             pst.setInt(2, idPrenotazione);
-            ResultSet rs = pst.executeQuery();
+            pst.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -969,7 +970,7 @@ public class DAO {
 
     }
 
-    public void deletePrenotazione(String nomeCorso, int idDocent, int idUtente, String slot) throws SQLException {
+    public void deletePrenotazione(int idPrenotazione) throws SQLException {
         PreparedStatement pstEliminaPrenotazione = null;
         Connection conn = null;
         try {
@@ -977,14 +978,10 @@ public class DAO {
             System.out.println("Connected to the database \"ripetizioni\".");
 
             // Eliminazione dalla tabella "prenotazione"
-            String sqlEliminaAssociazione = "UPDATE prenotazione SET stato = ? WHERE nomeCorso=? AND idDocente=? AND idUtente=? " +
-                    "AND slot=?";
+            String sqlEliminaAssociazione = "UPDATE prenotazione SET stato = ? WHERE idPrenotazione = ?";
             pstEliminaPrenotazione = conn.prepareStatement(sqlEliminaAssociazione);
             pstEliminaPrenotazione.setInt(1, -1);
-            pstEliminaPrenotazione.setString(2, nomeCorso);
-            pstEliminaPrenotazione.setInt(3, idDocent);
-            pstEliminaPrenotazione.setInt(4, idUtente);
-            pstEliminaPrenotazione.setString(5, slot);
+            pstEliminaPrenotazione.setInt(2, idPrenotazione);
 
             pstEliminaPrenotazione.execute();
             System.out.println("Prenotazione eliminata correttamente.");
