@@ -21,9 +21,8 @@ import java.util.ArrayList;
 
 @WebServlet(name = "PopolaDocenteServlet", urlPatterns = "/PopolaDocenteServlet")
 public class PopolaDocenteServlet extends HttpServlet {
+
     DAO dao = null;
-    ArrayList<Docente> docenti;
-    Gson gson = new Gson();
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -44,6 +43,10 @@ public class PopolaDocenteServlet extends HttpServlet {
         response.setContentType("application/json, charset=UTF-8");
         //RequestDispatcher reqDisp = request.getRequestDispatcher("Logout.html");
         PrintWriter out = response.getWriter();
+
+        ArrayList<Docente> docenti;
+        Gson gson = new Gson();
+
         try {
             docenti = dao.mostraDocenti(); //recupera tutti i docenti
             System.out.print("Corsi recuperati");

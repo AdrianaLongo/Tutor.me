@@ -1,6 +1,7 @@
 package logged;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import dao.DAO;
 import utils.Useful;
 
@@ -9,14 +10,13 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.sql.SQLException;
 
 @WebServlet(name = "DeleteTutorServlet", urlPatterns = "/DeleteTutorServlet")
 public class DeleteTutorServlet extends HttpServlet {
 
     DAO dao = null;
-    Gson gson = new Gson();
-    String Json;
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -64,20 +64,25 @@ public class DeleteTutorServlet extends HttpServlet {
                     } catch (SQLException | NumberFormatException e) {
                         System.out.println(e.getMessage());
                         message = new Useful("There was some problem querying the tutor", -1, null);
-                        toSendJson = gson.toJson(message);
+                        Type type = new TypeToken<Useful>() {
+                        }.getType();
+                        toSendJson = gson.toJson(message, type);
                         out.write(toSendJson);
                         out.flush();
                     }
                 } else {
                     message = new Useful("Sorry you don't have admin privileges", -1, null);
                 }
+            }
+            else {
                 message = new Useful("Sorry your sessionId doesn't match", -1, null);
             }
         }else {
             message = new Useful("Sorry you're not logged in", -1, null);
         }
-
-        toSendJson = gson.toJson(message);
+        Type type = new TypeToken<Useful>() {
+        }.getType();
+        toSendJson = gson.toJson(message, type);
         out.write(toSendJson);
         out.flush();
     }

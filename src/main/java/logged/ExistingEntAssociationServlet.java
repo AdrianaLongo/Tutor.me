@@ -1,6 +1,7 @@
 package logged;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import dao.DAO;
 import utils.Useful;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.sql.SQLException;
 
 @WebServlet(name = "ExistingEntAssociationServlet", urlPatterns = "/ExistingEntAssociationServlet")
@@ -60,14 +62,16 @@ public class ExistingEntAssociationServlet extends HttpServlet {
                 try {
                     dao.insertCorsoDocenteAssociation(nomeCorso, idDocente, nomeDocente, cognomeDocente);
                     message = new Useful("Successfully added association", 1, null);
-                    Json = gson.toJson(message);
+                    Type type = new TypeToken<Useful>() {}.getType();
+                    Json = gson.toJson(message, type);
                     out.write(Json);
                     out.flush();
 
                 }catch (SQLException e){
                     System.out.println(e.getMessage());
                     message = new Useful("There was some problem associating the existing courses", -1, null);
-                    Json = gson.toJson(message);
+                    Type type = new TypeToken<Useful>() {}.getType();
+                    Json = gson.toJson(message, type);
                     out.write(Json);
                     out.flush();
                 }

@@ -29,9 +29,7 @@ import java.util.ArrayList;
 public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
     DAO dao;
 
-    String Json;
-    Gson gson = new Gson();
-    Useful message;
+
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -55,9 +53,13 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
         ArrayList<Prenotazione> prenotazioni;
         PrintWriter out = response.getWriter();
 
+        String Json;
+        Gson gson = new Gson();
+        Useful message = new Useful();
+
         if (s != null) {
 
-            String jSessionId = s.getId().toString();
+            String jSessionId = s.getId();
             String idToVerify = request.getParameter("jSessionId");
 
             if(jSessionId.equals(idToVerify)) {
@@ -79,23 +81,33 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
                     } catch (SQLException | NumberFormatException ex) {
                         System.out.println(ex.getMessage());
                         Useful error = new Useful("Unable to retrieve reservations", -1, null);
-                        String Json = gson.toJson(error);
+                        Type type = new TypeToken<Useful>() {
+                        }.getType();
+                        Json = gson.toJson(error, type );
 
                         out.println(Json);//mando un json al fronto di mancata operazione
                         out.flush();
                     }
                 }
+                else {
+                    message = new Useful("Sorry your role doesn't match the requirements", -1, null);
+                }
             }
-        }
-        else {
-            message = new Useful("Sorry you're not logged", -1, null);
+            else {
+                message = new Useful("Sorry but your sessionId doesn't match", -1,null);
+            }
             Type type = new TypeToken<Useful>() {
             }.getType();
             Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
 
-            out.print(Json);
-            out.flush();
         }
+        else {
+            message = new Useful("Sorry you're not logged", -1, null);
+            Type type = new TypeToken<Useful>() {}.getType();
+            Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
 
+        }
+        out.print(Json);
+        out.flush();
     }
 }

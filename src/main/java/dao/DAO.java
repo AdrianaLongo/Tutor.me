@@ -216,7 +216,7 @@ public class DAO {
 
             // Estrazione id dei docenti che insegnano quel corso e che sono disponibili
             String sql = "SELECT prenotazione.slot FROM prenotazione" +
-                    " WHERE prenotazione.idDocente = ?";
+                    " WHERE prenotazione.idDocente = ? AND stato = 0";
 
             // Controllo disponibilita' del docente
 

@@ -22,10 +22,9 @@ import java.sql.SQLException;
 
 @WebServlet(name = "PrenotazioneEffettuataServlet", urlPatterns = "/PrenotazioneEffettuataServlet")
 public class PrenotazioneEffettuataServlet extends HttpServlet {
+
     DAO dao;
-    String Json;
-    Gson gson = new Gson();
-    Useful message;
+
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -39,6 +38,10 @@ public class PrenotazioneEffettuataServlet extends HttpServlet {
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        String Json;
+        Gson gson = new Gson();
+        Useful message;
+
         response.setContentType("application/json, charset=UTF-8");
         HttpSession s = request.getSession(false);
 
@@ -46,7 +49,7 @@ public class PrenotazioneEffettuataServlet extends HttpServlet {
 
         if (s != null) {
 
-            String jSessionId = s.getId().toString();
+            String jSessionId = s.getId();
             String idToVerify = request.getParameter("jSessionId");
 
             if(jSessionId.equals(idToVerify)) {
@@ -57,32 +60,35 @@ public class PrenotazioneEffettuataServlet extends HttpServlet {
                         int idPrenotazione = Integer.parseInt(request.getParameter("idPrenotazione"));
                         dao.prenotazioneEffettuata(idPrenotazione);
 
-                        Useful confirmation = new Useful("Prenotazione effettuata", 1, null);
-                        Json = gson.toJson(confirmation);
-
-                        out.println(Json);//mando un json al fronto di mancata operazione
-                        out.flush();
+                        message = new Useful("Prenotazione effettuata", 1, null);
 
                     } catch (SQLException | NumberFormatException ex) {
 
                         System.out.println(ex.getMessage());
-                        Useful error = new Useful("Reservation unsuccessful", -1, null);
-                        Json = gson.toJson(error);
+                        message = new Useful("Reservation unsuccessful", -1, null);
+                        Json = gson.toJson(message);
 
                         out.println(Json);//mando un json al fronto di mancata operazione
                         out.flush();
                     }
                 }
+                else {
+                    message = new Useful("Sorry but you don't have admin privileges", -1, null);
+                }
+            }
+            else {
+                message = new Useful("Sorry but your session id doesn't match", -1, null);
             }
         }
         else {
             message = new Useful("Sorry you're not logged", -1, null);
-            Type type = new TypeToken<Useful>() {
-            }.getType();
-            Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
-            out.print(Json);
-            out.flush();
+
         }
+        Type type = new TypeToken<Useful>() {
+        }.getType();
+        Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
+        out.print(Json);
+        out.flush();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

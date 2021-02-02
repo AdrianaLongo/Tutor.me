@@ -24,9 +24,7 @@ import com.google.gson.Gson;
 @WebServlet(name = "PopulateCorsiServlet", urlPatterns = "/PopulateCorsiServlet")
 public class PopulateCorsiServlet extends HttpServlet {
     DAO dao = null;
-    ArrayList<Corso> corso;
-    Gson gson = new Gson();
-    Type type;
+
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -44,16 +42,21 @@ public class PopulateCorsiServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ArrayList<Corso> corso;
+        Gson gson = new Gson();
+        Type type;
+
         response.setContentType("application/json, charset=UTF-8");
-        //RequestDispatcher reqDisp = request.getRequestDispatcher("Logout.html");
+
         PrintWriter out = response.getWriter();
+
         try {
             corso = dao.mostraCorsi(); //prende tutti i corsi
             System.out.print("Corsi recuperati");
             type = new TypeToken<ArrayList<Corso>>() {}.getType(); //crea il token corrisp all'argomento passato
             String jsonCorsi = gson.toJson(corso, type); //e se io voglio passare più dati Json sulla stessa pagina ?
             out.print(jsonCorsi); //printa il Json
-            out.close();
+            out.flush();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             Useful error = new Useful("Courses not retrieved", -1, null); //oggetto messaggio da passare al front

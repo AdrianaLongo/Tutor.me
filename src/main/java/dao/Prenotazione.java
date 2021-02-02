@@ -13,6 +13,7 @@ public class Prenotazione {
 
     public Prenotazione(int idPrenotazione, String nomeCorso, int idDocente, String nomeDocente, String cognomeDocente, int idUtente, String slot
     , String stato){
+
         this.idPrenotazione = idPrenotazione;
         this.idDocente = idDocente;
         this.nomeDocente = nomeDocente;

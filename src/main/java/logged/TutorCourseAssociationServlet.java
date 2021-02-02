@@ -1,6 +1,7 @@
 package logged;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import dao.DAO;
 import utils.Useful;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.sql.SQLException;
 
 @WebServlet(name = "TutorCourseServlet", urlPatterns = "/TutorCourseServlet")
@@ -69,7 +71,8 @@ public class TutorCourseAssociationServlet extends HttpServlet {
                     } catch (SQLException e) {
                         System.out.println(e.getMessage());
                         message = new Useful("There were problems in step 1, adding the new course", -1, null);
-                        Json = gson.toJson(message);
+                        Type type = new TypeToken<Useful>() {}.getType();
+                        Json = gson.toJson(message, type);
                         out.write(Json);
                         out.flush();
                     }
@@ -78,13 +81,15 @@ public class TutorCourseAssociationServlet extends HttpServlet {
                 try {
                     dao.insertCorsoDocenteAssociation(nomeCorso, idTutor, nomeDocente, cognomeDocente);
                     message = new Useful("Correctly associated elements", 1, null);
-                    Json = gson.toJson(message);
+                    Type type = new TypeToken<Useful>() {}.getType();
+                    Json = gson.toJson(message, type);
                     out.write(Json);
                     out.flush();
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                     message = new Useful("There were problems in step 2, associating elements", -1, null);
-                    Json = gson.toJson(message);
+                    Type type = new TypeToken<Useful>() {}.getType();
+                    Json = gson.toJson(message, type);
                     out.write(Json);
                     out.flush();
                 }

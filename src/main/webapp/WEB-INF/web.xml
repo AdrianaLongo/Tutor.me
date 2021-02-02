@@ -49,8 +49,8 @@
     </context-param>
 
     <context-param>
-        <param-name>RetrievePrenotazioneUtenteServlet</param-name>
-        <param-value>/RetrievePrenotazioneUtenteServlet</param-value>
+        <param-name>RetrievePrenotazioniUtenteServlet</param-name>
+        <param-value>/RetrievePrenotazioniUtenteServlet</param-value>
     </context-param>
 
     <context-param>
