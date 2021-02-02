@@ -5,36 +5,38 @@
     android:id="@+id/fragment_section_course"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.corsi.SectionCourseFragment">
+    tools:context=".view.course.CourseFragment">
 
     <TextView
-        android:id="@+id/empty_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/empty_view_course"
+        style="@style/EmptyViewStyle"
         android:text="@string/empty_course_list"
-        android:visibility="gone"
-        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/courses"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/course_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/button_course"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/courses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/button_course"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="164dp"
+        style="@style/ButtonStyle"
         android:text="@string/conferma_corsi"
-        app:layout_constraintBottom_toBottomOf="@id/courses"
-        app:layout_constraintEnd_toStartOf="@+id/courses"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/courses" />
+        app:layout_constraintEnd_toEndOf="@id/course_container"
+        app:layout_constraintStart_toStartOf="@id/course_container"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

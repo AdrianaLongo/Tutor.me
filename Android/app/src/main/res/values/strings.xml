@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Tutor Me</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="insert_username">Insert Username</string>
     <string name="insert_password">Insert Password</string>
     <string name="login">Login</string>
@@ -8,4 +8,20 @@
     <string name="conferma_corsi">conferma e vai <br> alla scelta del professore </br></string>
     <string name="conferma_prof">conferma e vai <br> alla scelta del giorno</br></string>
     <string name="empty_course_list">NessunDato disponibile</string>
+    <string name="first_slot">15-16</string>
+    <string name="second_slot">16-17</string>
+    <string name="third_slot">17-18</string>
+    <string name="fourth_slot">18-19</string>
+    <string name="corso_popup">Corso: </string>
+    <string name="professore_popup">Professore: </string>
+    <string name="giorno_popup">Giorno: </string>
+    <string name="orario_popup">Orario: </string>
+    <string name="conferma_prenotazione_popup">Conferma Prenotazione</string>
+    <string name="torna_indietro_popup">Torna indietro</string>
+    <string name="no_prenotazione">Nessuna book effettuata</string>
+    <string name="no_lessons_done">Nessuna lezione effettuata</string>
+    <string name="No_book_deleted">Nessuna book disdetta</string>
+    <string name="no_prof_available">Nessun professore disponibile per questo corso</string>
+    <string name="_8942">⋮</string>
+    <string name="alert">Alert</string>
 </resources>

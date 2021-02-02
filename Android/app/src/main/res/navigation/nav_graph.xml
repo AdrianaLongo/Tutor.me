@@ -7,40 +7,32 @@
     <fragment
         android:id="@+id/action_login"
         android:name="com.example.progetto_android.view.login.LoginFragment"
-        android:label="Start Fragment"
+        android:label="login"
         tools:layout="@layout/fragment_login">
 
         <action
             android:id="@+id/action_login_to_menu_course"
-
-            app:destination="@id/menu_course" />
-    </fragment>
-    <fragment
-        android:id="@+id/action_logout"
-        android:name="com.example.progetto_android.view.login.LoginFragment"
-        android:label="Second fragment"
-        tools:layout="@layout/fragment_login">
-
-        <action
-            android:id="@+id/action_logout_to_menu_course"
-
             app:destination="@id/menu_course" />
     </fragment>
     <fragment
         android:id="@+id/menu_course"
-        android:name="com.example.progetto_android.view.corsi.SectionCourseFragment"
-        android:label="Second fragment"
+        android:name="com.example.progetto_android.view.course.CourseFragment"
+        android:label="course"
         tools:layout="@layout/fragment_section_course">
 
         <action
             android:id="@+id/menu_course_to_menu_prof"
 
             app:destination="@id/menu_prof" />
+        <action
+            android:id="@+id/menu_course_to_login"
+
+            app:destination="@id/action_login" />
     </fragment>
     <fragment
         android:id="@+id/menu_prof"
-        android:name="com.example.progetto_android.view.professori.SectionProfFragment"
-        android:label="Third fragment"
+        android:name="com.example.progetto_android.view.tutors.TutorFragment"
+        android:label="prof"
         tools:layout="@layout/fragment_section_prof">
 
         <action
@@ -49,16 +41,25 @@
     </fragment>
     <fragment
         android:id="@+id/menu_calendar"
-        android:name="com.example.progetto_android.view.calendario.SectionDateFragment"
-        android:label="Fourth fragment"
+        android:name="com.example.progetto_android.view.calendar.TabSlotFragment"
+        android:label="date"
         tools:layout="@layout/tabbed_layout">
 
+        <action
+            android:id="@+id/calendar_to_login"
+            app:destination="@id/action_login" />
     </fragment>
     <fragment
-        android:id="@+id/action_prenotazioni"
-        android:name="com.example.progetto_android.view.cronologia.CronologiaFragment"
-        android:label="prenotazioni"
-        tools:layout="@layout/cronologia">
+        android:id="@+id/history"
+        android:name="com.example.progetto_android.view.history.TabHistoryFragment"
+        android:label="book"
+        tools:layout="@layout/tabbed_layout">
+        <action
+            android:id="@+id/history_to_login"
+            app:destination="@id/action_login"/>
+        <action
+            android:id="@+id/menu_history_to_course"
 
+            app:destination="@id/menu_course" />
     </fragment>
 </navigation>

@@ -1,7 +1,14 @@
 package com.example.progetto_android.view.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,44 +17,39 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
-
 import com.example.progetto_android.R;
-import com.example.progetto_android.conndata.Dao;
+import com.example.progetto_android.conndata.Connector;
 import com.example.progetto_android.databinding.FragmentLoginBinding;
+import com.example.progetto_android.globals.GlobalValue;
 import com.example.progetto_android.globals.ShareDataViewModel;
-
-import java.util.Objects;
 
 public class LoginFragment extends Fragment {
 
     private ShareDataViewModel sd;
     private LoginViewModel vm;
-    private Dao dao;
-    private FragmentLoginBinding loginbinding;
+    private Connector connector;
+    private FragmentLoginBinding loginBinding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //istanzio il ViewModel che tiene in memoria il login dell'utente
         sd = ShareDataViewModel.getInstance();
-        //sd = new ViewModelProvider(requireActivity()).get(ShareDataViewModel::getInstance());
+        //classe usata per collegarsi alle servlet
+        connector = Connector.getInstance(getContext());
         setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //viewModel che si occupa di gestire il collegamente tra layout e fragment
         vm = new ViewModelProvider(this).get(LoginViewModel.class);
-        loginbinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
-        View view = loginbinding.getRoot();
-        loginbinding.setBd(vm);
-        loginbinding.setLifecycleOwner(this);
-        dao = Dao.getInstance(getContext());
+        //permette di comunicare con le view in modo più semplice
+        loginBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
+        View view = loginBinding.getRoot();
+        loginBinding.setBd(vm);
+        loginBinding.setLifecycleOwner(this);
         return view;
     }
 
@@ -56,77 +58,54 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Button login = view.findViewById(R.id.login);
         Button guest = view.findViewById(R.id.guest);
-        loginClickListener(login);
-        guestClickListener(guest);
-
-    }
-
-    public void loginClickListener(Button login) {
+        //listener del login
         login.setOnClickListener(view1 -> {
+            //nascondo la tastiera una volta che l'utente ha finito di usarla
+            hideKeyboardFrom(requireContext(), view);
+
+            //leggo username e password dalla view per mandarla alla servlet
             String username = vm.getUsername().getValue();
             String password = vm.getPassword().getValue();
 
-            if (!checkValues(username, password, getContext())) return;
+            //controllo se i campi non sono vuoti
+            if (checkValues(username, password, getContext())) {
+                //mi collego alla servlet, mandando i dati necessari
+                connector.getLoginRep().login(username, password, result -> {
+                    try {
+                        //controllo se l'utente è presente nel db
+                        if (result.getObject() != null) {
+                            //inserisco risultato nella ViewModel
+                            sd.setLoggedIn(true);
 
-            //TODO modificare inviare il nome della servlet String
-            dao.getLoginRep().login(username, password, result -> {
-                sd.setLogin(result);
-                Log.i("Username in Login", username);
-                if (result == null) {
-                    Toast.makeText(getContext(), "Controllare connessione a internet", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (result.getLoggedIn()) {
-                    Toast.makeText(getContext(), "Benvenuto " + username, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getContext(), "Username e/o Password errati", Toast.LENGTH_LONG).show();
-                }
-            });
+                            //messaggio di benvenuto
+                            Toast.makeText(getContext(), "Benvenuto " + username, Toast.LENGTH_LONG).show();
 
-            //serve per recuperare il navController e muoversi tra i fragment
-            NavHostFragment.findNavController(LoginFragment.this)
-                    .navigate(R.id.action_login_to_menu_course);
-        });
+                            //metto in una variabile globali l'id della sessione
+                            GlobalValue.setjSessionId(result.getObject());
 
-    }
-
-    public void guestClickListener(Button guest) {
-        //serve per recuperare il navController e muoversi tra i fragment
-        guest.setOnClickListener(view1 ->
-                NavHostFragment.findNavController(LoginFragment.this)
-                        .navigate(R.id.action_login_to_menu_course));
-    }
-
-
-    //se c'è da inserire signup
-
-     /*public void onSignupButtonClicked(View view) {
-        String username = vm.getUsername().getValue();
-        String password = vm.getPassword().getValue();
-
-        if(!checkValues(username, password, this)) return;
-
-        dao.getLoginData().signup(username, password, result -> {
-            if (result != null) {
-                switch (result) {
-                    case 0: // Success
-                        model.setLoginData(new Login(true, username, false));
-                        Toast.makeText(this, getString(R.string.success_msg_login, username), Toast.LENGTH_LONG).show();
-                        finish();
-                        break;
-                    case 2: // Lo username è già in uso da un altro utente
-                        Toast.makeText(this, getString(R.string.error_msg_username_not_unique), Toast.LENGTH_LONG).show();
-                        break;
-                    default: // Unknown error
-                        Toast.makeText(this, getString(R.string.error_msg_generic), Toast.LENGTH_LONG).show();
-                        break;
-                }
-            } else {
-                // Problemi di connessione
-                Toast.makeText(this, getString(R.string.error_msg_internet_offline), Toast.LENGTH_LONG).show();
+                            //serve per recuperare il navController e muoversi tra i fragment
+                            NavHostFragment.findNavController(LoginFragment.this)
+                                    .navigate(R.id.action_login_to_menu_course);
+                        } else {
+                            //messaggio di errore, usernamen o password mancanti
+                            Toast.makeText(getContext(), "Username e/o Password errati", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        //errore da parte della servlet
+                        Toast.makeText(getActivity(), "Login non riuscito: controllare dati e connessione a internet", Toast.LENGTH_LONG).show();
+                        //inserisco risultato nella ViewModel
+                        sd.setLoggedIn(false);
+                        //azzero i campi del login così che l'utente possa riscriverli
+                        loginBinding.username.setText("");
+                        loginBinding.password.setText("");
+                    }
+                });
             }
         });
-    }*/
+        //listener per l'ospite
+        guest.setOnClickListener(view1 -> NavHostFragment.findNavController(LoginFragment.this)
+                .navigate(R.id.action_login_to_menu_course));
+    }
 
     //controllo che username e password non siano vuoti
     public boolean checkValues(String username, String password, Context context) {
@@ -139,5 +118,11 @@ public class LoginFragment extends Fragment {
         }
 
         return true;
+    }
+
+    //metodo che serve per far sparire la tastiera
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

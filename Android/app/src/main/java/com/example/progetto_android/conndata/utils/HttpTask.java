@@ -1,5 +1,6 @@
 package com.example.progetto_android.conndata.utils;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -11,101 +12,104 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-//si occupa si comunicare con la servlet, invia e riceve dati che convertirà i HttpResponse e HttpTaskResult
-public class HttpTask extends Thread {
+/**
+ * Questa classe si occupa di effettuare una singola richiesta http in maniera asincrona
+ */
+public class HttpTask extends AsyncTask<OnHttpTaskCompleted<HttpResponse>, Void, HttpTaskResult<HttpResponse>> {
 
-    private final URL url;
-    private final Map<String, String> params;
-    private final OnHttpTaskCompleted<HttpResponse>[] callbacks;
+    private URL url;
+    private Map<String, String> params;
+    //utilizzato come messaggio contente il risultato o null se è avvenuto un errore
+    private OnHttpTaskCompleted<HttpResponse>[] callbacks;
 
-    /* Provare senza questo costruttore
-    public HttpTask(String url, OnHttpTaskCompleted<HttpResponse>... callbacks) throws MalformedURLException{
-        this.url = new URL(url);
-        this.params = new HashMap<>();
-        this.callbacks = callbacks;
-    }*/
-
-    @SafeVarargs
-    // ... = numero qualsiasi di parametro, tipo * di python
-    public HttpTask(String url, Map<String, String> params, OnHttpTaskCompleted<HttpResponse>... callbacks) throws MalformedURLException {
-        this.url = new URL(url);
-        this.params = new HashMap<>(params);        // creami una mappa che parte dai parametri che ti sto mandando
-        this.callbacks = callbacks;
+    //si occupa di comunicare con la servlet, invia e riceve dati che convertirà in HttpResponse e HttpResult
+    public HttpTask(String url, Map<String, String> params) throws MalformedURLException {
+        this.params = new HashMap<>(params); // Clone
+        //creo l'url in base al metodo che mi serve nella servlet
+        if(Objects.equals(params.get("method"), "GET")){
+            //inserisco nell'URL i parametri per la doGET
+            this.url = new URL(url.concat(Objects.requireNonNull(params.get("url"))));
+        }else {
+            this.url = new URL(url);
+        }
     }
 
+    @SafeVarargs
     @Override
-    public void run() { //start thread
-        StringBuilder str = new StringBuilder();
-        int responseCode = HttpURLConnection.HTTP_BAD_REQUEST;
+    //'..' è come '*' su python, permette di ricevere x argomenti in parametro
+    protected final HttpTaskResult<HttpResponse> doInBackground(OnHttpTaskCompleted<HttpResponse>... callbacks) {
+        this.callbacks = callbacks;
+
+        StringBuilder builder = new StringBuilder();
+        int responseCode;
         HttpURLConnection conn = null;
-        OnPostExecuteTask res = (result) -> {
-            for (OnHttpTaskCompleted<HttpResponse> callback : callbacks)
-                callback.onHttpTaskCompleted(result);
-        };
 
         try {
-            StringBuilder postData = new StringBuilder();
-            for (Map.Entry<String, String> param : params.entrySet()) {
-                if (postData.length() != 0)
-                    postData.append('&');
-                postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                postData.append('=');
-                postData.append(URLEncoder.encode(param.getValue(), "UTF-8"));
-            }
-            // creo un array di byte perché getOutputStream() vuole un array di Byte
-            byte[] postDataBytes = postData.toString().getBytes("UTF-8");
 
+            StringBuilder postData = new StringBuilder();
+            //se il metodo richiesto è GET non può contenere corpo la richiesta
+            if (!(Objects.equals(params.get("method"), "GET"))) {
+                for (Map.Entry<String, String> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(param.getValue(), "UTF-8"));
+                }
+            }
+            //array di byte perché getOutputStream() riceve come parametro un array di byte
+            byte[] postDataBytes = postData.toString().getBytes(StandardCharsets.UTF_8);
+
+            //stabilisco connessione con la servlet
             conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(500);
-            //questo serve per mandare richieste in un messaggio, quindi sono nascoste,
-            // col metogo GET invece le richieste vengono inserite nell'url e quindi non sono nascoste
-            conn.setRequestMethod("POST");
+            //Inserisco il metodo da evocare
+            conn.setRequestMethod(params.get("method"));
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            conn.setDoOutput(true);
-            conn.getOutputStream().write(postDataBytes);
-
+            if(!(Objects.equals(params.get("method"), "GET"))) {
+                conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+                conn.getOutputStream().write(postDataBytes);
+            }
             InputStream in;
-            responseCode = conn.getResponseCode();
-            if (responseCode < HttpURLConnection.HTTP_BAD_REQUEST) {
+            // controllo che non ci siano errori nella connessione al server (http manda codice es 404)
+            if ((responseCode = conn.getResponseCode()) < HttpURLConnection.HTTP_BAD_REQUEST) {
                 in = conn.getInputStream();
             } else {
                 in = conn.getErrorStream();
                 if (in == null) {
-                    //onPostExecute(new HttpTaskResult<>(new HttpResponse("", responseCode)));
-                    res.execute(new HttpTaskResult<>(new HttpResponse("", responseCode)));      //lambda
+                    return new HttpTaskResult<>(new HttpResponse("", responseCode));
                 }
             }
 
             in = new BufferedInputStream(in);
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-            String line = reader.readLine();
-            while (line != null) {
-                str.append(line);
-                line = reader.readLine();
+            //inserisco quello che ho ricevuto nel builder
+            String line;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
             }
+
         } catch (IOException e) {
             Log.e("HttpTaskError", e.getMessage(), e);
-            //onPostExecute(new HttpTaskResult<HttpResponse>(e));
-            res.execute(new HttpTaskResult<>(e));       // lambda
+            return new HttpTaskResult<>(e);
         } finally {
-            if (conn != null)
+            if (conn != null) {
                 conn.disconnect();
+            }
         }
-        // è andato tutto bene
-        //onPostExecute(new HttpTaskResult<>(new HttpResponse(str.toString(), responseCode)));
-        //HttpTaskResult è un oggetto che contiene al suo interno un altro
-        // oggetto di tipo HttpResponse
-        res.execute(new HttpTaskResult<>(new HttpResponse(str.toString(), responseCode)));      // lambda
+        return new HttpTaskResult<>(new HttpResponse(builder.toString(), responseCode));
     }
 
-    /*protected void onPostExecute(HttpTaskResult<HttpResponse> result){
-        for(OnHttpTaskCompleted<HttpResponse> callback : callbacks){
+    //Interfaccia necessaria per passare il risultato direttamente alla repository chiamante
+    @Override
+    protected void onPostExecute(HttpTaskResult<HttpResponse> result) {
+        for (OnHttpTaskCompleted<HttpResponse> callback : callbacks) {
             callback.onHttpTaskCompleted(result);
         }
-    }*/
-
+    }
 }

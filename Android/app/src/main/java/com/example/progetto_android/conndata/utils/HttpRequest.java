@@ -13,14 +13,15 @@ public class HttpRequest {
 
     private final String url;
 
+    //imposto stringa per formare url
     public HttpRequest(String ip, String port, String context, String servlet){
         CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
         url = "http://" + ip + ":" + port + "/" + context + "/" + servlet;
     }
 
-    public void sendRequest(Map<String, String> params, OnHttpTaskCompleted<HttpResponse> callback){
+    public void sendRequest(Map<String, String> params, OnHttpTaskCompleted<HttpResponse> callback) {
         try{
-            new HttpTask(url, params,callback).run();
+            new HttpTask(url,params).execute(callback);
         }catch(MalformedURLException e){
             Log.e("HttpRequestManager", e.getMessage(), e);
         }

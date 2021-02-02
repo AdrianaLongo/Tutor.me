@@ -1,84 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_section_course"
+    android:id="@+id/fragment_section_date"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.corsi.CourseFragment">
-
-    <TextView
-        android:id="@+id/empty_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/no_orario_disponibile"
-        android:textSize="20sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+    tools:context=".view.calendar.SlotDayFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/course_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <!-- app:layout_constraintBottom_toTopOf="@id/button_course"-->
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/First_Slot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:textSize="20sp"
-            android:text="@string/first_slot"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/Second_Slot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:textSize="20sp"
-            android:text="@string/second_slot"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/First_Slot" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/Third_Slot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:textSize="20sp"
-            android:text="@string/third_slot"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/Second_Slot" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/Fourth_Slot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:textSize="20sp"
-            android:text="@string/fourth_slot"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/Third_Slot" />
-        <!--TODO PROBABILE DA ELIMINARE
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/slots"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            app:layout_constraintTop_toTopOf="parent" />-->
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout><!--<Button
-        android:id="@+id/button_course"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/conferma_corsi"
-        app:layout_constraintEnd_toEndOf="@id/course_container"
-        app:layout_constraintStart_toStartOf="@id/course_container"
-        app:layout_constraintTop_toBottomOf="@id/course_container" />-->
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/first_level"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:elevation="4dip"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/First_Slot"
+                style="@style/TextViewDate"
+                android:text="@string/first_slot"/>
+
+            <ImageView
+                android:id="@+id/imageView1"
+                style="@style/ImageView"
+                android:contentDescription="@string/alert"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/second_level"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:elevation="4dip"
+            app:layout_constraintTop_toBottomOf="@id/first_level"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/Second_Slot"
+                style="@style/TextViewDate"
+                android:text="@string/second_slot" />
+            <ImageView
+                android:id="@+id/imageView2"
+                style="@style/ImageView"
+                android:contentDescription="@string/alert" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/third_level"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:elevation="4dip"
+            app:layout_constraintTop_toBottomOf="@id/second_level"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/Third_Slot"
+                style="@style/TextViewDate"
+                android:text="@string/third_slot" />
+            <ImageView
+                android:id="@+id/imageView3"
+                style="@style/ImageView"
+                android:contentDescription="@string/alert" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/fourth_level"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:elevation="4dip"
+            app:layout_constraintTop_toBottomOf="@id/third_level"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/Fourth_Slot"
+                style="@style/TextViewDate"
+                android:text="@string/fourth_slot" />
+            <ImageView
+                android:id="@+id/imageView4"
+                style="@style/ImageView"
+                android:contentDescription="@string/alert" />
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

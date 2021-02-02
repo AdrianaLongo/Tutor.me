@@ -29,18 +29,23 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="action_logout">
+                  <entry key="history">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="368" />
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_logout_to_menu_course">
+                            <entry key="history_to_login">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="menu_history_to_course">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -59,6 +64,15 @@
                             <option name="y" value="410" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="calendar_to_login">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
@@ -73,6 +87,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="menu_course_to_login">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="menu_course_to_menu_prof">
                               <value>
                                 <LayoutPositions />
@@ -100,18 +119,6 @@
                               </value>
                             </entry>
                           </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="prenotazioni">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
-                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>

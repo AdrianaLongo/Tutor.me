@@ -3,8 +3,10 @@ package com.example.progetto_android.view.login;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+//intermezzo tra fragment e view/layout, permette di ottenere i dati contenuti nel layout
 public class LoginViewModel extends ViewModel {
 
+    //possono essere osservati tramite observer così da informare chi li sta osservando quando cambiano
     private MutableLiveData<String> username;
     private MutableLiveData<String> password;
 
@@ -22,15 +24,5 @@ public class LoginViewModel extends ViewModel {
             password.setValue("");
         }
         return password;
-    }
-
-    public void setUsername(String username) {
-        this.username = getUsername();
-        this.username.setValue(username);
-    }
-
-    public void setPassword(String password) {
-        this.password = getPassword();
-        this.password.setValue(password);
     }
 }

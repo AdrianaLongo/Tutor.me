@@ -4,15 +4,14 @@ import android.util.Log;
 
 import com.example.progetto_android.conndata.utils.HttpRequest;
 import com.example.progetto_android.conndata.utils.OnDaoCallCompleted;
-import com.example.progetto_android.view.login.Login;
+import com.example.progetto_android.globals.GlobalValue;
+import com.example.progetto_android.globals.Useful;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 //classe che si occupa di recuperare i dati del login dalla servlet e li inserisce nella classe login
 public class LoginRepository {
@@ -25,12 +24,13 @@ public class LoginRepository {
         this.gson = new Gson();
     }
 
-    public void login(String username, String password, OnDaoCallCompleted<Login> callback) {
-        //creo hashmap contenente i parametri da passare alla richiesta http
+    public void login(String username, String password, OnDaoCallCompleted<Useful> callback) {
+        //inserisco i parametri necessari per identificare la servlet che mi serve e per effettuare la query richiesta
         Map<String, String> params = new HashMap<>();
         params.put("action", "login");
         params.put("username", username);
         params.put("password", password);
+        params.put("method", "POST");
 
         //mando la richiesta
         //la lambda viene usata per creare un oggetto di classe login riempito con i dati
@@ -39,58 +39,48 @@ public class LoginRepository {
         //e poi la lambda che prenderà i valori ricevuti dalla richiesta e li inserirà nella classe login
         http.sendRequest(params, result -> {
             try {
-                Login utente = null;
+                Useful useful = null;
                 //controllo se sono riuscito a connettermi
                 if (result.getResult().getStatusCode() == HttpURLConnection.HTTP_OK) {
+                    Log.i("47 LoginRep", "Risultato login ricevuto" + result.getResult().getData());
                     //inserisco il risultato che ottengo in formato json
                     // all'interno della classe login
-                    utente = gson.fromJson(result.getResult().getData(), Login.class);
+                    useful = gson.fromJson(result.getResult().getData(), Useful.class);
+                    Log.i("53 LoginRep", "inserito roba dentro useful " + useful.toString());
                 }
 
                 if (callback != null)
-                    callback.onDaoCallCompleted(utente);
+                    callback.onDaoCallCompleted(useful);
             } catch (IOException e) {
-                Log.e("LoginDAOError", e.getMessage(), e);
+                Log.e("LoginRepError", e.getMessage(), e);
             }
         });
     }
 
-    public void logout(OnDaoCallCompleted<Boolean> callback) {
+    public void logout(OnDaoCallCompleted<Useful> callback) {
         Map<String, String> params = new HashMap<>();
         params.put("action", "logout");
+        params.put("jSessionId", GlobalValue.getjSessionId());
+        params.put("method", "POST");
 
         http.sendRequest(params, result -> {
             try {
-                if (callback != null) {
-                    callback.onDaoCallCompleted(result.getResult().getStatusCode() == HttpURLConnection.HTTP_OK);
+                Useful useful = null;
+                //controllo se sono riuscito a connettermi
+                if (result.getResult().getStatusCode() == HttpURLConnection.HTTP_OK) {
+                    Log.i("72 LoginRep - Logout", "Risultato login ricevuto" + result.getResult().getData());
+                    //inserisco il risultato che ottengo in formato json
+                    // all'interno della classe login
+                    useful = gson.fromJson(result.getResult().getData(), Useful.class);
+                    Log.i("53 LoginRep", "inserito roba dentro useful " + useful.toString());
                 }
+
+                if (callback != null)
+                    callback.onDaoCallCompleted(useful);
             }catch (IOException e){
                 Log.e("LogoutDAOError", e.getMessage(), e);
 
                 //Richiamo la callback passando null per indicare la presenza di un errore
-                if(callback != null)
-                    callback.onDaoCallCompleted(null);
-            }
-        });
-    }
-
-    public void loggedIn(OnDaoCallCompleted<Login> callback){
-        Map<String, String> params = new HashMap<>();
-        params.put("action", "logged_in");
-
-        http.sendRequest(params, result -> {
-            try{
-                Login loggedIn = null;
-
-                if(result.getResult().getStatusCode() == HttpsURLConnection.HTTP_OK){
-                    loggedIn = gson.fromJson(result.getResult().getData(), Login.class);
-                }
-
-                if(callback != null)
-                    callback.onDaoCallCompleted(loggedIn);
-            }catch(IOException e){
-                Log.e("LoggedInDAOError", e.getMessage(), e);
-
                 if(callback != null)
                     callback.onDaoCallCompleted(null);
             }
