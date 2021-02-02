@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="TWEB:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>TWEB</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="TWEB-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="TWEB:war exploded" />
+    </root>
+  </artifact>
+</component>

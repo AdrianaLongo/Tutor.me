@@ -1,23 +1,23 @@
 package dao;
 
 public class Utente {
-    private String id;
+    private int id;
     private String nome;
     private String cognome;
     private String ruolo;
-    private String password;
     private String username;
+    private String password;
 
-    public Utente(String id, String nome, String cognome, String ruolo, String password, String username){
+    public Utente(int id, String nome, String cognome, String ruolo, String username, String password){
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.ruolo = ruolo;
-        this.password = password;
         this.username = username;
+        this.password = password;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -33,12 +33,12 @@ public class Utente {
         return ruolo;
     }
 
-    public String getPassword() {return password;}
+    public String getUsername() {return username;}
 
-    public String getUsername() { return username; }
+    public String getPassword() {return password;}
 
     @Override
     public String toString(){
-        return id + " " + username + " " +  password + " " + nome + " " + cognome + " " + ruolo;
+        return "id " + id + " " + "username " + username + " " + "password " + password + " " + "nome " + nome + " " + "cognome " + cognome + " " + "ruolo " + ruolo;
     }
 }

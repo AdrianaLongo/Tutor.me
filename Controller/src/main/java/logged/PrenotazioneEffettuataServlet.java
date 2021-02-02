@@ -1,3 +1,6 @@
+package logged;
+
+import utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
@@ -14,6 +17,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
+
+/** Segna la prenotazione come effettua, cambia quindi il campo stato della prenotazione */
 
 @WebServlet(name = "PrenotazioneEffettuataServlet", urlPatterns = "/PrenotazioneEffettuataServlet")
 public class PrenotazioneEffettuataServlet extends HttpServlet {
@@ -35,29 +40,44 @@ public class PrenotazioneEffettuataServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json, charset=UTF-8");
-        PrintWriter out = response.getWriter();
         HttpSession s = request.getSession(false);
+
+        PrintWriter out = response.getWriter();
+
         if (s != null) {
-            String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
-                try {
-                    int idPrenotazione = Integer.parseInt(request.getParameter("idPrenotazione"));
-                    dao.prenotazioneEffettuata(idPrenotazione);
-                    Useful confirmation = new Useful("Prenotazione effettuata", 1);
-                    Json = gson.toJson(confirmation);
-                    out.println(Json);//mando un json al fronto di mancata operazione
-                    out.flush();
-                } catch (SQLException | NumberFormatException ex) {
-                    System.out.println(ex.getMessage());
-                    Useful error = new Useful("Reservation unsuccessful", -1);
-                    Json = gson.toJson(error);
-                    out.println(Json);//mando un json al fronto di mancata operazione
-                    out.flush();
+
+            String jSessionId = s.getId();
+            String idToVerify = request.getParameter("jSessionId");
+
+            if(jSessionId.equals(idToVerify)) {
+                String ruoloUtente = (String) s.getAttribute("ruoloUtente");
+                if (ruoloUtente.equals("utente") || ruoloUtente.equals("admin")) {
+                    try {
+
+                        int idPrenotazione = Integer.parseInt(request.getParameter("idPrenotazione"));
+                        System.out.println("58 PrenotazioneEffettuateServlet: idPrenotazione = " + idPrenotazione);
+                        dao.prenotazioneEffettuata(idPrenotazione);
+
+                        Useful confirmation = new Useful("Stato prenotazione cambiato", 1, null);
+                        Json = gson.toJson(confirmation);
+
+                        out.println(Json);//mando un json al fronto di mancata operazione
+                        out.flush();
+
+                    } catch (SQLException | NumberFormatException ex) {
+
+                        System.out.println(ex.getMessage());
+                        Useful error = new Useful("Impossibile cambiare stato prenotazione, riprovate più tardi", -1, null);
+                        Json = gson.toJson(error);
+
+                        out.println(Json);//mando un json al fronto di mancata operazione
+                        out.flush();
+                    }
                 }
             }
         }
         else {
-            message = new Useful("Sorry you're not logged", -1);
+            message = new Useful("Sorry you're not logged", -1, null);
             Type type = new TypeToken<Useful>() {
             }.getType();
             Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json

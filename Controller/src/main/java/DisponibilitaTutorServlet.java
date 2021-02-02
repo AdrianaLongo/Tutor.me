@@ -1,3 +1,4 @@
+import utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
@@ -16,18 +17,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 @WebServlet(name = "DisponibilitaTutorServlet", urlPatterns = "/DisponibilitaTutorServlet")
-public class DisponibilitaTutorServlet extends HttpServlet implements IAction {
+public class DisponibilitaTutorServlet extends HttpServlet {
 
     DAO dao;
-    Gson gson = new Gson();
-    ArrayList<Slot> slotOccupati;
-    ArrayList<Slot> slotLiberi;
-    Type type;
-    private final String name;
-
-    public DisponibilitaTutorServlet(){
-        this.name = "profAvailable";
-    }
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -45,55 +37,38 @@ public class DisponibilitaTutorServlet extends HttpServlet implements IAction {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        System.out.println("40 DisponibilitàTutorServlet: Sono dentro");
         response.setContentType("application/json, charset=UTF-8");
+
         PrintWriter out = response.getWriter();
+
+        Gson gson = new Gson();
+        ArrayList<Slot> slotOccupati;
+        ArrayList<Slot> slotLiberi;
+        Type type;
+
         String idDocente = request.getParameter("idDocente");
 
         try {
             int idTutor = Integer.parseInt(idDocente);
+
             slotOccupati = dao.getSlotOccupati(idTutor);
             slotLiberi = Useful.getSlotLiberi(slotOccupati);
+
             type = new TypeToken<ArrayList<Slot>>() {}.getType(); //crea il token corrisp all'argomento passato
             String jsonCorsi = gson.toJson(slotLiberi, type); //e se io voglio passare più dati Json sulla stessa pagina ?
+
             out.print(jsonCorsi); //printa il Json
             out.close();
         }
         catch(SQLException | NumberFormatException e) {
+
             System.out.println(e.getMessage());
-            Useful error = new Useful("Error in getting slots", -1); //oggetto messaggio da passare al front
+            Useful error = new Useful("Error in getting slots", -1, null); //oggetto messaggio da passare al front
             String Json = gson.toJson(error);//converte in Stringa l'oggetto messaggio
+
             out.println(Json);//mando un json al fronto di mancata operazione
             out.flush();
         }
-    }
-
-    @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response, DAO dao) throws ServletException, IOException {
-        response.setContentType("application/json, charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        String idDocente = request.getParameter("idDocente");
-
-        try {
-            int idTutor = Integer.parseInt(idDocente);
-            slotOccupati = dao.getSlotOccupati(idTutor);
-            slotLiberi = Useful.getSlotLiberi(slotOccupati);
-            type = new TypeToken<ArrayList<Slot>>() {}.getType(); //crea il token corrisp all'argomento passato
-            String jsonCorsi = gson.toJson(slotLiberi, type); //e se io voglio passare più dati Json sulla stessa pagina ?
-            out.print(jsonCorsi); //printa il Json
-            out.close();
-        }
-        catch(SQLException | NumberFormatException e) {
-            System.out.println(e.getMessage());
-            Useful error = new Useful("Error in getting slots", -1); //oggetto messaggio da passare al front
-            String Json = gson.toJson(error);//converte in Stringa l'oggetto messaggio
-            out.println(Json);//mando un json al fronto di mancata operazione
-            out.flush();
-        }
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 }

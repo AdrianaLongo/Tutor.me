@@ -1,3 +1,4 @@
+import utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
@@ -16,8 +17,10 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/** Restituisce sottoforma di Json tutti i docenti */
+
 @WebServlet(name = "PopolaDocenteServlet", urlPatterns = "/PopolaDocenteServlet")
-public class PopolaDocenteServlet extends HttpServlet{
+public class PopolaDocenteServlet extends HttpServlet {
     DAO dao = null;
     ArrayList<Docente> docenti;
     Gson gson = new Gson();
@@ -50,12 +53,11 @@ public class PopolaDocenteServlet extends HttpServlet{
             out.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            Useful error = new Useful("Courses not retrieved", -1);
+            Useful error = new Useful("Courses not retrieved", -1, null);
             String Json = gson.toJson(error);
             out.println(Json);//mando un json al fronto di mancata operazione
             out.flush();
         }
 
     }
-
 }
