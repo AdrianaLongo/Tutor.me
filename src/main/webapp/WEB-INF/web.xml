@@ -29,6 +29,36 @@
     </context-param>
 
     <context-param>
+        <param-name>CourseTutorAssociation</param-name>
+        <param-value>/CourseTutorAssociation</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>DeleteAssociationServlet</param-name>
+        <param-value>/DeleteAssociationServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>DeleteCourseServlet</param-name>
+        <param-value>/DeleteCourseServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>DeleteTutorServlet</param-name>
+        <param-value>/DeleteTutorServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>ExistingEntAssociationServlet</param-name>
+        <param-value>/ExistingEntAssociationServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>TutorCourseAssociationServlet</param-name>
+        <param-value>/TutorCourseAssociationServlet</param-value>
+    </context-param>
+
+    <context-param>
         <param-name>EffettuaPrenotazioneServlet</param-name>
         <param-value>/EffettuaPrenotazioneServlet</param-value>
     </context-param>
@@ -55,7 +85,7 @@
 
     <context-param>
         <param-name>AddAssociationServlet</param-name>
-        <param-value>/logged.CourseTutorAssociation</param-value>
+        <param-value>/logged.CourseTutorAssociationServlet</param-value>
     </context-param>
 
     <context-param>

@@ -63,6 +63,24 @@ public class DispatcherServlet extends HttpServlet {
         if(action.equals("populateCourses"))
             page = ctx.getInitParameter("PopulateCorsiServlet");
 
+        if(action.equals("courseTutorAssociation"))
+            page = ctx.getInitParameter("CourseTutorAssociationServlet");
+
+        if(action.equals("deleteAssociation"))
+            page = ctx.getInitParameter("DeleteAssociationServlet");
+
+        if(action.equals("deleteCourse"))
+            page = ctx.getInitParameter("DeleteCourseServlet");
+
+        if(action.equals("deleteTutor"))
+            page = ctx.getInitParameter("DeleteTutorServlet");
+
+        if(action.equals("existingAssociation"))
+            page = ctx.getInitParameter("ExistingEntAssociationServlet");
+
+        if(action.equals("tutorCourseAssociation"))
+            page = ctx.getInitParameter("TutorCourseAssociationServlet");
+
         RequestDispatcher reqDisp = ctx.getRequestDispatcher(page);
         reqDisp.forward(request,response);
 

@@ -18,8 +18,8 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 
-@WebServlet(name = "CourseTutorAssociation", urlPatterns = "/CourseTutorAssociation")
-public class CourseTutorAssociation extends HttpServlet {
+@WebServlet(name = "CourseTutorAssociationServlet", urlPatterns = "/CourseTutorAssociationServlet")
+public class CourseTutorAssociationServlet extends HttpServlet {
 
     DAO dao = null;
 
