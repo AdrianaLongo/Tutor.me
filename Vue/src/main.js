@@ -10,6 +10,9 @@ window.jQuery = jQuery()
 
 import store from './store';
 
+import VueSession from 'vue-session';
+Vue.use(VueSession)
+
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)

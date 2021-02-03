@@ -38,6 +38,13 @@
 </template>
 
 <script>
+// import Vue from 'vue';
+// import jQuery from 'jquery'
+// // import $ from "jquery";
+// window.jQuery = jQuery()
+
+import jQuery from "jquery";
+
 export default {
   name: "login",
   data(){
@@ -47,14 +54,51 @@ export default {
     }
   },
   methods:{
-    login(){
-      this.$store.dispatch('login',{
+    // login: function(){
+    //   this.$store.dispatch('login',{
+    //     username: this.username,
+    //     password: this.password,
+    //   });
+    //
+    //   setTimeout(() => {this.makeToast()}, 200)
+    //   console.log("Username inserito: " + this.username);
+    //   console.log("Password inserita: " + this.password);
+    // },
+    login: function() {
+      // var self = this;
+      jQuery.post('http://localhost:8081/TWEB_war_exploded/LoginServlet', {
         username: this.username,
         password: this.password,
-      });
-      setTimeout(() => {this.makeToast()}, 200)
-      console.log("Username inserito: " + this.username);
-      console.log("Password inserita: " + this.password);
+      })
+          .then(response => {
+            // .then(function(response))
+            // console.log("session: " + response.getSession());
+            this.$session.start();
+            console.log("session started");
+            // console.log("this.$session.exists() = " + this.$session.exists())
+            // var id = this.session.getAttribute("jSessionId");
+            // console.log("id = " + id)
+            var resp = JSON.parse(response);
+            // console.log("request" + sessionStorage)
+            if(resp.success === 1) {
+              console.log("response: " + response)
+              console.log("credentials.username: " + this.username)
+              console.log("credentials.password: " + this.password)
+              this.$store.state.token = JSON.parse(response).object
+              localStorage.setItem('access_token', this.$store.state.token)
+              // console.log("token in localstorage: " + localStorage.access_token)
+              console.log("token in store: " + this.$store.state.token)
+              this.$session.set("session-id",JSON.parse(response).object);
+              console.log("this.$session.get(): " + this.$session.get("session-id"))
+              // context.commit('login', token)
+              this.$store.state.isLogged = true;
+              console.log("isLogged: " + this.$store.state.isLogged)
+            }
+
+          })
+          .catch(error => {
+            console.log(error)
+          })
     },
     makeToast(){
       console.log("toast creato")

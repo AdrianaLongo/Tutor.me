@@ -147,33 +147,40 @@ export default new Vuex.Store({
     //             context.commit("popolaCalendarioDocente", payload);
     //         }, 20);
     //     }
-        login(context, credentials){
-            jQuery.post('http://localhost:8081/TWEB_war_exploded/LoginServlet', {
-                username: credentials.username,
-                password: credentials.password,
-            })
-                .then(response => {
-                    // console.log("session: " + response.getSession());
-                    var resp = JSON.parse(response);
-                    // console.log("request" + sessionStorage)
-                    if(resp.success === 1) {
-                        console.log("response: " + response)
-                        console.log("credentials.username: " + credentials.username)
-                        console.log("credentials.password: " + credentials.password)
-                        this.state.token = JSON.parse(response).object
-                        localStorage.setItem('access_token', this.state.token)
-                        // console.log("token in localstorage: " + localStorage.access_token)
-                        console.log("token in store: " + this.state.token)
-                        // context.commit('login', token)
-                        this.state.isLogged = true;
-                        console.log("isLogged: " + this.state.isLogged)
-                    }
-
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-        },
+    //     login(context, credentials){
+    //         // var self = this;
+    //         jQuery.post('http://localhost:8081/TWEB_war_exploded/LoginServlet', {
+    //             username: credentials.username,
+    //             password: credentials.password,
+    //         })
+    //             .then(response => {
+    //             // .then(function(response))
+    //                 // console.log("session: " + response.getSession());
+    //                 this.$session.start();
+    //                 console.log("session started");
+    //                 // console.log("this.$session.exists() = " + this.$session.exists())
+    //                 var id = this.session.getAttribute("jSessionId");
+    //                 console.log("id = " + id)
+    //                 var resp = JSON.parse(response);
+    //                 // console.log("request" + sessionStorage)
+    //                 if(resp.success === 1) {
+    //                     console.log("response: " + response)
+    //                     console.log("credentials.username: " + credentials.username)
+    //                     console.log("credentials.password: " + credentials.password)
+    //                     this.state.token = JSON.parse(response).object
+    //                     localStorage.setItem('access_token', this.state.token)
+    //                     // console.log("token in localstorage: " + localStorage.access_token)
+    //                     console.log("token in store: " + this.state.token)
+    //                     // context.commit('login', token)
+    //                     this.state.isLogged = true;
+    //                     console.log("isLogged: " + this.state.isLogged)
+    //                 }
+    //
+    //             })
+    //             .catch(error => {
+    //                 console.log(error)
+    //             })
+    //     },
 
         retrieveTutors(context, course){
             var _this = this;
