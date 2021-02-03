@@ -92,10 +92,9 @@
     <filter>
         <filter-name>CorsFilter</filter-name>
         <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
-        //add below config
         <init-param>
             <param-name>cors.allowed.origins</param-name>
-            <param-value>http://localhost:8081</param-value>
+            <param-value>http://localhost:8080</param-value>
         </init-param>
     </filter>
 
