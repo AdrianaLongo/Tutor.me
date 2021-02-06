@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="shortcut icon" href="#">
+
+
 </head>
 <body>
 
@@ -19,6 +22,16 @@
     <input type="text" id="nomeCorso" name="nomeCorso"><br><br>
     <input type="submit" value="Populate">
 </form>
+<button onclick="getJSessionId()">OttieniId</button>
+
+<script>
+    // import $ from "jquery";
+
+    function getJSessionId(){
+        console.log(session.getAttribute)
+    }
+</script>
 
 </body>
+
 </html>

@@ -46,10 +46,11 @@ public class PopolaDocenteServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             docenti = dao.mostraDocenti(); //recupera tutti i docenti
-            System.out.print("Corsi recuperati");
+            System.out.print("Tutor recuperati");
             Type type = new TypeToken<ArrayList<Docente>>() {}.getType(); //stabilisce il tipo di ArrayList docente
             String jsonDocenti = gson.toJson(docenti, type); //
             out.print(jsonDocenti);
+            System.out.println(jsonDocenti);
             out.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

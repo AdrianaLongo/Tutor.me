@@ -3,6 +3,7 @@ import com.google.gson.reflect.TypeToken;
 import dao.Corso;
 import dao.DAO;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -36,6 +37,8 @@ public class PopulateCorsiServlet extends HttpServlet {
         String user = ctx.getInitParameter("user");
         String pwd = ctx.getInitParameter("password");
         dao = new DAO(url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
+
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,8 +47,10 @@ public class PopulateCorsiServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+
         response.setContentType("application/json, charset=UTF-8");
-        //RequestDispatcher reqDisp = request.getRequestDispatcher("Logout.html");
+        RequestDispatcher reqDisp = request.getRequestDispatcher("index.html");
         PrintWriter out = response.getWriter();
         try {
             corso = dao.mostraCorsi(); //prende tutti i corsi

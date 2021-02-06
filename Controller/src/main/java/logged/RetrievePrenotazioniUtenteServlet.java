@@ -41,49 +41,61 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
         String user = ctx.getInitParameter("user");
         String pwd = ctx.getInitParameter("password");
         dao = new DAO(url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
-
+        System.out.println("Fine init RetrievePrenotazioniUtenteServlet");
     }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        processRequest(request, response);
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json, charset=UTF-8");
+        response.setContentType("text/html, charset=UTF-8");
         HttpSession s = request.getSession(false);
+//        HttpSession s = request.getSession();
 
+        System.out.println("session in RetrievePrenotazioniUtenteServlet: " + s);
+//        //TODO: problema: la richiesta che arriva non ha un HTTPSession valida, quindi restituisce true
+        System.out.println("s.getId(): " + s.getId());
+        System.out.println("request.getParameter(jSessioId): " + request.getParameter("jSessionId") );
+//         se request.getSession(true) -> request.getSession.getId() != request.getParameter("jSessionId")
         ArrayList<Prenotazione> prenotazioni;
         PrintWriter out = response.getWriter();
+        System.out.println("s.getID() in RetrievePrenotazioniUtenteServlet: " + s.getId().toString());
 
         if (s != null) {
-
-            String jSessionId = s.getId().toString();
+        String jSessionId = s.getId().toString();
             String idToVerify = request.getParameter("jSessionId");
+            System.out.println("idToVerify in RetrievePrenotazioniUtenteServlet: " + idToVerify);
 
-            if(jSessionId.equals(idToVerify)) {
-                String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-                if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
+            String ruoloUtente = (String) s.getAttribute("ruoloUtente");
+            if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
+                System.out.println("ruoloUtente: " + ruoloUtente);
+                try {
+                    String idUtentee = (String) s.getAttribute("idUtente");
+                    int idUtente = Integer.parseInt(idUtentee);
+                    prenotazioni = dao.retrievePrenotazioniUtente(idUtente);
 
-                    try {
-                        String idUtentee = (String) s.getAttribute("idUtente");
-                        int idUtente = Integer.parseInt(idUtentee);
-                        prenotazioni = dao.retrievePrenotazioniUtente(idUtente);
+                    Type type = new TypeToken<ArrayList<Prenotazione>>() {
+                    }.getType();
+                    String jsonPrenotazioni = gson.toJson(prenotazioni, type);
 
-                        Type type = new TypeToken<ArrayList<Prenotazione>>() {
-                        }.getType();
-                        String jsonPrenotazioni = gson.toJson(prenotazioni, type);
+                    out.print(jsonPrenotazioni);
+                    out.close();
 
-                        out.print(jsonPrenotazioni);
-                        out.close();
+                } catch (SQLException | NumberFormatException ex) {
+                    System.out.println(ex.getMessage());
+                    Useful error = new Useful("Unable to retrieve reservations", -1, null);
+                    String Json = gson.toJson(error);
 
-                    } catch (SQLException | NumberFormatException ex) {
-                        System.out.println(ex.getMessage());
-                        Useful error = new Useful("Unable to retrieve reservations", -1, null);
-                        String Json = gson.toJson(error);
-
-                        out.println(Json);//mando un json al fronto di mancata operazione
-                        out.flush();
-                    }
+                    out.println(Json);//mando un json al fronto di mancata operazione
+                    out.flush();
                 }
             }
         }

@@ -64,6 +64,7 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("ruoloUtente", user.getRuolo()); //setto il ruolo per definire i componenti in cui ha accesso l'utente
                     session.setAttribute("Idutente", user.getId()); //un pò un capriccio ma magari serve
                     session.setAttribute("Idsessione", jSessionId);
+                    System.out.println("jSessionId in LoginServlet:" + jSessionId);
 
                     Useful success = new Useful("Successful login", 1, jSessionId);
                     String Json = gson.toJson(success);

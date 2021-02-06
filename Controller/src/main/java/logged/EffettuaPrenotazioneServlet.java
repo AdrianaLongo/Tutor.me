@@ -43,7 +43,7 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
         String user = ctx.getInitParameter("user");
         String pwd = ctx.getInitParameter("password");
         dao = new DAO(url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
-
+        System.out.println("Fine init EffettuaPrenotazioneServlet");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,9 +59,11 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
 
         HttpSession s = request.getSession(false);
         String jSession = request.getParameter("jSessionId");
+        System.out.println("jSessionId in EffettuaPrenotazioneServlet: " + jSession);
 
         if (s.getId().equals(jSession)) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
+            System.out.println("ruoloUtente in EffettuaPrenotazioneServlet: " + ruoloUtente);
 
             if (ruoloUtente.equals("utente") || ruoloUtente.equals("admin")) {
 
