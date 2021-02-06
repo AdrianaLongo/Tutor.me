@@ -1,6 +1,7 @@
 package com.example.progetto_android.view.calendar;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,12 +81,12 @@ public class SlotDayFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         //creo array dove andrò a suddividere gli orari ricevuti a seconda della necessità
         ArrayList<Slot> hours = new ArrayList<>();
-        ArrayList<Book> uSlots = new ArrayList<>();
 
         TextView fs = view.findViewById(R.id.First_Slot);
         TextView ss = view.findViewById(R.id.Second_Slot);
         TextView ts = view.findViewById(R.id.Third_Slot);
         TextView qs = view.findViewById(R.id.Fourth_Slot);
+        System.out.println();
 
         //ottengo gli slot dalla ViewModel e li inserisco nella view
         mViewModel.getSlots().observe(getViewLifecycleOwner(), slots -> {
@@ -96,18 +97,18 @@ public class SlotDayFragment extends Fragment{
                         .collect(Collectors.toList());
                 List<Slot> pSlots = slots;
                 sd.getLoggedIn().observe(getViewLifecycleOwner(), data -> {
-                    if (data) {
                         //ottengo le prenotazioni dell'utente
                         mViewModel.getBook().observe(getViewLifecycleOwner(), book -> {
-                            book = book.stream()
-                                    .filter(distinctByKey(Book::getSlot))
-                                    .collect(Collectors.toList());
-                            //seleziono quelle ancora attive
-                            for (Book p : book) {
-                                if (p.getStato().equals("0")) {
-                                    uSlots.add(p);
+                            ArrayList<Book> uSlots = new ArrayList<>();
+                            if(book != null) {
+                                for (Book p : book) {
+                                    if (p.getStato().equals("0")) {
+                                        uSlots.add(p);
+                                        Log.i("SlotDayFragment", p.toString());
+                                    }
                                 }
                             }
+                            //seleziono quelle ancora attive
                             //prendo gli orari del giorno che mi serve
                             for (Slot slot : pSlots) {
                                 String day = slot.getDay(slot.getSezione());
@@ -154,6 +155,7 @@ public class SlotDayFragment extends Fragment{
                                             if (check(uSlots, pSlots, slot.getSezione())) {
                                                 ss.setVisibility(View.VISIBLE);
                                                 view.findViewById(R.id.imageView2).setVisibility(View.VISIBLE);
+                                                Log.i("SlotDayFragment", view.findViewById(R.id.imageView2).getVisibility() + "");
                                             } else
                                                 ss.setVisibility(View.VISIBLE);
                                             break;
@@ -178,7 +180,6 @@ public class SlotDayFragment extends Fragment{
                                         "Questo professore è al completo per oggi, prova a cambiare giorno.",
                                         Toast.LENGTH_LONG).show();
                         });
-                    }
                 });
                 //controllo sul click dell'utente per ogni textview
                 fs.setOnClickListener(v -> onClick(view.findViewById(R.id.imageView1), hours, "15-16"));
