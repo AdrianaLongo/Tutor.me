@@ -113,7 +113,7 @@ export default {
   },
   created: function() {
     var _this = this;
-    $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateCorsiServlet', function (courses) {
+    $.getJSON('http://localhost:8080/TWEB_war_exploded/PopulateCorsiServlet', function (courses) {
       _this.courses = courses;
       console.log(courses); // array di 7 elementi
     });
@@ -124,13 +124,13 @@ export default {
       var _this = this;
       // console.log("Corso scelto: " + courseName);
       // var corso = this.$store.getters.courseName;
-      // $.get('http://localhost:8081/TWEB_war_exploded/cercaTutorServlet', "corso", function
+      // $.get('http://localhost:8080/TWEB_war_exploded/cercaTutorServlet', "corso", function
       //     (json) {
       //   _this.json = json;
       // });
       $.getJSON({
         type: "GET",
-        url: 'http://localhost:8081/TWEB_war_exploded/cercaTutorServlet',
+        url: 'http://localhost:8080/TWEB_war_exploded/cercaTutorServlet',
         data: 'corso=' + corso,
         success: function (jsonTutor) {
           _this.jsonTutor = jsonTutor;

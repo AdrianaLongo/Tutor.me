@@ -3,15 +3,12 @@ package utils;
 import dao.Slot;
 
 
-import javax.servlet.ServletContext;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Useful {
+    public static String id;
     private String message;
     private int success;
     private Object object;
@@ -73,6 +70,18 @@ public class Useful {
         return random.nextInt(10, 1000000000);
     }
 
+
+    public static boolean identifyCookie(Cookie cook[]) {
+        if (cook != null) {
+            for (Cookie cookie : cook) {
+                if (cookie.getName().equals(Useful.id))
+                    return true;
+            }
+        }
+        return false;
+
+
+    }
 }
 
 

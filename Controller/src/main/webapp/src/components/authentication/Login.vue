@@ -66,15 +66,15 @@ export default {
     // },
     login: function() {
       // var self = this;
-      jQuery.post('http://localhost:8081/TWEB_war_exploded/LoginServlet', {
+      jQuery.post('http://localhost:8080/TWEB_war_exploded/LoginServlet', {
         username: this.username,
         password: this.password,
       })
           .then(response => {
             // .then(function(response))
             // console.log("session: " + response.getSession());
-            this.$session.start();
-            console.log("session started");
+            //this.$session.start();
+            //console.log("session started");
             // console.log("this.$session.exists() = " + this.$session.exists())
             // var id = this.session.getAttribute("jSessionId");
             // console.log("id = " + id)
@@ -84,7 +84,7 @@ export default {
               console.log("response: " + response)
               console.log("credentials.username: " + this.username)
               console.log("credentials.password: " + this.password)
-              this.$store.state.token = JSON.parse(response).object
+              this.$store.state.token = 87;
               localStorage.setItem('access_token', this.$store.state.token)
               // console.log("token in localstorage: " + localStorage.access_token)
               console.log("token in store: " + this.$store.state.token)

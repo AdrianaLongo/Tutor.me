@@ -124,7 +124,7 @@ export default new Vuex.Store({
         // retrieveTutors(state, tutors){
         //     state.tutorJSON = tutors
         // }
-        resetTutors(state, payload){
+        findTutors(state, payload){
             state.tutorJSON = payload;
         },
         resetAvailability(state, payload){
@@ -149,7 +149,7 @@ export default new Vuex.Store({
     //     }
     //     login(context, credentials){
     //         // var self = this;
-    //         jQuery.post('http://localhost:8081/TWEB_war_exploded/LoginServlet', {
+    //         jQuery.post('http://localhost:8080/TWEB_war_exploded/LoginServlet', {
     //             username: credentials.username,
     //             password: credentials.password,
     //         })
@@ -186,7 +186,7 @@ export default new Vuex.Store({
             var _this = this;
             jQuery.getJSON({
                 type: "GET",
-                url: 'http://localhost:8081/TWEB_war_exploded/cercaTutorServlet',
+                url: 'http://localhost:8080/TWEB_war_exploded/cercaTutorServlet',
                 data: 'corso='+course,
                 success: function (jsonTutor) {
                     _this.jsonTutor = jsonTutor;
@@ -206,7 +206,7 @@ export default new Vuex.Store({
             var _this = this;
             $.getJSON({
                 type: "GET",
-                url: 'http://localhost:8081/TWEB_war_exploded/DisponibilitaTutorServlet',
+                url: 'http://localhost:8080/TWEB_war_exploded/DisponibilitaTutorServlet',
                 data: 'idDocente='+tutor,
                 success: function (jsonDisponibilita) {
                     _this.jsonDisponibilita = jsonDisponibilita;
@@ -224,7 +224,7 @@ export default new Vuex.Store({
             var _this = this;
             // $.getJSON({
             //     type: "GET",
-            //     url: 'http://localhost:8081/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet',
+            //     url: 'http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet',
             //     data: 'jSessionId='+ user,
             //     success: function (jsonPersonalHistory) {
             //         console.log("user: " + user);
@@ -234,7 +234,7 @@ export default new Vuex.Store({
             //         console.log(_this.state.personalHistoryJSON);
             //     }
             // });
-            jQuery.get('http://localhost:8081/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet',{
+            jQuery.get('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet',{
                 jSessionId: user
             })
                 .then(response => {
@@ -251,7 +251,7 @@ export default new Vuex.Store({
             var _this = this;
             $.getJSON({
                 type: "GET",
-                url: 'http://localhost:8081/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet',
+                url: 'http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet',
                 data: 'jSessionId='+ user,
                 success: function (jsonPersonalHistory) {
                     console.log("user: " + user);
@@ -265,7 +265,7 @@ export default new Vuex.Store({
 
         deleteCourseFromCatalogue(context, credentials){
             // TODO: cambiare appena c'è la servlet
-            jQuery.post('http://localhost:8081/TWEB_war_exploded/LoginServlet', {
+            jQuery.post('http://localhost:8080/TWEB_war_exploded/LoginServlet', {
                 username: credentials.username,
                 password: credentials.password,
             })

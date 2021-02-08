@@ -14,16 +14,5 @@
 //         port: 8080,
 //         public: 'http://192.168.1.199:8080/'
 //     },
-//     publicPath: "/",
-//     // baseUrl: "/",
-//     chainWebpack: config => {
-//         config
-//             .plugin("html")
-//             .tap(args => {
-//                 // if (process.env.DEMO) {
-//                     args[0].template = "src/main/webapp/index.html"
-//                 // }
-//                 return args
-//             })
-//     }
+//     publicPath: "/"
 // }

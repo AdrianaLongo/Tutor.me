@@ -41,7 +41,7 @@ export default {
   },
   beforeCreate: function() {
     var _this = this;
-    $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
+    $.getJSON('http://localhost:8080/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
       _this.jsonCourses = jsonCourses;
       // console.log(jsonCourses);
     });
@@ -49,7 +49,7 @@ export default {
 
     // // VERSIONE CON DISPATCHER
     // var _this = this;
-    // $.getJSON('http://localhost:8081/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
+    // $.getJSON('http://localhost:8080/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
     //   _this.jsonCourses = jsonCourses;
     //   // console.log(jsonCourses);
     // });

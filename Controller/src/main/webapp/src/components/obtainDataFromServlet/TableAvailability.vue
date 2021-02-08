@@ -336,12 +336,12 @@ export default {
       // TODO: gestire sessione
       if (this.$store.getters.userLogged){
         console.log("Sei loggato!")
-        $.post('http://localhost:8081/TWEB_war_exploded/EffettuaPrenotazioneServlet', {
+        $.post('http://localhost:8080/TWEB_war_exploded/EffettuaPrenotazioneServlet', {
           jSessionId: this.$store.getters.currentToken,
           idDocente: this.$store.getters.tutorId,
           slot: this.$store.getters.prenotazioneSlot,
           nomeCorso: this.$store.getters.courseName
-        })
+        },)
         console.log("Prenotazione avvenuta col tutor " + this.$store.getters.tutorId + " di " + this.$store.getters.courseName + " nello slot " + this.$store.getters.prenotazioneSlot)
       } else {
         console.log("Non sei loggato.")
