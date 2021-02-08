@@ -3,7 +3,6 @@
 <!--    <p>elencoDisponibilita: {{this.$store.getters.elencoDisponibilita}}</p>-->
 <!--    <p>disponibilitaDocente: {{this.$store.getters.disponibilitaDocente}}</p>-->
 
-<!--    TODO: sistemare data e orario nel modale della prenotazione-->
     <b-container v-if="this.$store.getters.userLogged">
       <b-table class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita">
         <!--        <template #cell(lun)="data">-->
@@ -120,6 +119,10 @@
         <!--          </b-button>-->
         <!--        </template>-->
 
+<!--        <template #cell(lun)="data" :value="{day: 'Lunedi'}">-->
+<!--        <template #cell(lun)="data" :day="Lunedi">-->
+<!--        <template #cell(lun)="data" v-model="fields.label">-->
+<!--        <template #cell(lun)="data" :value="day = 'Lunedi'">-->
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
           <b-button v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
@@ -210,11 +213,9 @@
       <b-modal id="modal-1" title="Vuoi confermare la prenotazione?" align="center" hide-footer>
         <p class="my-4"> Corso: {{ this.$store.getters.courseName }} </p>
         <p class="my-4"> Tutor: {{ this.$store.getters.tutorFullName }} </p>
-        <p class="my-4"> Data e ora: {{ fields.label }}, {{ fields }}</p>
-        <p>tutto: {{fields}}</p>
-        <p>vuoto: {{fields.label}}</p>
-        <p>tutto: {{this.fields}}</p>
-<!--        <p>fields.get(label): {{fields.getElementById("day")}}</p>-->
+        <p class="my-4"> Data e ora: {{ day }}, {{ hours }}</p>
+
+        <p class="text-danger font-weight-bold">Per confermare è necessario procedere con il login.</p>
         <login></login>
 
       </b-modal>
@@ -331,6 +332,21 @@ export default {
       console.log("corso = " + this.$store.getters.courseName);
       console.log("tutor = " + this.$store.getters.tutorFullName + ", " + this.$store.getters.tutorId );
       console.log("slot = " + this.$store.getters.prenotazioneSlot);
+      switch(s.slice(0,3)){
+        case 'LUN': this.day = "Lunedi"; break;
+        case 'MAR': this.day = "Martedi"; break;
+        case 'MER': this.day = "Mercoledi"; break;
+        case 'GIO': this.day = "Giovedi"; break;
+        case 'VEN': this.day = "Venerdi"; break;
+        default: this.day = "";
+      }
+      switch(s.slice(3)){
+        case '1': this.hours = "15:00 - 16:00"; break;
+        case '2': this.hours = "16:00 - 17:00"; break;
+        case '3': this.hours = "17:00 - 18:00"; break;
+        case '4': this.hours = "18:00 - 19:00"; break;
+        default: this.hours = "";
+      }
     },
     creaPrenotazione: function(){
       // TODO: gestire sessione

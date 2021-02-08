@@ -127,9 +127,9 @@ export default new Vuex.Store({
         findTutors(state, payload){
             state.tutorJSON = payload;
         },
-        resetAvailability(state, payload){
-            state.disponibilitaJSON = payload;
-        },
+        // resetAvailability(state, payload){
+        //     state.disponibilitaJSON = payload;
+        // },
         logout(state, payload){
             state.token=payload;
         }

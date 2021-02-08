@@ -7,7 +7,7 @@
           label-cols-lg="3"
           label="Seleziona un corso: "
           label-for="input-horizontal"
-
+          class="font-weight-bold text-lg-left"
       >
         <b-form-select
             v-model="courseName"
@@ -75,8 +75,10 @@ export default {
     courseHasChanged(evt){
       let val = evt.target.value;
       console.log("cambio corso" + val);
-      this.$store.commit("resetTutors", '');
-      this.$store.commit("resetAvailability", '');
+      this.$store.state.tutorJSON = '';
+      this.$store.state.disponibilitaJSON = '';
+      // this.$store.commit("resetTutors", '');
+      // this.$store.commit("resetAvailability", '');
     },
 
     showTutors: function(){

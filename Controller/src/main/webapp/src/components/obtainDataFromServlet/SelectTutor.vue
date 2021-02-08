@@ -9,6 +9,7 @@
             label-cols-lg="3"
             label="Seleziona un tutor: "
             label-for="input-horizontal"
+            class="font-weight-bold text-lg-left"
         >
           <b-select
               v-model="tutor"
@@ -46,7 +47,8 @@ export default {
     tutorHasChanged(evt){
       let val = evt.target.value;
       console.log("cambio tutor" + val);
-      this.$store.commit("resetAvailability", '');
+      this.$store.state.disponibilitaJSON = '';
+      // this.$store.commit("resetAvailability", '');
     },
     showAvailiability: function(){
       // console.log(this.tutor.id); // torna l'id
