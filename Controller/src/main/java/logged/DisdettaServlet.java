@@ -1,6 +1,6 @@
 package logged;
 
-import Utils.Useful;
+import utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
@@ -74,17 +74,11 @@ public class DisdettaServlet extends HttpServlet {
 
                 if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
 
-                    String utente = (String) s.getAttribute("idUtente");
-                    String docente = request.getParameter("idDocente");
-                    String slot = request.getParameter("slot"); //sostituire con il parsing Json forse
-                    String nomeCorso = request.getParameter("nomeCorso"); //sostituire con il parsin Json forse
 
                     try {
-
-                        int utenteint = Integer.parseInt(utente);
-                        int docenteint = Integer.parseInt(docente);
+                        int idPrenotazione = Integer.parseInt(request.getParameter("idPrenotazione"));
                         //int utenteint = Integer.parseInt(utente);
-                        dao.deletePrenotazione(nomeCorso, docenteint, utenteint, slot);//trasforma stato prenotazione in disdetta
+                        dao.deletePrenotazione(idPrenotazione);//trasforma stato prenotazione in disdetta
                         resstate = 1;
 
                     } catch (SQLException | NumberFormatException e) {

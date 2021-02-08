@@ -1,6 +1,6 @@
 package logged;
 
-import Utils.Useful;
+import utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
@@ -52,12 +52,13 @@ public class PopolaStoricoServlet extends HttpServlet {
         ArrayList<Prenotazione> prenotazioni;
         String Json;
         Gson gson = new Gson();
+        Useful message;
 
         HttpSession s = request.getSession(false);
 
         if (s != null) {
 
-            String jSessionId = s.getId().toString();
+            String jSessionId = s.getId();
             String idToVerify = request.getParameter("jSessionId");
 
             if (jSessionId.equals(idToVerify)) {
@@ -76,8 +77,8 @@ public class PopolaStoricoServlet extends HttpServlet {
                     } catch (SQLException ex) {
 
                         System.out.println(ex.getMessage());
-                        Useful error = new Useful("Courses not retrieved", -1, null);
-                        Json = gson.toJson(error);
+                        message= new Useful("Courses not retrieved", -1, null);
+                        Json = gson.toJson(message);
 
                         out.println(Json);//mando un json al fronto di mancata operazione
                         out.flush();

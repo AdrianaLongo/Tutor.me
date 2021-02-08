@@ -1,6 +1,6 @@
 package logged;
 
-import Utils.Useful;
+import utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
@@ -43,7 +43,7 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
         String user = ctx.getInitParameter("user");
         String pwd = ctx.getInitParameter("password");
         dao = new DAO(url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
-        System.out.println("Fine init EffettuaPrenotazioneServlet");
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,11 +59,9 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
 
         HttpSession s = request.getSession(false);
         String jSession = request.getParameter("jSessionId");
-        System.out.println("jSessionId in EffettuaPrenotazioneServlet: " + jSession);
 
         if (s.getId().equals(jSession)) {
             String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            System.out.println("ruoloUtente in EffettuaPrenotazioneServlet: " + ruoloUtente);
 
             if (ruoloUtente.equals("utente") || ruoloUtente.equals("admin")) {
 
@@ -101,23 +99,21 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
                         message = new Useful("That tutor is already occupied", -1, null);
                         System.out.println("Unsuccessfully deleted reservation");
                     }
-
-                    Type type = new TypeToken<Useful>() {}.getType(); //genera il token corrispondente ad oggetto Utils.Useful
-                    Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
-
-                    out.print(Json);
-                    out.flush();
                 }
+            }
+            else {
+                message = new Useful("Sorry you don't have admin privileges", -1, null);
             }
         }
         else {
             message = new Useful("Sorry you're not logged", -1, null);
-            Type type = new TypeToken<Useful>() {}.getType(); //genera il token corrispondente ad oggetto Utils.Useful
-            Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
-
-            out.print(Json);
-            out.flush();
         }
+
+        Type type = new TypeToken<Useful>() {}.getType(); //genera il token corrispondente ad oggetto Utils.Useful
+        Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
+
+        out.print(Json);
+        out.flush();
 
     }
 

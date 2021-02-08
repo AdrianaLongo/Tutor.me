@@ -1,4 +1,4 @@
-import Utils.Useful;
+import utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
@@ -67,7 +67,7 @@ public class cercaTutorServlet extends HttpServlet {
                 String jsonTutor = gson.toJson(tutor, type); //e se io voglio passare più dati Json sulla stessa pagina ?
 
                 out.print(jsonTutor);//stampa il tutor
-                out.close(); //chiude il PrintWriter della response
+
             } else {
 
                 Useful error = new Useful("Course doesn't exist", -1, null); //vedere class Utils.Useful
@@ -75,13 +75,16 @@ public class cercaTutorServlet extends HttpServlet {
                 String Json = gson.toJson(error, type); //serializza l'oggetto in una stringa formato Json
 
                 out.println(Json);//mando un json al fronto di mancata operazione
-                out.flush();
+
 
             }
+            out.flush();
+
         } catch (SQLException e) {
             System.out.println(e.getMessage()); //recupera messaggio possibile errore query
             Useful error = new Useful("Courses not retrieved", -1, null); //vedere class Utils.Useful
-            String Json = gson.toJson(error); //serializza l'oggetto in una stringa formato Json
+            Type type = new TypeToken<Useful>() {}.getType();
+            String Json = gson.toJson(error, type); //serializza l'oggetto in una stringa formato Json
 
             out.println(Json);//mando un json al fronto di mancata operazione
             out.flush();

@@ -1,4 +1,4 @@
-import Utils.Useful;
+import utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
@@ -21,9 +21,8 @@ import java.util.ArrayList;
 
 @WebServlet(name = "PopolaDocenteServlet", urlPatterns = "/PopolaDocenteServlet")
 public class PopolaDocenteServlet extends HttpServlet {
+
     DAO dao = null;
-    ArrayList<Docente> docenti;
-    Gson gson = new Gson();
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -44,13 +43,16 @@ public class PopolaDocenteServlet extends HttpServlet {
         response.setContentType("application/json, charset=UTF-8");
         //RequestDispatcher reqDisp = request.getRequestDispatcher("Logout.html");
         PrintWriter out = response.getWriter();
+
+        ArrayList<Docente> docenti;
+        Gson gson = new Gson();
+
         try {
             docenti = dao.mostraDocenti(); //recupera tutti i docenti
-            System.out.print("Tutor recuperati");
+            System.out.print("Corsi recuperati");
             Type type = new TypeToken<ArrayList<Docente>>() {}.getType(); //stabilisce il tipo di ArrayList docente
             String jsonDocenti = gson.toJson(docenti, type); //
             out.print(jsonDocenti);
-            System.out.println(jsonDocenti);
             out.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

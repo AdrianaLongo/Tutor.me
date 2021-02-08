@@ -1,6 +1,6 @@
 package logged;
 
-import Utils.Useful;
+import utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
@@ -29,9 +29,7 @@ import java.util.ArrayList;
 public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
     DAO dao;
 
-    String Json;
-    Gson gson = new Gson();
-    Useful message;
+
 
     public void init(ServletConfig conf) throws ServletException {
 
@@ -41,73 +39,75 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
         String user = ctx.getInitParameter("user");
         String pwd = ctx.getInitParameter("password");
         dao = new DAO(url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
-        System.out.println("Fine init RetrievePrenotazioniUtenteServlet");
-    }
 
+    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        processRequest(request, response);
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json, charset=UTF-8");
-        response.setContentType("text/html, charset=UTF-8");
         HttpSession s = request.getSession(false);
-//        HttpSession s = request.getSession();
 
-        System.out.println("session in RetrievePrenotazioniUtenteServlet: " + s);
-//        //TODO: problema: la richiesta che arriva non ha un HTTPSession valida, quindi restituisce true
-        System.out.println("s.getId(): " + s.getId());
-        System.out.println("request.getParameter(jSessioId): " + request.getParameter("jSessionId") );
-//         se request.getSession(true) -> request.getSession.getId() != request.getParameter("jSessionId")
         ArrayList<Prenotazione> prenotazioni;
         PrintWriter out = response.getWriter();
-        System.out.println("s.getID() in RetrievePrenotazioniUtenteServlet: " + s.getId().toString());
+
+        String Json;
+        Gson gson = new Gson();
+        Useful message = new Useful();
 
         if (s != null) {
-        String jSessionId = s.getId().toString();
+
+            String jSessionId = s.getId();
             String idToVerify = request.getParameter("jSessionId");
-            System.out.println("idToVerify in RetrievePrenotazioniUtenteServlet: " + idToVerify);
 
-            String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-            if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
-                System.out.println("ruoloUtente: " + ruoloUtente);
-                try {
-                    String idUtentee = (String) s.getAttribute("idUtente");
-                    int idUtente = Integer.parseInt(idUtentee);
-                    prenotazioni = dao.retrievePrenotazioniUtente(idUtente);
+            if(jSessionId.equals(idToVerify)) {
+                String ruoloUtente = (String) s.getAttribute("ruoloUtente");
+                if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
 
-                    Type type = new TypeToken<ArrayList<Prenotazione>>() {
-                    }.getType();
-                    String jsonPrenotazioni = gson.toJson(prenotazioni, type);
+                    try {
+                        String idUtentee = (String) s.getAttribute("idUtente");
+                        int idUtente = Integer.parseInt(idUtentee);
+                        prenotazioni = dao.retrievePrenotazioniUtente(idUtente);
 
-                    out.print(jsonPrenotazioni);
-                    out.close();
+                        Type type = new TypeToken<ArrayList<Prenotazione>>() {
+                        }.getType();
+                        String jsonPrenotazioni = gson.toJson(prenotazioni, type);
 
-                } catch (SQLException | NumberFormatException ex) {
-                    System.out.println(ex.getMessage());
-                    Useful error = new Useful("Unable to retrieve reservations", -1, null);
-                    String Json = gson.toJson(error);
+                        out.print(jsonPrenotazioni);
+                        out.close();
 
-                    out.println(Json);//mando un json al fronto di mancata operazione
-                    out.flush();
+                    } catch (SQLException | NumberFormatException ex) {
+                        System.out.println(ex.getMessage());
+                        Useful error = new Useful("Unable to retrieve reservations", -1, null);
+                        Type type = new TypeToken<Useful>() {
+                        }.getType();
+                        Json = gson.toJson(error, type );
+
+                        out.println(Json);//mando un json al fronto di mancata operazione
+                        out.flush();
+                    }
+                }
+                else {
+                    message = new Useful("Sorry your role doesn't match the requirements", -1, null);
                 }
             }
-        }
-        else {
-            message = new Useful("Sorry you're not logged", -1, null);
+            else {
+                message = new Useful("Sorry but your sessionId doesn't match", -1,null);
+            }
             Type type = new TypeToken<Useful>() {
             }.getType();
             Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
 
-            out.print(Json);
-            out.flush();
         }
+        else {
+            message = new Useful("Sorry you're not logged", -1, null);
+            Type type = new TypeToken<Useful>() {}.getType();
+            Json = gson.toJson(message, type); //trasforma l'oggetto in una stringa Json
 
+        }
+        out.print(Json);
+        out.flush();
     }
 }
