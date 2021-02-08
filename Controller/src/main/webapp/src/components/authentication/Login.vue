@@ -1,26 +1,7 @@
 <template>
-<!--  PAGINA-->
-<!--  <b-container>-->
-<!--    <div class="container">-->
-<!--      <div class="row-cols-1 m-5 text-center" label-cols-sm="4"-->
-<!--           label-cols-lg="3">-->
-<!--        <b-form @submit.stop.prevent>-->
-<!--          <b-form-input id="input-username" v-model="username" required placeholder="Username"></b-form-input>-->
-<!--&lt;!&ndash;          <b-form-input id="input-password" v-model="password" required placeholder="Password" class="mt-3"></b-form-input>&ndash;&gt;-->
-<!--          <b-form-input id="text-password" v-model="password" type="password" required placeholder="Password" class="mt-3"></b-form-input>-->
-<!--          <div class="mt-2">-->
-<!--            <b-button variant="primary" @click="login()">Login</b-button>-->
-<!--          </div>-->
-<!--        </b-form>-->
-
-<!--      </div>-->
-<!--    </div>-->
-<!--  </b-container>-->
-
-<!--  MODAL-->
-  <div v-if="this.$store.getters.currentToken === ''">
+  <div v-if="!this.$store.state.isLogged">
     <b-col md="4">
-      <b-button type="primary" v-b-modal.modal-1>Login</b-button>
+      <b-button variant="outline-success" v-b-modal.modal-1>Login</b-button>
     </b-col>
 
     <b-modal id="modal-1" title="Login" align="center" hide-footer>
@@ -81,31 +62,35 @@ export default {
             var resp = JSON.parse(response);
             // console.log("request" + sessionStorage)
             if(resp.success === 1) {
-              console.log("response: " + response)
-              console.log("credentials.username: " + this.username)
-              console.log("credentials.password: " + this.password)
-              this.$store.state.token = 87;
-              localStorage.setItem('access_token', this.$store.state.token)
-              // console.log("token in localstorage: " + localStorage.access_token)
-              console.log("token in store: " + this.$store.state.token)
-              this.$session.set("session-id",JSON.parse(response).object);
-              console.log("this.$session.get(): " + this.$session.get("session-id"))
-              // context.commit('login', token)
+              // console.log("response: " + response)
+              // console.log("credentials.username: " + this.username)
+              // console.log("credentials.password: " + this.password)
+              // this.$store.state.token = 87;
+              // localStorage.setItem('access_token', this.$store.state.token)
+              // // console.log("token in localstorage: " + localStorage.access_token)
+              // console.log("token in store: " + this.$store.state.token)
+              // this.$session.set("session-id",JSON.parse(response).object);
+              // console.log("this.$session.get(): " + this.$session.get("session-id"))
+              // // context.commit('login', token)
               this.$store.state.isLogged = true;
-              console.log("isLogged: " + this.$store.state.isLogged)
+              console.log("isLogged in store: " + this.$store.state.isLogged)
             }
 
           })
           .catch(error => {
             console.log(error)
           })
+
+      setTimeout(() => {this.makeToast()}, 200)
+        console.log("Username inserito: " + this.username);
+        console.log("Password inserita: " + this.password);
     },
     makeToast(){
       console.log("toast creato")
-      console.log("token:" + this.$store.state.token)
-      console.log("userLogged:" + this.$store.getters.userLogged)
-      if(this.$store.getters.currentToken !== ''){
-        console.log("currentToken (if): " + this.$store.getters.currentToken)
+      // console.log("token:" + this.$store.state.token)
+      console.log("userLogged:" + this.$store.state.isLogged)
+      if(this.$store.state.isLogged){
+        console.log("Utente " + this.username + " loggato")
         this.$bvToast.toast(
             `Benvenut*, ${this.username}!`,
             {
@@ -114,7 +99,7 @@ export default {
               solid: true
             })
       } else {
-        console.log("currentToken (else): " + this.$store.getters.currentToken)
+        console.log("Username o pw non corretti")
         this.$bvToast.toast(
             `Controlla username e password.`,
             {

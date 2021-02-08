@@ -63,11 +63,11 @@
 <!--        <b-nav-item>-->
 <!--          <router-link class="nav-link ml-2" to="calendar">Calendario disponibilità</router-link>-->
 <!--        </b-nav-item>-->
-        <b-nav-item v-show="this.$store.getters.currentToken !== ''">
+        <b-nav-item v-show="this.$store.getters.userLogged">
           <router-link class="nav-link ml-2" to="lemieprenotazioni">Le mie prenotazioni</router-link>
         </b-nav-item>
 
-        <b-nav-item-dropdown v-show="this.$store.getters.currentToken !== ''" class="m-2"  text="Funzionalità amministratore" >
+        <b-nav-item-dropdown v-show="this.$store.getters.userLogged" class="m-2"  text="Funzionalità amministratore" >
         <!-- TODO: Rendere dark il dropdown menu-->
           <b-dropdown-item>
             <router-link to="prenotazioniclienti">
@@ -96,7 +96,8 @@
 
 
         <b-nav-item v-show="this.$store.getters.userLogged">
-          <a href="#" class="btn bg-danger" @click="logout">Log out</a>
+<!--          <a href="#" class="btn bg-outline-danger" @click="logout">Log out</a>-->
+          <logout></logout>
           <!--            <a href="#LogInButton" role="button" class="btn btn-outline" data-toggle="modal">Login</a>-->
         </b-nav-item>
 <!--        <b-nav-item>-->
@@ -114,11 +115,13 @@
 
 <script>
 import Login from "@/components/authentication/Login";
+import Logout from "@/components/authentication/Logout";
 
 export default {
   name: "navbar",
   components:{
-    Login
+    Login,
+    Logout
   },
 
   data() {
@@ -156,4 +159,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>
