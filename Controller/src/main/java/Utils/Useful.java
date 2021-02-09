@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Useful {
-    public static String id;
+    public static String idSession;
     private String message;
     private int success;
     private Object object;
@@ -71,17 +71,10 @@ public class Useful {
     }
 
 
-    public static boolean identifyCookie(Cookie cook[]) {
-        if (cook != null) {
-            for (Cookie cookie : cook) {
-                if (cookie.getName().equals(Useful.id))
-                    return true;
-            }
-        }
-        return false;
 
 
-    }
+
+
 }
 
 

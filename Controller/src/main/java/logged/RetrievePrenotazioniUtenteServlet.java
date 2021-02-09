@@ -1,5 +1,6 @@
 package logged;
 
+import utils.IdentifyUsers;
 import utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -62,13 +63,20 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
 
         Cookie cookies[] = request.getCookies();
 
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                System.out.println(cookie.getValue());
+            }
+        }
 
-        if (Useful.identifyCookie(cookies)) {
+        System.out.println(IdentifyUsers.sessionId + "IDSESSIONE");
+
+        if (IdentifyUsers.identifyIdCookie(cookies)) {
             //String ruoloUtente = (String) s.getAttribute("ruoloUtente");
             //if (ruoloUtente.equals("Utente") || ruoloUtente.equals("Admin")) {
 
             try {
-                String idUtentee = "1"; //(String) s.getAttribute("idUtente");
+                String idUtentee = IdentifyUsers.getUserId(cookies); //(String) s.getAttribute("idUtente");
                 int idUtente = Integer.parseInt(idUtentee);
                 prenotazioni = dao.retrievePrenotazioniUtente(idUtente);
 
@@ -76,6 +84,7 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
                 }.getType();
                 String jsonPrenotazioni = gson.toJson(prenotazioni, type);
 
+                System.out.println(jsonPrenotazioni);
                 out.print(jsonPrenotazioni);
                 out.close();
 
@@ -90,7 +99,7 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
                 out.flush();
             }
         } else {
-            message = new Useful("Sorry your role doesn't match the requirements", -1, null);
+            message = new Useful("Sorry your id doesn't match", -1, null);
         }
         Type type = new TypeToken<Useful>() {
         }.getType();

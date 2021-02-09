@@ -1,3 +1,4 @@
+import utils.IdentifyUsers;
 import utils.Useful;
 import com.google.gson.Gson;
 import dao.DAO;
@@ -69,11 +70,30 @@ public class LoginServlet extends HttpServlet {
                 String Json = gson.toJson(success);
 
 
-              String id = String.valueOf(Useful.generateId());
-              Useful.id = id;
+                String id = String.valueOf(Useful.generateId());
+                IdentifyUsers.sessionId = id;
+                IdentifyUsers.nome = user.getNome();
+                IdentifyUsers.cognome = user.getCognome();
+                IdentifyUsers.userRole = user.getRuolo();
+
                 Cookie JSESSIONID = new Cookie("JSESSIONID", id);
-                JSESSIONID.setMaxAge(60*60);
+                Cookie ruoloUtente = new Cookie("ruoloUtente", user.getRuolo());
+                Cookie idUtente = new Cookie("idUtente", String.valueOf(user.getId()));
+                Cookie nome = new Cookie("nomeUtente", user.getNome());
+                Cookie cognome = new Cookie("cognomeUtente", user.getCognome());
+
+                JSESSIONID.setMaxAge(60 * 60);
+                ruoloUtente.setMaxAge(3600);
+                idUtente.setMaxAge(3600);
+                nome.setMaxAge(3600);
+                cognome.setMaxAge(3600);
+
                 response.addCookie(JSESSIONID);
+                response.addCookie(ruoloUtente);
+                response.addCookie(idUtente);
+                response.addCookie(nome);
+                response.addCookie(cognome);
+
                 out.println(Json);//mando un json al fronto di mancata operazione
 
 

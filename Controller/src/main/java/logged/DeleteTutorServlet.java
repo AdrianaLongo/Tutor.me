@@ -3,6 +3,7 @@ package logged;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
+import utils.IdentifyUsers;
 import utils.Useful;
 
 import javax.servlet.*;
@@ -44,41 +45,36 @@ public class DeleteTutorServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        HttpSession session = request.getSession(false);
+        Cookie toCheck[] = request.getCookies();
 
-        if (session != null) {
-            String sessionId = request.getParameter("jSessionId");
-            if (sessionId.equals(session.getId())) {
-                if (session.getAttribute("ruolo").equals("admin")) {
 
-                    try {
-                        int idDocente = Integer.parseInt(request.getParameter("idDocente"));
-                        boolean check = dao.checkTutor(idDocente);
+        if (IdentifyUsers.identifyIdCookie(toCheck)) {
+            if (IdentifyUsers.identifyRoleCookie(toCheck)) {
 
-                        if (check) {
-                            dao.deleteDocente(idDocente);
-                            message = new Useful("Tutor correctly deleted", 1, null);
-                        } else {
-                            message = new Useful("Tutor doesn't exist", -1, null);
-                        }
-                    } catch (SQLException | NumberFormatException e) {
-                        System.out.println(e.getMessage());
-                        message = new Useful("There was some problem querying the tutor", -1, null);
-                        Type type = new TypeToken<Useful>() {
-                        }.getType();
-                        toSendJson = gson.toJson(message, type);
-                        out.write(toSendJson);
-                        out.flush();
+                try {
+                    int idDocente = Integer.parseInt(request.getParameter("idDocente"));
+                    boolean check = dao.checkTutor(idDocente);
+
+                    if (check) {
+                        dao.deleteDocente(idDocente);
+                        message = new Useful("Tutor correctly deleted", 1, null);
+                    } else {
+                        message = new Useful("Tutor doesn't exist", -1, null);
                     }
-                } else {
-                    message = new Useful("Sorry you don't have admin privileges", -1, null);
+                } catch (SQLException | NumberFormatException e) {
+                    System.out.println(e.getMessage());
+                    message = new Useful("There was some problem querying the tutor", -1, null);
+                    Type type = new TypeToken<Useful>() {
+                    }.getType();
+                    toSendJson = gson.toJson(message, type);
+                    out.write(toSendJson);
+                    out.flush();
                 }
+            } else {
+                message = new Useful("Sorry you don't have admin privileges", -1, null);
             }
-            else {
-                message = new Useful("Sorry your sessionId doesn't match", -1, null);
-            }
-        }else {
-            message = new Useful("Sorry you're not logged in", -1, null);
+        } else {
+            message = new Useful("Sorry your sessionId doesn't match", -1, null);
         }
         Type type = new TypeToken<Useful>() {
         }.getType();

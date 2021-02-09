@@ -87,8 +87,6 @@
         <param-value>/PopulateCorsiServlet</param-value>
     </context-param>
 
-
-
     <filter>
         <filter-name>CorsFilter</filter-name>
         <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>

@@ -1,5 +1,6 @@
 package logged;
 
+import utils.IdentifyUsers;
 import utils.Useful;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -10,10 +11,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
@@ -54,42 +52,36 @@ public class PopolaStoricoServlet extends HttpServlet {
         Gson gson = new Gson();
         Useful message;
 
-        HttpSession s = request.getSession(false);
+        Cookie toCheck[] = request.getCookies();
 
-        if (s != null) {
 
-            String jSessionId = s.getId();
-            String idToVerify = request.getParameter("jSessionId");
+        if (IdentifyUsers.identifyIdCookie(toCheck)) {
+            if(IdentifyUsers.identifyRoleCookie(toCheck)) {
 
-            if (jSessionId.equals(idToVerify)) {
+                try {
+                    prenotazioni = dao.retrievePrenotazioni(); //click tasto destro goTO
+                    Type type = new TypeToken<ArrayList<Prenotazione>>() {
+                    }.getType();
+                    String jsonPrenotazioni = gson.toJson(prenotazioni, type);
 
-                String ruoloUtente = (String) s.getAttribute("ruoloUtente");
-                if (ruoloUtente.equals("Admin")) {
-                    try {
-                        prenotazioni = dao.retrievePrenotazioni(); //click tasto destro goTO
-                        Type type = new TypeToken<ArrayList<Prenotazione>>() {
-                        }.getType();
-                        String jsonPrenotazioni = gson.toJson(prenotazioni, type);
+                    out.print(jsonPrenotazioni);
+                    out.close();
 
-                        out.print(jsonPrenotazioni);
-                        out.close();
+                } catch (SQLException ex) {
 
-                    } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                    message= new Useful("Courses not retrieved", -1, null);
+                    Json = gson.toJson(message);
 
-                        System.out.println(ex.getMessage());
-                        message= new Useful("Courses not retrieved", -1, null);
-                        Json = gson.toJson(message);
-
-                        out.println(Json);//mando un json al fronto di mancata operazione
-                        out.flush();
-                    }
-                } else {
-                    Useful error = new Useful("Sorry you need to be an admin for this service", -1, null);
-                    Json = gson.toJson(error);
-
-                    out.println(Json);
+                    out.println(Json);//mando un json al fronto di mancata operazione
                     out.flush();
                 }
+            } else {
+                Useful error = new Useful("Sorry you need to be an admin for this service", -1, null);
+                Json = gson.toJson(error);
+
+                out.println(Json);
+                out.flush();
             }
         } else {
 
