@@ -235,7 +235,7 @@ export default new Vuex.Store({
             //     }
             // });
             jQuery.get('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet',{
-                jSessionId: user
+                // jSessionId: user
             })
                 .then(response => {
                     var jsonPersonalHistory = response;

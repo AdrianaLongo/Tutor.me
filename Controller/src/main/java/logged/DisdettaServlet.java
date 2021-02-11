@@ -67,11 +67,13 @@ public class DisdettaServlet extends HttpServlet {
             try {
                 int idPrenotazione = Integer.parseInt(request.getParameter("idPrenotazione"));
                 //int utenteint = Integer.parseInt(utente);
+                System.out.println("idPrenotazione da cancellare: " + idPrenotazione);
                 dao.deletePrenotazione(idPrenotazione);//trasforma stato prenotazione in disdetta
                 resstate = 1;
 
             } catch (SQLException | NumberFormatException e) {
                 System.out.println(e.getMessage());
+                System.out.println("idPrenotazione da cancellare" +request.getParameter("idPrenotazione"));
                 resstate = -1;
 
             } finally {

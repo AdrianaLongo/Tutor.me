@@ -17,7 +17,7 @@ export default {
   },
   beforeCreate() {
     // console.log("token in localstorage: " + localStorage.access_token)
-    console.log("token in store: " + this.$store.getters.currentToken)
+    // console.log("token in store: " + this.$store.getters.currentToken)
 
   }
 
