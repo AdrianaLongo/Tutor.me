@@ -9,18 +9,30 @@
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
           <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
-            <b-dropdown v-if="JSON.stringify(jsonAttive).includes(data.value)"
-                        :id = data.value
-                        :variant="cancelledArray.includes(data.value) ? isCancelled : 'primary'"
-                        :disabled="cancelledArray.includes(data.value) ? isCancelled === 'danger' : false"
-                        :text="cancelledArray.includes(data.value) ? 'Prenotazione cancellata' : 'Prenotazione attiva'">
-              <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
-              <b-dropdown-item>Segna come effettuata</b-dropdown-item>
-            </b-dropdown>
+            <div v-if="JSON.stringify(jsonAttive).includes(data.value)">
+              <b-dropdown v-show="!(cancelledArray.includes(data.value)) && !(effettuateArray.includes(data.value))"
+                          variant="primary"
+                          text="Prenotazione attiva">
+                <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
+                <b-dropdown-item @click="segnaPrenotazioneComeEffettuata(data.value)">Segna come effettuata</b-dropdown-item>
+              </b-dropdown>
+
+              <b-button v-show="cancelledArray.includes(data.value)"
+                          variant="danger"
+                          disabled>
+                Prenotazione cancellata
+              </b-button>
+
+              <b-button v-show="effettuateArray.includes(data.value)"
+                          variant="light"
+                          disabled>
+                Ripetizione effettuata
+              </b-button>
+            </div>
             <b-button v-else-if="JSON.stringify(jsonEffettuate).includes(data.value)"
                       disabled
                       variant="light">
-              Prenotazione effettuata
+              Ripetizione effettuata
             </b-button>
             <b-button v-else-if="JSON.stringify(jsonCancellate).includes(data.value)"
                       disabled
@@ -33,14 +45,26 @@
         <template #cell(mar)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
           <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
-            <b-dropdown v-if="JSON.stringify(jsonAttive).includes(data.value)"
-                        :id = data.value
-                        :variant="cancelledArray.includes(data.value) ? isCancelled : 'primary'"
-                        :disabled="cancelledArray.includes(data.value) ? isCancelled === 'danger' : false"
-                        :text="cancelledArray.includes(data.value) ? 'Prenotazione cancellata' : 'Prenotazione attiva'">
-              <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
-              <b-dropdown-item>Segna come effettuata</b-dropdown-item>
-            </b-dropdown>
+            <div v-if="JSON.stringify(jsonAttive).includes(data.value)">
+              <b-dropdown v-show="!(cancelledArray.includes(data.value)) && !(effettuateArray.includes(data.value))"
+                          variant="primary"
+                          text="Prenotazione attiva">
+                <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
+                <b-dropdown-item @click="segnaPrenotazioneComeEffettuata(data.value)">Segna come effettuata</b-dropdown-item>
+              </b-dropdown>
+
+              <b-button v-show="cancelledArray.includes(data.value)"
+                        variant="danger"
+                        disabled>
+                Prenotazione cancellata
+              </b-button>
+
+              <b-button v-show="effettuateArray.includes(data.value)"
+                        variant="light"
+                        disabled>
+                Ripetizione effettuata
+              </b-button>
+            </div>
             <b-button v-else-if="JSON.stringify(jsonEffettuate).includes(data.value)"
                       disabled
                       variant="light">
@@ -49,7 +73,7 @@
             <b-button v-else-if="JSON.stringify(jsonCancellate).includes(data.value)"
                       disabled
                       variant="danger">
-              Prenotazione cancellata
+              Ripetizione cancellata
             </b-button>
           </div>
         </template>
@@ -57,18 +81,30 @@
         <template #cell(mer)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
           <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
-            <b-dropdown v-if="JSON.stringify(jsonAttive).includes(data.value)"
-                        :id = data.value
-                        :variant="cancelledArray.includes(data.value) ? isCancelled : 'primary'"
-                        :disabled="cancelledArray.includes(data.value) ? isCancelled === 'danger' : false"
-                        :text="cancelledArray.includes(data.value) ? 'Prenotazione cancellata' : 'Prenotazione attiva'">
-              <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
-              <b-dropdown-item>Segna come effettuata</b-dropdown-item>
-            </b-dropdown>
+            <div v-if="JSON.stringify(jsonAttive).includes(data.value)">
+              <b-dropdown v-show="!(cancelledArray.includes(data.value)) && !(effettuateArray.includes(data.value))"
+                          variant="primary"
+                          text="Prenotazione attiva">
+                <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
+                <b-dropdown-item @click="segnaPrenotazioneComeEffettuata(data.value)">Segna come effettuata</b-dropdown-item>
+              </b-dropdown>
+
+              <b-button v-show="cancelledArray.includes(data.value)"
+                        variant="danger"
+                        disabled>
+                Prenotazione cancellata
+              </b-button>
+
+              <b-button v-show="effettuateArray.includes(data.value)"
+                        variant="light"
+                        disabled>
+                Ripetizione effettuata
+              </b-button>
+            </div>
             <b-button v-else-if="JSON.stringify(jsonEffettuate).includes(data.value)"
                       disabled
                       variant="light">
-              Prenotazione effettuata
+              Ripetizione effettuata
             </b-button>
             <b-button v-else-if="JSON.stringify(jsonCancellate).includes(data.value)"
                       disabled
@@ -81,18 +117,30 @@
         <template #cell(gio)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
           <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
-            <b-dropdown v-if="JSON.stringify(jsonAttive).includes(data.value)"
-                        :id = data.value
-                        :variant="cancelledArray.includes(data.value) ? isCancelled : 'primary'"
-                        :disabled="cancelledArray.includes(data.value) ? isCancelled === 'danger' : false"
-                        :text="cancelledArray.includes(data.value) ? 'Prenotazione cancellata' : 'Prenotazione attiva'">
-              <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
-              <b-dropdown-item>Segna come effettuata</b-dropdown-item>
-            </b-dropdown>
+            <div v-if="JSON.stringify(jsonAttive).includes(data.value)">
+              <b-dropdown v-show="!(cancelledArray.includes(data.value)) && !(effettuateArray.includes(data.value))"
+                          variant="primary"
+                          text="Prenotazione attiva">
+                <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
+                <b-dropdown-item @click="segnaPrenotazioneComeEffettuata(data.value)">Segna come effettuata</b-dropdown-item>
+              </b-dropdown>
+
+              <b-button v-show="cancelledArray.includes(data.value)"
+                        variant="danger"
+                        disabled>
+                Prenotazione cancellata
+              </b-button>
+
+              <b-button v-show="effettuateArray.includes(data.value)"
+                        variant="light"
+                        disabled>
+                Ripetizione effettuata
+              </b-button>
+            </div>
             <b-button v-else-if="JSON.stringify(jsonEffettuate).includes(data.value)"
                       disabled
                       variant="light">
-              Prenotazione effettuata
+              Ripetizione effettuata
             </b-button>
             <b-button v-else-if="JSON.stringify(jsonCancellate).includes(data.value)"
                       disabled
@@ -105,18 +153,30 @@
         <template #cell(ven)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
           <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
-            <b-dropdown v-if="JSON.stringify(jsonAttive).includes(data.value)"
-                        :id = data.value
-                        :variant="cancelledArray.includes(data.value) ? isCancelled : 'primary'"
-                        :disabled="cancelledArray.includes(data.value) ? isCancelled === 'danger' : false"
-                        :text="cancelledArray.includes(data.value) ? 'Prenotazione cancellata' : 'Prenotazione attiva'">
-              <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
-              <b-dropdown-item>Segna come effettuata</b-dropdown-item>
-            </b-dropdown>
+            <div v-if="JSON.stringify(jsonAttive).includes(data.value)">
+              <b-dropdown v-show="!(cancelledArray.includes(data.value)) && !(effettuateArray.includes(data.value))"
+                          variant="primary"
+                          text="Prenotazione attiva">
+                <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
+                <b-dropdown-item @click="segnaPrenotazioneComeEffettuata(data.value)">Segna come effettuata</b-dropdown-item>
+              </b-dropdown>
+
+              <b-button v-show="cancelledArray.includes(data.value)"
+                        variant="danger"
+                        disabled>
+                Prenotazione cancellata
+              </b-button>
+
+              <b-button v-show="effettuateArray.includes(data.value)"
+                        variant="light"
+                        disabled>
+                Ripetizione effettuata
+              </b-button>
+            </div>
             <b-button v-else-if="JSON.stringify(jsonEffettuate).includes(data.value)"
                       disabled
                       variant="light">
-              Prenotazione effettuata
+              Ripetizione effettuata
             </b-button>
             <b-button v-else-if="JSON.stringify(jsonCancellate).includes(data.value)"
                       disabled
@@ -127,10 +187,12 @@
         </template>
 
       </b-table>
+
       <b-modal id="modal-op" title="Cosa vuoi fare con questa operazione?" align="center" hide-footer>
         <b-button variant="outline-danger" class="mr-3" @click="disdiciPrenotazione()">Disdire</b-button>
         <b-button variant="outline-success" class="ml-3" @click="segnaPrenotazioneComeEffettuata">Segnare come effettuata</b-button>
       </b-modal>
+<!--      TODO: inserire modale di conferma operazione-->
     </b-container>
   </div>
 </template>
@@ -154,9 +216,11 @@ export default {
       jsonCancellate: '',
 
       cancelled: false,
-      buttonText: 'Prenotazione attiva',
 
       cancelledArray: [],
+
+      effettuata: false,
+      effettuateArray: [],
 
       slot: '',
 
@@ -231,11 +295,20 @@ export default {
           ven: {day: 'Venerdi', slotVue: 'VEN4'},
         },
       ],
+
+
+
+      variant: '',
+      disabled: '',
+      text: ''
     }
   },
   computed:{
     isCancelled(){
       return this.cancelled ? "danger" : "primary";
+    },
+    isEffettuata(){
+      return this.effettuata ? "light" : "primary";
     }
   },
 
@@ -276,7 +349,6 @@ export default {
       // console.log("slot = " + this.$store.getters.prenotazioneSlot);
     },
     // disdiciPrenotazione: function(){
-    //   // TODO: implementare metodo per eliminare prenotazione
     //   var _this = this;
     //   jQuery.post('http://localhost:8080/TWEB_war_exploded/DisdettaServlet', {
     //     idPrenotazione: _this.idPrenotazione
@@ -316,13 +388,40 @@ export default {
       this.cancelled = true;
       this.cancelledArray.push(this.slot)
       console.log("cancelledArray: " + this.cancelledArray)
-      this.buttonText = "Prenotazione cancellata";
 
     }
 
     ,
-    segnaPrenotazioneComeEffettuata: function(){
-      // TODO: implementare metodo per segnare prenotazione come effettuata
+    segnaPrenotazioneComeEffettuata: function(s){
+      this.slot = s;
+      this.$store.commit("selectSlot", s);
+      console.log("s: " + this.slot)
+
+
+      var jsonAttiveParsified = JSON.parse(JSON.stringify(this.jsonAttive));
+      // necessario perche jsonAttiveParsified e' un oggetto, mentre JSON.parse converte una stringa contenente notazione JSON in un oggetto javascript
+
+
+      console.log("jsonAttiveParsified")
+      console.log(jsonAttiveParsified)
+
+      var selectedSlotData = jsonAttiveParsified.filter(({slot}) => slot === s)
+      console.log("selectedSlotData")
+      console.log(selectedSlotData)
+      this.idPrenotazione = selectedSlotData[0].idPrenotazione;
+
+      var _this = this;
+      jQuery.post('http://localhost:8080/TWEB_war_exploded/PrenotazioneEffettuataServlet', {
+        idPrenotazione: _this.idPrenotazione
+      })
+          .then(response => {
+            console.log(response)
+            console.log("Ripetizione segnata come effettuata: " + _this.idPrenotazione)
+          })
+
+      this.effettuata = true;
+      this.effettuateArray.push(this.slot)
+      console.log("effettuateArray: " + this.effettuateArray)
 
     }
   }
