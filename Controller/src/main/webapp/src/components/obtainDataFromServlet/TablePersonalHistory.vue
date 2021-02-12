@@ -13,8 +13,8 @@
               <b-dropdown v-show="!(cancelledArray.includes(data.value)) && !(effettuateArray.includes(data.value))"
                           variant="primary"
                           text="Prenotazione attiva">
-                <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
-                <b-dropdown-item @click="segnaPrenotazioneComeEffettuata(data.value)">Segna come effettuata</b-dropdown-item>
+                <b-dropdown-item v-b-modal.modal-del @click="selectSlot(data.value)">Disdici</b-dropdown-item>
+                <b-dropdown-item v-b-modal.modal-eff @click="selectSlot(data.value)">Segna come effettuata</b-dropdown-item>
               </b-dropdown>
 
               <b-button v-show="cancelledArray.includes(data.value)"
@@ -49,8 +49,8 @@
               <b-dropdown v-show="!(cancelledArray.includes(data.value)) && !(effettuateArray.includes(data.value))"
                           variant="primary"
                           text="Prenotazione attiva">
-                <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
-                <b-dropdown-item @click="segnaPrenotazioneComeEffettuata(data.value)">Segna come effettuata</b-dropdown-item>
+                <b-dropdown-item v-b-modal.modal-del @click="selectSlot(data.value)">Disdici</b-dropdown-item>
+                <b-dropdown-item v-b-modal.modal-eff @click="selectSlot(data.value)">Segna come effettuata</b-dropdown-item>
               </b-dropdown>
 
               <b-button v-show="cancelledArray.includes(data.value)"
@@ -85,8 +85,8 @@
               <b-dropdown v-show="!(cancelledArray.includes(data.value)) && !(effettuateArray.includes(data.value))"
                           variant="primary"
                           text="Prenotazione attiva">
-                <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
-                <b-dropdown-item @click="segnaPrenotazioneComeEffettuata(data.value)">Segna come effettuata</b-dropdown-item>
+                <b-dropdown-item v-b-modal.modal-del @click="selectSlot(data.value)">Disdici</b-dropdown-item>
+                <b-dropdown-item v-b-modal.modal-eff @click="selectSlot(data.value)">Segna come effettuata</b-dropdown-item>
               </b-dropdown>
 
               <b-button v-show="cancelledArray.includes(data.value)"
@@ -121,8 +121,8 @@
               <b-dropdown v-show="!(cancelledArray.includes(data.value)) && !(effettuateArray.includes(data.value))"
                           variant="primary"
                           text="Prenotazione attiva">
-                <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
-                <b-dropdown-item @click="segnaPrenotazioneComeEffettuata(data.value)">Segna come effettuata</b-dropdown-item>
+                <b-dropdown-item v-b-modal.modal-del @click="selectSlot(data.value)">Disdici</b-dropdown-item>
+                <b-dropdown-item v-b-modal.modal-eff @click="selectSlot(data.value)">Segna come effettuata</b-dropdown-item>
               </b-dropdown>
 
               <b-button v-show="cancelledArray.includes(data.value)"
@@ -157,8 +157,8 @@
               <b-dropdown v-show="!(cancelledArray.includes(data.value)) && !(effettuateArray.includes(data.value))"
                           variant="primary"
                           text="Prenotazione attiva">
-                <b-dropdown-item @click="disdiciPrenotazione(data.value)">Disdici</b-dropdown-item>
-                <b-dropdown-item @click="segnaPrenotazioneComeEffettuata(data.value)">Segna come effettuata</b-dropdown-item>
+                <b-dropdown-item v-b-modal.modal-del @click="selectSlot(data.value)">Disdici</b-dropdown-item>
+                <b-dropdown-item v-b-modal.modal-eff @click="selectSlot(data.value)">Segna come effettuata</b-dropdown-item>
               </b-dropdown>
 
               <b-button v-show="cancelledArray.includes(data.value)"
@@ -188,11 +188,20 @@
 
       </b-table>
 
-      <b-modal id="modal-op" title="Cosa vuoi fare con questa operazione?" align="center" hide-footer>
-        <b-button variant="outline-danger" class="mr-3" @click="disdiciPrenotazione()">Disdire</b-button>
-        <b-button variant="outline-success" class="ml-3" @click="segnaPrenotazioneComeEffettuata">Segnare come effettuata</b-button>
+      <b-modal id="modal-del" title="Vuoi disdire la prenotazione selezionata?" align="center"
+               @ok="disdiciPrenotazione(slot)">
+        <p class="my-4"> Corso: {{ this.$store.state.prenotazione.nomeCorso }} </p>
+        <p class="my-4"> Tutor: {{ this.$store.state.prenotazione.nomeDocente }} {{this.$store.state.prenotazione.cognomeDocente}} </p>
+        <p class="my-4"> Data e ora: {{ day }}, {{ hours }}</p>
       </b-modal>
-<!--      TODO: inserire modale di conferma operazione-->
+
+      <b-modal id="modal-eff" title="Vuoi segnare come effettuata la ripetizone selezionata?" align="center"
+               @ok="segnaRipetizioneComeEffettuata(slot)">
+        <p class="my-4"> Corso: {{ this.$store.state.prenotazione.nomeCorso }} </p>
+        <p class="my-4"> Tutor: {{ this.$store.state.prenotazione.nomeDocente }} {{this.$store.state.prenotazione.cognomeDocente}} </p>
+        <p class="my-4"> Data e ora: {{ day }}, {{ hours }}</p>
+      </b-modal>
+
     </b-container>
   </div>
 </template>
@@ -208,10 +217,10 @@ export default {
       slotVue: '',
       day: null,
       hours: null,
-      idPrenotazione: null,
       jsonPersonalHistory: '',
       elenco: '',
       jsonAttive: '',
+      // jsonAttiveParsified: '',
       jsonEffettuate:'',
       jsonCancellate: '',
 
@@ -223,6 +232,7 @@ export default {
       effettuateArray: [],
 
       slot: '',
+      selectedSlot: '',
 
       loginSucceded: false,
 
@@ -297,10 +307,11 @@ export default {
       ],
 
 
+      cognomeDocente: '',
+      nomeDocente: '',
+      idPrenotazione: null,
+      nomeCorso: '',
 
-      variant: '',
-      disabled: '',
-      text: ''
     }
   },
   computed:{
@@ -318,35 +329,80 @@ export default {
       _this.jsonPersonalHistory = jsonPersonalHistory;
       console.log(jsonPersonalHistory);
       _this.jsonAttive = jsonPersonalHistory.filter( element => element.stato === '0');
+      // _this.jsonAttiveParsified = JSON.parse(JSON.stringify(_this.jsonAttive))
       _this.jsonEffettuate = jsonPersonalHistory.filter( element => element.stato === '1');
       _this.jsonCancellate = jsonPersonalHistory.filter( element => element.stato === '-1');
+
+      this.$store
     });
+
   },
   methods: {
-    selectSlot: function(s){
-      this.$store.commit("selectSlot", s);
-      console.log("s: " + s)
-      // console.log(this.jsonAttive) //restituisce oggetto
-      // console.log(this.jsonAttive.idPrenotazione) // undefined
-      // console.log(JSON.stringify(this.jsonAttive)) // restituisce oggetto in forma di stringa
-      // console.log(JSON.stringify(this.jsonAttive.idPrenotazione)) // undefined
+    selectSlot: function(slot){
 
+      console.log("slot: " + slot)
       var jsonAttiveParsified = JSON.parse(JSON.stringify(this.jsonAttive));
       // necessario perche jsonAttiveParsified e' un oggetto, mentre JSON.parse converte una stringa contenente notazione JSON in un oggetto javascript
 
       // for (var data in jsonAttiveParsified){
       //   console.log("idPrenotazione" + jsonAttiveParsified[data].idPrenotazione); //mi restituisce 2 idPrenotazione
       // }
+      console.log("jsonAttiveParsified:")
+      console.log(jsonAttiveParsified)
 
-      var selectedSlotData = jsonAttiveParsified.filter(({slot}) => slot === s)
+      var selectedSlotData = jsonAttiveParsified.filter(element => element.slot === slot)
+
+      console.log("selectedSlotData")
+      console.log(selectedSlotData)
+
       this.idPrenotazione = selectedSlotData[0].idPrenotazione;
+      console.log("idPrenotazione: " + this.idPrenotazione)
+      this.nomeCorso = selectedSlotData[0].nomeCorso;
+      console.log("nomeCorso: " + this.nomeCorso)
+      this.nomeDocente = selectedSlotData[0].nomeDocente;
+      console.log("nomeDocente: " + this.nomeDocente)
+      this.cognomeDocente = selectedSlotData[0].cognomeDocente;
+      console.log("cognomeDocente: " + this.cognomeDocente)
 
-      // console.log(selectedSlotData[0].idPrenotazione)
+      this.selectedSlot = selectedSlotData[0].slot;
+      console.log("selectedSlot: " + this.selectedSlot)
 
+
+
+          // console.log(selectedSlotData[0].idPrenotazione)
+
+      this.$store.commit("selectForDelete", {
+        idPrenotazione: this.idPrenotazione,
+        nomeCorso: this.nomeCorso,
+        nomeDocente: this.nomeDocente,
+        cognomeDocente: this.cognomeDocente
+      });
+      console.log("this.$store.state.prenotazione.idPrenotazione: " + this.$store.state.prenotazione.idPrenotazione)
+      console.log("this.$store.state.prenotazione.nomeCorso: " + this.$store.state.prenotazione.nomeCorso)
+      console.log("this.$store.state.prenotazione.nomeDocente: " + this.$store.state.prenotazione.nomeDocente)
+      console.log("this.$store.state.prenotazione.cognomeDocente: " + this.$store.state.prenotazione.cognomeDocente)
 
       // console.log("corso = " + this.$store.getters.courseName);
       // console.log("tutor = " + this.$store.getters.tutorFullName + ", " + this.$store.getters.tutorId );
       // console.log("slot = " + this.$store.getters.prenotazioneSlot);
+
+      switch(this.selectedSlot.slice(0,3)){
+        case 'LUN': this.day = "Lunedi"; break;
+        case 'MAR': this.day = "Martedi"; break;
+        case 'MER': this.day = "Mercoledi"; break;
+        case 'GIO': this.day = "Giovedi"; break;
+        case 'VEN': this.day = "Venerdi"; break;
+        default: this.day = "default";
+      }
+      switch(this.selectedSlot.slice(3)){
+        case '1': this.hours = "15:00 - 16:00"; break;
+        case '2': this.hours = "16:00 - 17:00"; break;
+        case '3': this.hours = "17:00 - 18:00"; break;
+        case '4': this.hours = "18:00 - 19:00"; break;
+        default: this.hours = "default";
+      }
+
+      return this.selectedSlot;
     },
     // disdiciPrenotazione: function(){
     //   var _this = this;
@@ -359,70 +415,94 @@ export default {
     //   })
     // },
     disdiciPrenotazione:function(s){
-      this.slot = s;
-      this.$store.commit("selectSlot", s);
-      console.log("s: " + this.slot)
+      var responseStatus
+      // this.selectedSlot = this.selectSlot(s);
+      // console.log("s in disdiciPrenotazione dopo selectSloct" + s)
 
-
-      var jsonAttiveParsified = JSON.parse(JSON.stringify(this.jsonAttive));
-      // necessario perche jsonAttiveParsified e' un oggetto, mentre JSON.parse converte una stringa contenente notazione JSON in un oggetto javascript
-
-
-      console.log("jsonAttiveParsified")
-      console.log(jsonAttiveParsified)
-
-      var selectedSlotData = jsonAttiveParsified.filter(({slot}) => slot === s)
-      console.log("selectedSlotData")
-      console.log(selectedSlotData)
-      this.idPrenotazione = selectedSlotData[0].idPrenotazione;
+      console.log("s in disdiciPrenotazione: " + s)
 
       var _this = this;
       jQuery.post('http://localhost:8080/TWEB_war_exploded/DisdettaServlet', {
-        idPrenotazione: _this.idPrenotazione
+        idPrenotazione: _this.$store.state.prenotazione.idPrenotazione
       })
           .then(response => {
+            responseStatus = response.success
             console.log(response)
             console.log("Prenotazione cancellata: " + _this.idPrenotazione)
           })
 
       this.cancelled = true;
-      this.cancelledArray.push(this.slot)
+      this.cancelledArray.push(this.selectedSlot)
       console.log("cancelledArray: " + this.cancelledArray)
 
-    }
+      setTimeout(() => {this.makeToastDel(responseStatus)}, 200)
 
-    ,
-    segnaPrenotazioneComeEffettuata: function(s){
-      this.slot = s;
-      this.$store.commit("selectSlot", s);
-      console.log("s: " + this.slot)
+    },
+    segnaRipetizioneComeEffettuata: function(s){
+      var responseStatus
 
+      console.log("s in segnaPrenotazioneComeEffettuata: " + s)
 
-      var jsonAttiveParsified = JSON.parse(JSON.stringify(this.jsonAttive));
-      // necessario perche jsonAttiveParsified e' un oggetto, mentre JSON.parse converte una stringa contenente notazione JSON in un oggetto javascript
-
-
-      console.log("jsonAttiveParsified")
-      console.log(jsonAttiveParsified)
-
-      var selectedSlotData = jsonAttiveParsified.filter(({slot}) => slot === s)
-      console.log("selectedSlotData")
-      console.log(selectedSlotData)
-      this.idPrenotazione = selectedSlotData[0].idPrenotazione;
 
       var _this = this;
       jQuery.post('http://localhost:8080/TWEB_war_exploded/PrenotazioneEffettuataServlet', {
         idPrenotazione: _this.idPrenotazione
       })
           .then(response => {
+            responseStatus = response.success
             console.log(response)
             console.log("Ripetizione segnata come effettuata: " + _this.idPrenotazione)
           })
 
       this.effettuata = true;
-      this.effettuateArray.push(this.slot)
+      this.effettuateArray.push(this.selectedSlot)
       console.log("effettuateArray: " + this.effettuateArray)
 
+      setTimeout(() => {this.makeToastEff(responseStatus)}, 200)
+
+    },
+
+    makeToastDel(responseStatus){
+      if(responseStatus === 1){
+        this.$bvToast.toast(
+            `Hai disdetto la prenotazione di ${this.nomeCorso} col tutor ${this.nomeDocente} ${this.cognomeDocente} delle ore ${this.hours} di ${this.day} `,
+            {
+              title: `Prenotazione disdetta con successo!`,
+              variant: 'success',
+              solid: true
+            }
+        )
+      } else {
+        this.$bvToast(
+            `Qualcosa è andato storto. Riprova o effettua nuovamente il login.`,
+            {
+              title: `Errore`,
+              variant: 'danger',
+              solid: true
+            }
+        )
+      }
+    },
+    makeToastEff(responseStatus){
+      if(responseStatus === 1){
+        this.$bvToast.toast(
+            `Hai segnato come effettuata la ripetizione di ${this.nomeCorso} col tutor ${this.nomeDocente} ${this.cognomeDocente} delle ore ${this.hours} di ${this.day} `,
+            {
+              title: `Cambio stato ripetizione effettuata con successo!`,
+              variant: 'success',
+              solid: true
+            }
+        )
+      } else {
+        this.$bvToast(
+            `Qualcosa è andato storto. Riprova o effettua nuovamente il login.`,
+            {
+              title: `Errore`,
+              variant: 'danger',
+              solid: true
+            }
+        )
+      }
     }
   }
 }
