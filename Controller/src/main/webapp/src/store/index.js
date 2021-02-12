@@ -23,8 +23,8 @@ export default new Vuex.Store({
         prenotazione: {
             idPrenotazione: '',
             nomeCorso: '',
-            idDocente: '',
-            idUtente: '',
+            nomeDocente: '',
+            cognomeDocente: '',
             slot: '',
             stato: ''
         },
@@ -32,7 +32,7 @@ export default new Vuex.Store({
         disponibilita: {
             slot: ''
         },
-        personalHistoryJSON: '',
+        jsonPersonalHistory: '',
         personalHistory:{
             slot: ''
         },
@@ -43,7 +43,10 @@ export default new Vuex.Store({
             ruolo: ''
         },
         token: '',
-        isLogged: false
+        isLogged: false,
+        jsonAttive: '',
+        jsonEffettuate: '',
+        jsonCancellate: ''
     },
 
     // Quello che mettiamo in getters puo essere visto da altri componenti
@@ -80,7 +83,7 @@ export default new Vuex.Store({
             return state.disponibilitaJSON;
         },
         elencoMiePrenotazioni: state => {
-            return state.personalHistoryJSON;
+            return state.jsonPersonalHistory;
         },
         // miePrenotazioni: state => {
         //     return state.personalHistory.slot;
@@ -132,7 +135,22 @@ export default new Vuex.Store({
         // },
         logout(state, payload){
             state.token=payload;
+        },
+
+        selectForDelete(state, payload){
+            // state.prenotazione.slot = payload.slot;
+            state.prenotazione.idPrenotazione = payload.idPrenotazione;
+            state.prenotazione.nomeCorso = payload.nomeCorso;
+            state.prenotazione.nomeDocente = payload.nomeDocente;
+            state.prenotazione.cognomeDocente = payload.cognomeDocente;
+        },
+
+        obtainPersonalHistory(state, payload){
+            state.jsonAttive = payload.jsonAttive;
+            state.jsonCancellate = payload.jsonCancellate;
+            state.jsonEffettuate = payload.jsonEffettuate;
         }
+
     },
 
     // Cambiamenti asincroni
@@ -147,40 +165,40 @@ export default new Vuex.Store({
     //             context.commit("popolaCalendarioDocente", payload);
     //         }, 20);
     //     }
-    //     login(context, credentials){
-    //         // var self = this;
-    //         jQuery.post('http://localhost:8080/TWEB_war_exploded/LoginServlet', {
-    //             username: credentials.username,
-    //             password: credentials.password,
-    //         })
-    //             .then(response => {
-    //             // .then(function(response))
-    //                 // console.log("session: " + response.getSession());
-    //                 this.$session.start();
-    //                 console.log("session started");
-    //                 // console.log("this.$session.exists() = " + this.$session.exists())
-    //                 var id = this.session.getAttribute("jSessionId");
-    //                 console.log("id = " + id)
-    //                 var resp = JSON.parse(response);
-    //                 // console.log("request" + sessionStorage)
-    //                 if(resp.success === 1) {
-    //                     console.log("response: " + response)
-    //                     console.log("credentials.username: " + credentials.username)
-    //                     console.log("credentials.password: " + credentials.password)
-    //                     this.state.token = JSON.parse(response).object
-    //                     localStorage.setItem('access_token', this.state.token)
-    //                     // console.log("token in localstorage: " + localStorage.access_token)
-    //                     console.log("token in store: " + this.state.token)
-    //                     // context.commit('login', token)
-    //                     this.state.isLogged = true;
-    //                     console.log("isLogged: " + this.state.isLogged)
-    //                 }
-    //
-    //             })
-    //             .catch(error => {
-    //                 console.log(error)
-    //             })
-    //     },
+        login(context, credentials){
+            // var self = this;
+            jQuery.post('http://localhost:8080/TWEB_war_exploded/LoginServlet', {
+                username: credentials.username,
+                password: credentials.password,
+            })
+                .then(response => {
+                // .then(function(response))
+                    // console.log("session: " + response.getSession());
+                    // this.$session.start();
+                    // console.log("session started");
+                    // // console.log("this.$session.exists() = " + this.$session.exists())
+                    // var id = this.session.getAttribute("jSessionId");
+                    // console.log("id = " + id)
+                    var resp = JSON.parse(response);
+                    // console.log("request" + sessionStorage)
+                    if(resp.success === 1) {
+                        // console.log("response: " + response)
+                        // console.log("credentials.username: " + credentials.username)
+                        // console.log("credentials.password: " + credentials.password)
+                        // this.state.token = JSON.parse(response).object
+                        // localStorage.setItem('access_token', this.state.token)
+                        // // console.log("token in localstorage: " + localStorage.access_token)
+                        // console.log("token in store: " + this.state.token)
+                        // // context.commit('login', token)
+                        this.state.isLogged = true;
+                        console.log("isLogged: " + this.state.isLogged)
+                    }
+
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
 
         retrieveTutors(context, course){
             var _this = this;
@@ -230,8 +248,8 @@ export default new Vuex.Store({
             //         console.log("user: " + user);
             //         _this.jsonPersonalHistory = jsonPersonalHistory;
             //         console.log("Elenco prenotazioni " + jsonPersonalHistory);
-            //         _this.state.personalHistoryJSON = jsonPersonalHistory;
-            //         console.log(_this.state.personalHistoryJSON);
+            //         _this.state.jsonPersonalHistory = jsonPersonalHistory;
+            //         console.log(_this.state.jsonPersonalHistory);
             //     }
             // });
             jQuery.get('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet',{

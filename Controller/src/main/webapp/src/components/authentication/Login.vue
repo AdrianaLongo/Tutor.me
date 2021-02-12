@@ -21,10 +21,10 @@
 <script>
 // import Vue from 'vue';
 // import jQuery from 'jquery'
-// // import $ from "jquery";
+// import $ from "jquery";
 // window.jQuery = jQuery()
 
-import jQuery from "jquery";
+// import jQuery from "jquery";
 
 export default {
   name: "login",
@@ -35,56 +35,62 @@ export default {
     }
   },
   methods:{
-    // login: function(){
-    //   this.$store.dispatch('login',{
-    //     username: this.username,
-    //     password: this.password,
-    //   });
-    //
-    //   setTimeout(() => {this.makeToast()}, 200)
-    //   console.log("Username inserito: " + this.username);
-    //   console.log("Password inserita: " + this.password);
-    // },
-    login: function() {
-      // var self = this;
-      jQuery.post('http://localhost:8080/TWEB_war_exploded/LoginServlet', {
+    login: function(){
+      this.$store.dispatch('login',{
         username: this.username,
         password: this.password,
-      })
-          .then(response => {
-            // .then(function(response))
-            // console.log("session: " + response.getSession());
-            //this.$session.start();
-            //console.log("session started");
-            // console.log("this.$session.exists() = " + this.$session.exists())
-            // var id = this.session.getAttribute("jSessionId");
-            // console.log("id = " + id)
-            var resp = JSON.parse(response);
-            // console.log("request" + sessionStorage)
-            if(resp.success === 1) {
-              // console.log("response: " + response)
-              // console.log("credentials.username: " + this.username)
-              // console.log("credentials.password: " + this.password)
-              // this.$store.state.token = 87;
-              // localStorage.setItem('access_token', this.$store.state.token)
-              // // console.log("token in localstorage: " + localStorage.access_token)
-              // console.log("token in store: " + this.$store.state.token)
-              // this.$session.set("session-id",JSON.parse(response).object);
-              // console.log("this.$session.get(): " + this.$session.get("session-id"))
-              // // context.commit('login', token)
-              this.$store.state.isLogged = true;
-              console.log("isLogged in store: " + this.$store.state.isLogged)
-            }
-
-          })
-          .catch(error => {
-            console.log(error)
-          })
+      });
 
       setTimeout(() => {this.makeToast()}, 200)
-        console.log("Username inserito: " + this.username);
-        console.log("Password inserita: " + this.password);
+      console.log("Username inserito: " + this.username);
+      console.log("Password inserita: " + this.password);
     },
+    // login: function() {
+    //   //TODO: gestire timeout sessione
+    //   var _this = this;
+    //   jQuery.post('http://localhost:8080/TWEB_war_exploded/LoginServlet', {
+    //     username: this.username,
+    //     password: this.password,
+    //   })
+    //       .then(response => {
+    //         // .then(function(response))
+    //         // console.log("session: " + response.getSession());
+    //         //this.$session.start();
+    //         //console.log("session started");
+    //         // console.log("this.$session.exists() = " + this.$session.exists())
+    //         // var id = this.session.getAttribute("jSessionId");
+    //         // console.log("id = " + id)
+    //         var resp = JSON.parse(response);
+    //         // console.log("request" + sessionStorage)
+    //         if(resp.success === 1) {
+    //           // console.log("response: " + response)
+    //           // console.log("credentials.username: " + this.username)
+    //           // console.log("credentials.password: " + this.password)
+    //           // this.$store.state.token = 87;
+    //           // localStorage.setItem('access_token', this.$store.state.token)
+    //           // // console.log("token in localstorage: " + localStorage.access_token)
+    //           // console.log("token in store: " + this.$store.state.token)
+    //           // this.$session.set("session-id",JSON.parse(response).object);
+    //           // console.log("this.$session.get(): " + this.$session.get("session-id"))
+    //           // // context.commit('login', token)
+    //           this.$store.state.isLogged = true;
+    //           console.log("isLogged in store: " + this.$store.state.isLogged)
+    //           $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet', function (jsonPersonalHistory) {
+    //             _this.jsonPersonalHistory = jsonPersonalHistory;
+    //             console.log("jsonPersonalHistory; ")
+    //             console.log(_this.$store.state.jsonPersonalHistory);
+    //           });
+    //         }
+    //
+    //       })
+    //       .catch(error => {
+    //         console.log(error)
+    //       })
+    //
+    //   setTimeout(() => {this.makeToast()}, 200)
+    //     console.log("Username inserito: " + this.username);
+    //     console.log("Password inserita: " + this.password);
+    // },
     makeToast(){
       console.log("toast creato")
       // console.log("token:" + this.$store.state.token)
