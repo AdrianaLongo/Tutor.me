@@ -2,7 +2,7 @@
   <div>
 <!--    <p>elencoDisponibilita: {{this.$store.getters.elencoDisponibilita}}</p>-->
 <!--    <p>disponibilitaDocente: {{this.$store.getters.disponibilitaDocente}}</p>-->
-
+<!--    TODO: aggiornare tabella con disponibiltia utente se si logga alla fine-->
     <b-container v-if="this.$store.getters.userLogged">
       <b-table class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita" :jsonPersonalHistory="jsonPersonalHistory">
         <!--        <template #cell(lun)="data">-->
@@ -167,7 +167,7 @@
       </b-table>
 
       <b-modal id="modal-1" title="Vuoi confermare la prenotazione?" align="center"
-               @ok="creaPrenotazione(course, tutor, slot)">
+               @ok="creaPrenotazione()">
         <p class="my-4"> Corso: {{ this.$store.getters.courseName }} </p>
         <p class="my-4"> Tutor: {{ this.$store.getters.tutorFullName }} </p>
         <p class="my-4"> Data e ora: {{ day }}, {{ hours }}</p>
@@ -428,11 +428,12 @@ export default {
       }
     },
     creaPrenotazione: function(){
+
       // TODO: gestire sessione
       if (this.$store.getters.userLogged){
         console.log("Sei loggato!")
         $.post('http://localhost:8080/TWEB_war_exploded/EffettuaPrenotazioneServlet', {
-          jSessionId: this.$store.getters.currentToken,
+          // jSessionId: this.$store.getters.currentToken,
           idDocente: this.$store.getters.tutorId,
           slot: this.$store.getters.prenotazioneSlot,
           nomeCorso: this.$store.getters.courseName
