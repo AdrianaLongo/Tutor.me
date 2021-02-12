@@ -56,13 +56,13 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
         boolean disponibilita;
 
         HttpSession s = request.getSession(false);
-        String jSession = request.getParameter("jSessionId");
+//        String jSession = request.getParameter("jSessionId");
 
         Cookie toCheck[] = request.getCookies();
 
         if (IdentifyUsers.identifyIdCookie(toCheck)) {
 
-            String utente = s.getAttribute("Idutente").toString(); //getParameter recupera dal campo Nome nell'<input>Html il valore
+            String utente = IdentifyUsers.getUserId(toCheck); //getParameter recupera dal campo Nome nell'<input>Html il valore
             String docente = request.getParameter("idDocente");
             String slot = request.getParameter("slot");
             String nomeCorso = request.getParameter("nomeCorso");
