@@ -333,7 +333,7 @@ export default {
       _this.jsonEffettuate = jsonPersonalHistory.filter( element => element.stato === '1');
       _this.jsonCancellate = jsonPersonalHistory.filter( element => element.stato === '-1');
 
-      this.$store
+      // this.$store
     });
 
   },

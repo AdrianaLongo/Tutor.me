@@ -4,7 +4,7 @@
 <!--    <p>disponibilitaDocente: {{this.$store.getters.disponibilitaDocente}}</p>-->
 
     <b-container v-if="this.$store.getters.userLogged">
-      <b-table class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita">
+      <b-table class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita" :jsonPersonalHistory="jsonPersonalHistory">
         <!--        <template #cell(lun)="data">-->
         <!--          &lt;!&ndash; `data.value` is the value after formatted by the Formatter &ndash;&gt;-->
         <!--          <b-button v-if="Object.values(this.$store.getters.disponibilitaDocente).includes(data.value)" @click="selectSlot(data.value)"-->
@@ -15,13 +15,27 @@
 
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <b-button v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
-                JSON.stringify({sezione: data.value}))"
-                     @click="selectSlot(data.value)"
-                     variant="success"
-                     v-b-modal.modal-1>
-            Prenota
-          </b-button>
+          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
+                JSON.stringify({sezione: data.value}))">
+            <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
+              <b-button
+                  disabled
+                  variant="success"
+                  v-b-tooltip.hover
+                  title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
+                Prenota
+              </b-button>
+            </div>
+            <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
+              <b-button
+                  @click="selectSlot(data.value)"
+                  variant="success"
+                  v-b-modal.modal-1>
+                Prenota
+              </b-button>
+            </div>
+          </div>
+
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
                     variant="danger"
@@ -29,16 +43,29 @@
             Tutor non disponibile
           </b-button>
         </template>
-
         <template #cell(mar)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <b-button v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
-                JSON.stringify({sezione: data.value}))"
-                     @click="selectSlot(data.value)"
-                     variant="success"
-                     v-b-modal.modal-1>
-            Prenota
-          </b-button>
+          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
+                JSON.stringify({sezione: data.value}))">
+            <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
+              <b-button
+                  disabled
+                  variant="success"
+                  v-b-tooltip.hover
+                  title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
+                Prenota
+              </b-button>
+            </div>
+            <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
+              <b-button
+                  @click="selectSlot(data.value)"
+                  variant="success"
+                  v-b-modal.modal-1>
+                Prenota
+              </b-button>
+            </div>
+          </div>
+
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
                     variant="danger"
@@ -46,16 +73,29 @@
             Tutor non disponibile
           </b-button>
         </template>
-
         <template #cell(mer)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
-                JSON.stringify({sezione: data.value}))"
-                     @click="selectSlot(data.value)"
-                     variant="success"
-                     v-b-modal.modal-1>
-            Prenota
-          </b-button>
+          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
+                JSON.stringify({sezione: data.value}))">
+            <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
+              <b-button
+                  disabled
+                  variant="success"
+                  v-b-tooltip.hover
+                  title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
+                Prenota
+              </b-button>
+            </div>
+            <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
+              <b-button
+                  @click="selectSlot(data.value)"
+                  variant="success"
+                  v-b-modal.modal-1>
+                Prenota
+              </b-button>
+            </div>
+          </div>
+
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
                     variant="danger"
@@ -63,16 +103,29 @@
             Tutor non disponibile
           </b-button>
         </template>
-
         <template #cell(gio)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
-                JSON.stringify({sezione: data.value}))"
-                     @click="selectSlot(data.value)"
-                     variant="success"
-                     v-b-modal.modal-1>
-            Prenota
-          </b-button>
+          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
+                JSON.stringify({sezione: data.value}))">
+            <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
+              <b-button
+                  disabled
+                  variant="success"
+                  v-b-tooltip.hover
+                  title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
+                Prenota
+              </b-button>
+            </div>
+            <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
+              <b-button
+                  @click="selectSlot(data.value)"
+                  variant="success"
+                  v-b-modal.modal-1>
+                Prenota
+              </b-button>
+            </div>
+          </div>
+
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
                     variant="danger"
@@ -80,16 +133,29 @@
             Tutor non disponibile
           </b-button>
         </template>
-
         <template #cell(ven)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
-                JSON.stringify({sezione: data.value}))"
-                     @click="selectSlot(data.value)"
-                     variant="success"
-                     v-b-modal.modal-1>
-            Prenota
-          </b-button>
+          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
+                JSON.stringify({sezione: data.value}))">
+            <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
+              <b-button
+                  disabled
+                  variant="success"
+                  v-b-tooltip.hover
+                  title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
+                Prenota
+              </b-button>
+            </div>
+            <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
+              <b-button
+                  @click="selectSlot(data.value)"
+                  variant="success"
+                  v-b-modal.modal-1>
+                Prenota
+              </b-button>
+            </div>
+          </div>
+
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
                     variant="danger"
@@ -243,7 +309,8 @@ export default {
       json: null,
       prenotazione: null,
       pren: null,
-      jsonDisponibilita: this.$store.getters.elencoDisponibilita,
+      jsonDisponibilita: '',
+      jsonPersonalHistory: '',
       isLogged: false,
 
       fields: [
@@ -323,8 +390,20 @@ export default {
   // },
   created() {
     this.jsonDisponibilita = this.$store.getters.elencoDisponibilita;
-    // console.log("vuoto: " + this.$store.getters.disponibilitaDocente);
-    console.log("Slot: " + this.$store.getters.elencoDisponibilita);
+    console.log("Disponibilita' professori (created): ")
+    console.log(this.$store.getters.elencoDisponibilita)
+
+    if(this.$store.state.isLogged) {
+      console.log("Utente loggato")
+      var _this = this;
+      $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet', function (jsonPersonalHistory) {
+        _this.jsonPersonalHistory = jsonPersonalHistory.filter( element => element.stato === '0');
+        console.log(_this.jsonPersonalHistory);
+      });
+      console.log("Disponibilita' utente: " + this.$store.state.jsonPersonalHistory)
+    } else {
+      console.log("Utente non loggato")
+    }
   },
   methods: {
     selectSlot: function(s){
