@@ -600,6 +600,7 @@ public class DAO {
                 System.out.println("execute eseguita con successo");
             }
 
+
             // Controllo esistenza associazione corso-docente: se esiste, non devo far nulla
             String sqlControllaAssociazione = "SELECT * FROM insegna WHERE nomeCorso = ? AND idDocente = ?";
             pstControllaEsistenzaDocente = conn.prepareStatement(sqlControllaAssociazione);
