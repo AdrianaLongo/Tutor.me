@@ -108,7 +108,6 @@ public class DAO {
     }
 
     public ArrayList<Docente> cercaTutor(String corso) throws SQLException {
-
         Connection conn = null;
         PreparedStatement pst;
         PreparedStatement pstNested;
@@ -554,12 +553,12 @@ public class DAO {
 
         boolean courseExists = false, docenteExists = false, associazioneExists = false;
 
-        try {
+        try{
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
 
             // Controllo esistenza corso: se non esiste, lo aggiungo alla tabella "corso"
-            /*String sqlControllaEsistenzaCorso = "SELECT * FROM corso WHERE nomeCorso = ?";
+            String sqlControllaEsistenzaCorso = "SELECT * FROM corso WHERE nomeCorso = ?";
             pstControllaEsistenzaCorso = conn.prepareStatement(sqlControllaEsistenzaCorso);
             pstControllaEsistenzaCorso.setString(1, nomeCorso);
             ResultSet rsCorsi = pstControllaEsistenzaCorso.executeQuery();
@@ -568,31 +567,38 @@ public class DAO {
                 courseExists = true;
             }
             if(!courseExists){
+                String sqlInserisciCorso="INSERT INTO corso(nomeCorso) VALUES (?)";
+                pstInserisciCorso = conn.prepareStatement(sqlInserisciCorso);
+                pstInserisciCorso.setString(1, nomeCorso);
+                pstInserisciCorso.execute();
+            }
 
-             */
-            String sqlInserisciCorso = "INSERT INTO corso(nomeCorso) VALUES (?)";
-            pstInserisciCorso = conn.prepareStatement(sqlInserisciCorso);
-            pstInserisciCorso.setString(1, nomeCorso);
-            pstInserisciCorso.execute();
-
-            /*// Controllo esistenza docente: se non esiste, lo aggiungo alla tabella "docente"
-            String sqlControllaEsistenzaDocente = "SELECT * FROM docente WHERE idDocente = ?";
+            // Controllo esistenza docente: se non esiste, lo aggiungo alla tabella "docente"
+            String sqlControllaEsistenzaDocente = "SELECT * FROM docente WHERE nomeDocente = ? AND cognomeDocente = ?";
             pstControllaEsistenzaDocente = conn.prepareStatement(sqlControllaEsistenzaDocente);
-            pstControllaEsistenzaDocente.setInt(1, idDocente);
+            pstControllaEsistenzaDocente.setString(1, nomeDocente);
+            pstControllaEsistenzaDocente.setString(2, cognomeDocente);
             ResultSet rsDocenti = pstControllaEsistenzaDocente.executeQuery();
 
-            while (rsDocenti.next()) {
+            while(rsDocenti.next()){
                 docenteExists = true;
+                idDocente = rsDocenti.getInt("idDocente");
+                System.out.println("idDocente: " + idDocente);
             }
-            if (!docenteExists) {
-
-
-                String sqlInserisciDocente = "INSERT INTO docente(nomeDocente, cognomeDocente) VALUES (?, ?)";
+            if(!docenteExists){
+                System.out.println("!docenteExists");
+                String sqlInserisciDocente="INSERT INTO docente(nomeDocente, cognomeDocente, idDocente) VALUES (?, ?, ?)";
                 pstInserisciDocente = conn.prepareStatement(sqlInserisciDocente);
                 pstInserisciDocente.setString(1, nomeDocente);
+                System.out.println("nomeDocente: " + nomeDocente);
                 pstInserisciDocente.setString(2, cognomeDocente);
+                System.out.println("cognomeDocente: " + cognomeDocente);
+                pstInserisciDocente.setInt(3, idDocente);
+                System.out.println("idDocente: " + idDocente);
                 pstInserisciDocente.execute();
-            */
+//                idDocente = rsDocenti.getInt("idDocente");7
+                System.out.println("execute eseguita con successo");
+            }
 
             // Controllo esistenza associazione corso-docente: se esiste, non devo far nulla
             String sqlControllaAssociazione = "SELECT * FROM insegna WHERE nomeCorso = ? AND idDocente = ?";
@@ -601,10 +607,10 @@ public class DAO {
             pstControllaEsistenzaDocente.setInt(2, idDocente);
             ResultSet rsAssociazioni = pstControllaEsistenzaDocente.executeQuery();
 
-            while (rsAssociazioni.next()) { // l'associazione esiste gia': non devo far nulla
+            while(rsAssociazioni.next()){ // l'associazione esiste gia': non devo far nulla
                 associazioneExists = true;
             }
-            if (!associazioneExists) {
+            if(!associazioneExists){
                 // Inserimento connessione docente-corso nella tabella "insegna"
                 String sqlInserisciAssociazione = "INSERT INTO insegna(nomeCorso, idDocente) VALUES (?,?)";
                 pstInserisciAssociazione = conn.prepareStatement(sqlInserisciAssociazione);
@@ -615,7 +621,8 @@ public class DAO {
             }
 
 
-        } catch (SQLException se) {
+
+        } catch (SQLException se){
             System.out.println(se.getMessage());
         }
         // 4. Chiudo la connessione

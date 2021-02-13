@@ -54,10 +54,12 @@ public class CourseTutorAssociationServlet extends HttpServlet {
 
         if (IdentifyUsers.identifyIdCookie(toCheck)) {
             if (IdentifyUsers.identifyRoleCookie(toCheck)) {
-
                 nomeCorso = request.getParameter("nomeCorso");
+                System.out.println("nomeCorso: " + nomeCorso);
                 nomeDocente = request.getParameter("nomeDocente");
+                System.out.println("nomeDocente" + nomeDocente);
                 cognomeDocente = request.getParameter("cognomeDocente");
+                System.out.println("cognomeDocente" + cognomeDocente);
 
                 try {
                     checkCourse = dao.checkCourse(nomeCorso);
@@ -72,31 +74,31 @@ public class CourseTutorAssociationServlet extends HttpServlet {
                     out.flush();
                 }
 
-                if (opCode.equals("button1")) {
-
+                if (opCode.equals("insertCourse")) {
+                    System.out.println("Inserisco nuovo corso per tutor esistente");
                     idDocente = request.getParameter("idDocente");
+                    System.out.println("nomeCorso: " + nomeCorso);
+                    System.out.println("nomeDocente" + nomeDocente);
+                    System.out.println("cognomeDocente" + cognomeDocente);
+                    System.out.println("idDocente: " + idDocente);
                     idTutor = Integer.parseInt(idDocente);
-                }
-
-
-                if (opCode.equals("button2")) {
-
+                } else if (opCode.equals("insertCourseAndTutor")) {
+                    System.out.println("Inserisco nuovo corso per nuovo tutor");
                     idTutor = Useful.generateId();
-
-                    try {
-                        //anche se controllo con checkDocente se esiste
-                        //è deleterio, potrebbe esse un omonimo
-                        dao.addDocente(idTutor, nomeDocente, cognomeDocente);
-                    } catch (SQLException e) {
-                        System.out.println(e.getMessage());
-                        message = new Useful("Error in adding tutor to catalogue", -1, null);
-                        Json = gson.toJson(message);
-                        out.write(Json);
-                        out.flush();
-                    }
+//                    try {
+//                        //anche se controllo con checkDocente se esiste
+//                        //è deleterio, potrebbe esse un omonimo
+//                        dao.addDocente(idTutor, nomeDocente, cognomeDocente);
+//                    } catch (SQLException e) {
+//                        System.out.println(e.getMessage());
+//                        message = new Useful("Error in adding tutor to catalogue", -1, null);
+//                        Json = gson.toJson(message);
+//                        out.write(Json);
+//                        out.flush();
+//                    }
                 }
-
                 try {
+                    System.out.println("Provo ad associare nuovo corso a docente esistente");
                     dao.insertCorsoDocenteAssociation(nomeCorso, idTutor, nomeDocente, cognomeDocente);
                     message = new Useful("Correctly added association", 1, null);
                 } catch (SQLException e) {

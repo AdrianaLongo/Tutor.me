@@ -1,6 +1,5 @@
 <template>
   <b-container class="mt-4">
-    <!--  TODO: inserire corsi (manca la servlet)-->
     <b-card bg-variant="light">
       <b-form-group
           label="Inserisci un nuovo corso nel catalogo"
@@ -31,18 +30,14 @@
             <option id="newTutor">Inserisci un nuovo tutor...</option>
           </b-form-select>
           <b-form-input v-if="tutorSelected==='Inserisci un nuovo tutor...'" id="nested-course" v-model="tutorToAdd"></b-form-input>
-          <!-- TODO: controllare che il nome sia scritto bene, con le maiuscole-->
         </b-form-group>
 
-        <!-- TODO: se viene cambiata la condizione dell'if, l'altro bottone deve sparire -->
-        <div v-if="courseToAdd !== '' && tutorSelected !== ''">
-          <!-- TODO: quando si inserisce nuovo docente, far comparire il bottone dopo inserimento-->
-          <b-button @click="insertCourse" variant="primary">Inserisci corso</b-button>
+        <div v-if="courseToAdd !== '' && tutorSelected !== 'Inserisci un nuovo tutor...'">
+          <b-button @click="insertCourse(courseToAdd, tutorSelected)" variant="primary">Inserisci corso</b-button>
         </div>
 
-        <div v-if="courseToAdd !== '' && tutorToAdd !== ''">
-          <!-- TODO: quando si inserisce nuovo docente, far comparire il bottone dopo inserimento-->
-          <b-button @click="insertCourse" variant="primary">Inserisci corso e docente</b-button>
+        <div v-if="courseToAdd !== '' && tutorSelected === 'Inserisci un nuovo tutor...'">
+          <b-button @click="insertCourse(courseToAdd, tutorToAdd)" variant="primary">Inserisci corso e docente</b-button>
         </div>
 
 
@@ -54,6 +49,8 @@
 
 <script>
 import $ from "jquery";
+import jQuery from 'jquery'
+
 
 export default {
   name: "newCourse",
@@ -75,16 +72,57 @@ export default {
     })
   },
   methods: {
-    insertCourse: function (){
+    insertCourse(courseToAdd, tutor) {
+      this.courseToAdd = this.courseToAdd.charAt(0).toUpperCase() + this.courseToAdd.slice(1)
+      if(tutor.id !== undefined) {
+        console.log("Tutor esistente")
+        console.log("courseToAdd: " + courseToAdd)
+        console.log("tutor.nome: " + tutor.nome)
+        console.log("tutor.cognome: " + tutor.cognome)
+        console.log("tutor.id: " + tutor.id)
+        var _this = this;
+        jQuery.post('http://localhost:8080/TWEB_war_exploded/CourseTutorAssociationServlet', {
+          opCode: "insertCourse",
+          nomeCorso: _this.courseToAdd,
+          nomeDocente: tutor.nome,
+          cognomeDocente: tutor.cognome,
+          idDocente: tutor.id
+        })
+            .then(response => {
+              console.log(response)
+              setTimeout(() => {this.reset()}, 100)
+              this.makeToast(tutor.nome, tutor.cognome);
+            })
+      } else {
+        console.log("Nuovo tutor. Un nuovo id sarà generato dal backend")
+        console.log("courseToAdd: " + courseToAdd)
+        console.log("tutor: ")
+        console.log(tutor)
+        var nuovoTutor = tutor.split(' ');
+        var nomeNuovoTutor = nuovoTutor[0].charAt(0).toUpperCase() + nuovoTutor[0].slice(1);
+        console.log("nomeNuovoTutor: " + nomeNuovoTutor);
+        var cognomeNuovoTutor = nuovoTutor[1].charAt(0).toUpperCase() + nuovoTutor[0].slice(1);
+        console.log("cognomeNuovoTutor: " + cognomeNuovoTutor);
+        _this = this;
+        jQuery.post('http://localhost:8080/TWEB_war_exploded/CourseTutorAssociationServlet', {
+          opCode: "insertCourseAndTutor",
+          nomeCorso: _this.courseToAdd,
+          nomeDocente: nomeNuovoTutor,
+          cognomeDocente: cognomeNuovoTutor,
+        })
+            .then(response => {
+              console.log(response)
+              setTimeout(() => {this.reset()}, 100)
+              this.makeToast(nomeNuovoTutor, cognomeNuovoTutor);
+            })
+      }
       this.courseAdded = true;
-      setTimeout(() => {this.reset()}, 100)
-      this.makeToast();
-      console.log("Ho inserito il corso: " + this.courseToAdd.charAt(0).toUpperCase() + this.courseToAdd.slice(1))
+
+      console.log("Ho inserito il corso: " + this.courseToAdd)
     },
-    makeToast(){
+    makeToast(nomeTutor, cognomeTutor){
       this.$bvToast.toast(
-          // TODO: sistemare nome cognome tutor
-          `Hai aggiunto in catalogo il corso ${this.courseToAdd.nome} insegnato dal tutor ${this.tutorSelected.nome} ${this.tutorSelected.cognome}.`,
+          `Hai aggiunto in catalogo il corso ${this.courseToAdd} insegnato dal tutor ${nomeTutor} ${cognomeTutor}.`,
           {
             title: `Catalogo aggiornato con successo!`,
             variant: 'success',
