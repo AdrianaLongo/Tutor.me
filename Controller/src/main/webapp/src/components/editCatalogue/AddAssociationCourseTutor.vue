@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO: inserire associazioni corso-docente (manca la servlet)-->
   <b-container class="mt-4">
     <b-card bg-variant="light">
       <b-form-group
@@ -44,6 +43,7 @@
 
 <script>
 import $ from "jquery";
+import jQuery from "jquery";
 
 export default {
   name: "AddAssociationCourseTutor",
@@ -68,14 +68,25 @@ export default {
   },
   methods: {
     addAssociation: function(){
+      console.log(this.courseSelected.nome)
+      console.log(this.tutorSelected.nome)
+      console.log(this.tutorSelected.cognome)
+      console.log(this.tutorSelected.id)
+
+      jQuery.post('http://localhost:8080/TWEB_war_exploded/ExistingEntAssociationServlet', {
+        nomeCorso: this.courseSelected.nome,
+        nomeDocente: this.tutorSelected.nome,
+        cognomeDocente: this.tutorSelected.cognome,
+        idDocente: this.tutorSelected.id
+      })
+
       this.makeToast()
-      console.log("Associazione inserita!")
+
       setTimeout(() => {this.reset()}, 100)
 
     },
     makeToast(){
       this.$bvToast.toast(
-          // TODO: sistemare nome cognome tutor
           `Hai associato il tutor ${this.tutorSelected.nome} ${this.tutorSelected.cognome} al corso di ${this.courseSelected.nome}.`,
           {
             title: `Catalogo aggiornato con successo!`,
