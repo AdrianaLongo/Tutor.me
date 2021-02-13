@@ -30,11 +30,11 @@
           <b-form-input v-if="courseSelected==='Inserisci un nuovo corso...'" id="nested-course" v-model="courseToAdd"></b-form-input>
         </b-form-group>
 
-        <div v-if="tutorToAdd !== '' && courseSelected !== 'Inserisci un nuovo corso...'">
+        <div v-if="tutorToAdd !== '' && courseSelected !== '' && courseSelected !== 'Inserisci un nuovo corso...'">
           <b-button @click="insertTutor(tutorToAdd, courseSelected)" variant="primary">Inserisci tutor</b-button>
         </div>
 
-        <div v-if="tutorToAdd !== '' && courseSelected === 'Inserisci un nuovo corso...'">
+        <div v-if="tutorToAdd !== '' && courseSelected === 'Inserisci un nuovo corso...' && courseToAdd !== ''">
         <b-button @click="insertTutor(tutorToAdd, courseToAdd)" variant="primary">Inserisci tutor e corso</b-button>
       </div>
 

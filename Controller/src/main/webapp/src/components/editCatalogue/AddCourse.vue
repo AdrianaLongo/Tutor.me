@@ -32,11 +32,11 @@
           <b-form-input v-if="tutorSelected==='Inserisci un nuovo tutor...'" id="nested-course" v-model="tutorToAdd"></b-form-input>
         </b-form-group>
 
-        <div v-if="courseToAdd !== '' && tutorSelected !== 'Inserisci un nuovo tutor...'">
+        <div v-if="courseToAdd !== '' && tutorSelected !== '' && tutorSelected !== 'Inserisci un nuovo tutor...'">
           <b-button @click="insertCourse(courseToAdd, tutorSelected)" variant="primary">Inserisci corso</b-button>
         </div>
 
-        <div v-if="courseToAdd !== '' && tutorSelected === 'Inserisci un nuovo tutor...'">
+        <div v-if="courseToAdd !== '' && tutorSelected === 'Inserisci un nuovo tutor...' && tutorToAdd !== ''">
           <b-button @click="insertCourse(courseToAdd, tutorToAdd)" variant="primary">Inserisci corso e docente</b-button>
         </div>
 
@@ -101,7 +101,7 @@ export default {
         var nuovoTutor = tutor.split(' ');
         var nomeNuovoTutor = nuovoTutor[0].charAt(0).toUpperCase() + nuovoTutor[0].slice(1);
         console.log("nomeNuovoTutor: " + nomeNuovoTutor);
-        var cognomeNuovoTutor = nuovoTutor[1].charAt(0).toUpperCase() + nuovoTutor[0].slice(1);
+        var cognomeNuovoTutor = nuovoTutor[1].charAt(0).toUpperCase() + nuovoTutor[1].slice(1);
         console.log("cognomeNuovoTutor: " + cognomeNuovoTutor);
         _this = this;
         jQuery.post('http://localhost:8080/TWEB_war_exploded/CourseTutorAssociationServlet', {
