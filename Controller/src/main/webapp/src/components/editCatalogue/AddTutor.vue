@@ -1,45 +1,35 @@
 <template>
   <b-container class="mt-4">
-    <b-card bg-variant="light">
-      <b-form-group
-          label="Inserisci un nuovo tutor nel catalogo"
-          label-cols-lg="5"
-          label-size="lg"
-          label-class="font-weight-bold pt-0"
-          class="mb-0"
+    <b-card bg-variant="light" title="Inserisci un nuovo tutor nel catalogo">
+      <b-form-group label="Nome tutor"
+          label-for="nested-tutor"
+          label-cols-md="2"
+          label-align-md="right"
       >
-        <b-form-group
-            label="Nome tutor:"
-            label-for="nested-tutor"
-            label-cols-sm="3"
-            label-align-sm="right"
-        >
-          <b-form-input id="nested-tutor" v-model="tutorToAdd"></b-form-input>
-        </b-form-group>
+        <b-form-input id="nested-tutor" v-model="tutorToAdd"></b-form-input>
+      </b-form-group>
 
-        <b-form-group
-            label="Nome corso:"
-            label-for="nested-course"
-            label-cols-sm="3"
-            label-align-sm="right"
-        >
-          <b-form-select v-model="courseSelected">
-            <option v-for="course in jsonCourses" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
-            <option id="newTutor">Inserisci un nuovo corso...</option>
-          </b-form-select>
-          <b-form-input v-if="courseSelected==='Inserisci un nuovo corso...'" id="nested-course" v-model="courseToAdd"></b-form-input>
-        </b-form-group>
+      <b-form-group label="Nome corso"
+          label-for="nested-course"
+          label-cols-md="2"
+          label-align-md="right"
+      >
+        <b-form-select v-model="courseSelected">
+          <option v-for="course in jsonCourses" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
+          <option id="newTutor">Inserisci un nuovo corso...</option>
+        </b-form-select>
+        <b-form-input v-if="courseSelected==='Inserisci un nuovo corso...'" id="nested-course" v-model="courseToAdd"></b-form-input>
+      </b-form-group>
 
-        <div v-if="tutorToAdd !== '' && courseSelected !== '' && courseSelected !== 'Inserisci un nuovo corso...'">
-          <b-button @click="insertTutor(tutorToAdd, courseSelected)" variant="primary">Inserisci tutor</b-button>
-        </div>
+      <div v-if="tutorToAdd !== '' && courseSelected !== '' && courseSelected !== 'Inserisci un nuovo corso...'">
+        <b-button @click="insertTutor(tutorToAdd, courseSelected)" variant="primary">Inserisci tutor</b-button>
+      </div>
 
-        <div v-if="tutorToAdd !== '' && courseSelected === 'Inserisci un nuovo corso...' && courseToAdd !== ''">
+      <div v-if="tutorToAdd !== '' && courseSelected === 'Inserisci un nuovo corso...' && courseToAdd !== ''">
         <b-button @click="insertTutor(tutorToAdd, courseToAdd)" variant="primary">Inserisci tutor e corso</b-button>
       </div>
 
 
-      </b-form-group>
     </b-card>
   </b-container>
 </template>

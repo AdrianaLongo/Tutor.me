@@ -2,26 +2,19 @@
 
   <b-container class="mt-4">
 
-    <b-card bg-variant="light">
-      <b-form-group
-          label="Seleziona il tutor che vuoi rimuovere dal catalogo"
-          label-cols-lg="5"
-          label-size="lg"
-          label-class="font-weight-bold pt-0"
-          class="mb-0"
-      >
-        <b-form-select v-model="tutorSelected">
-          <option v-for="tutor in jsonTutor" :key="tutor.id" :value="{id: tutor.id, nome: tutor.nome, cognome:tutor.cognome}">
-            {{ tutor.nome }} {{tutor.cognome}}
-          </option>
-        </b-form-select>
+    <b-card bg-variant="light" title="Seleziona il tutor che vuoi rimuovere dal catalogo"
+    >
+      <b-form-select v-model="tutorSelected">
+        <option v-for="tutor in jsonTutor" :key="tutor.id" :value="{id: tutor.id, nome: tutor.nome, cognome:tutor.cognome}">
+          {{ tutor.nome }} {{tutor.cognome}}
+        </option>
+      </b-form-select>
 
-        <!--    <p>Corso selezionato in courseSelect: {{ courseName.nome }}</p>-->
+      <!--    <p>Corso selezionato in courseSelect: {{ courseName.nome }}</p>-->
 
-        <div v-if="tutorSelected.id !== undefined">
-          <b-button @click="deleteTutor" variant="danger">Elimina tutor</b-button>
-        </div>
-      </b-form-group>
+      <div v-if="tutorSelected.id !== undefined">
+        <b-button @click="deleteTutor" variant="danger">Elimina tutor</b-button>
+      </div>
     </b-card>
 
 <!--    <div>-->
@@ -52,7 +45,6 @@
 </template>
 
 <script>
-//TODO: aggiornare contenuto select dopo ogni operazione fatta sulle altri componenti
 import $ from "jquery";
 import jQuery from "jquery";
 

@@ -1,42 +1,32 @@
 <template>
   <b-container class="mt-4">
-    <b-card bg-variant="light">
-      <b-form-group
-          label="Associa un tutor ad un corso"
-          label-cols-lg="5"
-          label-size="lg"
-          label-class="font-weight-bold pt-0"
-          class="mb-0"
+    <b-card bg-variant="light" title="Associa un tutor ad un corso">
+      <b-form-group label="Tutor"
+          label-for="nested-tutor"
+          label-cols-md="1"
+          label-align-md="right"
       >
-        <b-form-group
-            label="Tutor:"
-            label-for="nested-tutor"
-            label-cols-sm="3"
-            label-align-sm="right"
-        >
-          <b-form-select v-model="tutorSelected">
-            <option v-for="tutor in jsonTutor" :key="tutor.id" :value="{id: tutor.id, nome: tutor.nome, cognome:tutor.cognome}">
-              {{ tutor.nome }} {{tutor.cognome}}
-            </option>
-          </b-form-select>
-        </b-form-group>
-
-        <b-form-group
-            label="Corso:"
-            label-for="nested-course"
-            label-cols-sm="3"
-            label-align-sm="right"
-        >
-          <b-form-select v-model="courseSelected">
-            <option v-for="course in jsonCourses" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
-          </b-form-select>
-        </b-form-group>
-
-        <div v-if="tutorSelected !== '' && courseSelected !== ''">
-          <b-button @click="addAssociation" variant="primary">Aggiungi associazione</b-button>
-        </div>
-
+        <b-form-select v-model="tutorSelected">
+          <option v-for="tutor in jsonTutor" :key="tutor.id" :value="{id: tutor.id, nome: tutor.nome, cognome:tutor.cognome}">
+            {{ tutor.nome }} {{tutor.cognome}}
+          </option>
+        </b-form-select>
       </b-form-group>
+
+      <b-form-group label="Corso"
+          label-for="nested-course"
+          label-cols-md="1"
+          label-align-md="right"
+      >
+        <b-form-select v-model="courseSelected">
+          <option v-for="course in jsonCourses" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
+        </b-form-select>
+      </b-form-group>
+
+      <div v-if="tutorSelected !== '' && courseSelected !== ''">
+        <b-button @click="addAssociation" variant="primary">Aggiungi associazione</b-button>
+      </div>
+
     </b-card>
   </b-container>
 </template>

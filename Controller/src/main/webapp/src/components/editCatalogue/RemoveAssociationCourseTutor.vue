@@ -1,6 +1,6 @@
 <template>
   <b-container class="mt-4">
-    <b-card bg-variant="light">
+    <b-card bg-variant="light" title="Rimuovi l'associazione di un corso ad un tutor">
       <!--All'inizio, entrambe le select sono riempite con tutti i corsi e tutti i tutor:-->
       <!-- OPZIONE 1) L'utente sceglie un corso -> la select del tutor mostra solo i tutor che insegnano quel corso  -->
       <!-- OPZIONE 2) L'utente sceglie un tutor -> la select del corso mostra solo i corsi da lui insegnati  -->
@@ -157,55 +157,47 @@
 
 <!--      </b-form-group>-->
 
-      <b-form-group
-          label="Rimuovi l'associazione di un corso ad un tutor"
-          label-cols-lg="5"
-          label-size="lg"
-          label-class="font-weight-bold pt-0"
-          class="mb-0"
+      <b-form-group label="Corso"
+                    label-for="nested-course"
+                    label-cols-md="2"
+                    label-align-md="right"
       >
-        <b-form-group label="Corso:"
-            label-for="nested-course"
-            label-cols-sm="3"
-            label-align-sm="right"
-        >
-          <b-form-select v-if="jsonCoursesForTutor === null" v-model="courseSelected" v-on:change="searchTutorsForCourse">
-            <option v-for="course in jsonCourses" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
-          </b-form-select>
-          <b-form-select v-else-if="jsonCoursesForTutor !== null" v-model="courseSelected">
-            <option v-for="course in jsonCoursesForTutor" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
-          </b-form-select>
-        </b-form-group>
-
-
-        <b-form-group label="Tutor:"
-            label-for="nested-tutor"
-            label-cols-sm="3"
-            label-align-sm="right"
-        >
-          <!--Se viene selezionato un tutor, vengono mostrati i corsi relativi a quel tutor...-->
-          <b-form-select v-if="jsonTutorsForCourse === null" v-model="tutorSelected" v-on:change="searchCoursesForTutor">
-            <option v-for="tutor in jsonTutor" :key="tutor.id" :value="{id: tutor.id, nome: tutor.nome, cognome:tutor.cognome}">
-              {{ tutor.nome }} {{tutor.cognome}}
-            </option>
-          </b-form-select>
-          <!--...altrimenti di base vengono mostrati tutti i corsi-->
-          <b-form-select v-else-if="jsonTutorsForCourse !== null" v-model="tutorSelected">
-            <option v-for="tutor in jsonTutorsForCourse" :key="tutor.id" :value="{id: tutor.id, nome: tutor.nome, cognome:tutor.cognome}">
-              {{ tutor.nome }} {{tutor.cognome}}
-            </option>
-          </b-form-select>
-        </b-form-group>
-
-
-        <div v-if="tutorSelected !== '' && courseSelected !== ''">
-          <b-button @click="removeAssociation" variant="primary">Rimuovi associazione</b-button>
-        </div>
-
+        <b-form-select v-if="jsonCoursesForTutor === null" v-model="courseSelected" v-on:change="searchTutorsForCourse">
+          <option v-for="course in jsonCourses" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
+        </b-form-select>
+        <b-form-select v-else-if="jsonCoursesForTutor !== null" v-model="courseSelected">
+          <option v-for="course in jsonCoursesForTutor" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
+        </b-form-select>
       </b-form-group>
 
 
-<!--      <b-form-group -->
+      <b-form-group label="Tutor"
+                    label-for="nested-tutor"
+                    label-cols-md="2"
+                    label-align-md="right"
+      >
+        <!--Se viene selezionato un tutor, vengono mostrati i corsi relativi a quel tutor...-->
+        <b-form-select v-if="jsonTutorsForCourse === null" v-model="tutorSelected" v-on:change="searchCoursesForTutor">
+          <option v-for="tutor in jsonTutor" :key="tutor.id" :value="{id: tutor.id, nome: tutor.nome, cognome:tutor.cognome}">
+            {{ tutor.nome }} {{tutor.cognome}}
+          </option>
+        </b-form-select>
+        <!--...altrimenti di base vengono mostrati tutti i corsi-->
+        <b-form-select v-else-if="jsonTutorsForCourse !== null" v-model="tutorSelected">
+          <option v-for="tutor in jsonTutorsForCourse" :key="tutor.id" :value="{id: tutor.id, nome: tutor.nome, cognome:tutor.cognome}">
+            {{ tutor.nome }} {{tutor.cognome}}
+          </option>
+        </b-form-select>
+      </b-form-group>
+
+
+      <div v-if="tutorSelected !== '' && courseSelected !== ''">
+        <b-button @click="removeAssociation" variant="primary">Rimuovi associazione</b-button>
+      </div>
+
+
+
+      <!--      <b-form-group -->
 <!--          label="Rimuovi l'associazione di un corso ad un tutor"-->
 <!--          label-cols-lg="5"-->
 <!--          label-size="lg"-->
@@ -256,7 +248,6 @@
 </template>
 
 <script>
-//TODO: aggiornare contenuto select dopo ogni operazione fatta sulle altri componenti
 import $ from "jquery";
 import jQuery from "jquery";
 
