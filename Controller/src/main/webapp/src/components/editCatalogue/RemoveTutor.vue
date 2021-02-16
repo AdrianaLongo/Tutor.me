@@ -1,6 +1,6 @@
 <template>
+
   <b-container class="mt-4">
-    <!--  TODO: rimuovere docenti (manca la servlet)-->
 
     <b-card bg-variant="light">
       <b-form-group
@@ -52,7 +52,9 @@
 </template>
 
 <script>
+//TODO: aggiornare contenuto select dopo ogni operazione fatta sulle altri componenti
 import $ from "jquery";
+import jQuery from "jquery";
 
 export default {
   name: "RemoveTutor",
@@ -78,6 +80,12 @@ export default {
   },
   methods:{
     deleteTutor: function(){
+      var _this = this;
+      console.log("_this.tutorSelected.id: ")
+      console.log(_this.tutorSelected.id)
+      jQuery.post('http://localhost:8080/TWEB_war_exploded/DeleteTutorServlet',{
+        idDocente: _this.tutorSelected.id
+      })
       this.makeToast()
       setTimeout(() => {this.reset()}, 100)
       console.log("Tutor eliminato!")

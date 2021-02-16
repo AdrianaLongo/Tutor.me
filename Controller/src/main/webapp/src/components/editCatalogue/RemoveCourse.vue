@@ -1,6 +1,5 @@
 <template>
   <b-container class="mt-4">
-    <!--  TODO: rimuovere corsi (manca la servlet)-->
 
     <b-card bg-variant="light">
       <b-form-group
@@ -25,7 +24,10 @@
 </template>
 
 <script>
+//TODO: aggiornare contenuto select dopo ogni operazione fatta sulle altri componenti
 import $ from "jquery";
+import jQuery from "jquery";
+
 
 export default {
   name: "RemoveCourse",
@@ -44,6 +46,10 @@ export default {
   },
   methods:{
     deleteCourse: function(){
+      // console.log(this.courseToDelete.nome)
+      jQuery.post('http://localhost:8080/TWEB_war_exploded/DeleteCourseServlet', {
+        nomeCorso: this.courseToDelete.nome
+      })
       this.makeToast()
       setTimeout(() => {this.reset()}, 100)
       console.log("Corso eliminato!")
