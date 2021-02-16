@@ -261,7 +261,7 @@ public class DAO {
             }
 
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM corso");
+            ResultSet rs = st.executeQuery("SELECT * FROM corso WHERE disponibilitaCorso = 1");
             while (rs.next()) {
                 Corso c = new Corso(rs.getString("nomeCorso"));
                 out.add(c);
@@ -688,7 +688,7 @@ public class DAO {
 
             // Estrazione id dei docenti che insegnano quel corso e che sono disponibili
             String sql = "SELECT docente.nomeDocente, docente.cognomeDocente, insegna.idDocente FROM docente,insegna" +
-                    " WHERE docente.idDocente=insegna.idDocente AND insegna.nomeCorso = ?";
+                    " WHERE docente.idDocente=insegna.idDocente AND insegna.nomeCorso = ? AND docente.disponibilitaDocente = 1";
 
             // Controllo disponibilita' del docente
             String sqlControllaDisponibilita = "SELECT * FROM insegna WHERE nomeCorso=? AND " +
