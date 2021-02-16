@@ -62,7 +62,7 @@ public class TutorCourseAssociationServlet extends HttpServlet {
 
                 idTutor = Useful.generateId();
 
-                if (opCode.equals("button2")) {
+                if (opCode.equals("insertTutorAndCourse")) {
                     try {
                         checkCourse = dao.checkCourse(nomeCorso);
                         if (!checkCourse)
