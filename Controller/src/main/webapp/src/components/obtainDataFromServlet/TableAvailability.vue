@@ -2,8 +2,6 @@
   <div>
     <!--    <p>elencoDisponibilita: {{this.$store.getters.elencoDisponibilita}}</p>-->
     <!--    <p>disponibilitaDocente: {{this.$store.getters.disponibilitaDocente}}</p>-->
-    <!--    TODO: refresh tabella con disponibilita utente se si logga alla fine-->
-    <!--    TODO: rendere opaco lo slot appena prenotato-->
 
     <b-container v-if="this.$store.getters.userLogged && this.$store.state.needRefresh">
       <!--      <b-button @click="refreshAvailability">Refresh</b-button>-->
@@ -21,15 +19,21 @@
 
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
-                JSON.stringify({sezione: data.value}))">
+          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) === JSON.stringify({sezione: data.value}))">
             <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
-              <b-button
+              <b-button v-if="!slotPrenotatiInSessione.includes(data.value)"
                   disabled
                   variant="info"
                   v-b-tooltip.hover
                   title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
                 Prenota
+              </b-button>
+              <b-button v-else-if="slotPrenotatiInSessione.includes(data.value)"
+                        @click="selectSlot(data.value)"
+                        variant="success"
+                        disabled
+                        v-b-modal.modal-1>
+                Prenotato
               </b-button>
             </div>
             <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
@@ -57,15 +61,21 @@
         </template>
         <template #cell(mar)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
-                JSON.stringify({sezione: data.value}))">
+          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) === JSON.stringify({sezione: data.value}))">
             <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
-              <b-button
+              <b-button v-if="!slotPrenotatiInSessione.includes(data.value)"
                   disabled
                   variant="info"
                   v-b-tooltip.hover
                   title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
                 Prenota
+              </b-button>
+              <b-button v-else-if="slotPrenotatiInSessione.includes(data.value)"
+                        @click="selectSlot(data.value)"
+                        variant="success"
+                        disabled
+                        v-b-modal.modal-1>
+                Prenotato
               </b-button>
             </div>
             <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
@@ -93,15 +103,21 @@
         </template>
         <template #cell(mer)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
-                JSON.stringify({sezione: data.value}))">
+          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) === JSON.stringify({sezione: data.value}))">
             <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
-              <b-button
+              <b-button v-if="!slotPrenotatiInSessione.includes(data.value)"
                   disabled
                   variant="info"
                   v-b-tooltip.hover
                   title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
                 Prenota
+              </b-button>
+              <b-button v-else-if="slotPrenotatiInSessione.includes(data.value)"
+                        @click="selectSlot(data.value)"
+                        variant="success"
+                        disabled
+                        v-b-modal.modal-1>
+                Prenotato
               </b-button>
             </div>
             <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
@@ -129,15 +145,21 @@
         </template>
         <template #cell(gio)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
-                JSON.stringify({sezione: data.value}))">
+          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) === JSON.stringify({sezione: data.value}))">
             <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
-              <b-button
+              <b-button v-if="!slotPrenotatiInSessione.includes(data.value)"
                   disabled
                   variant="info"
                   v-b-tooltip.hover
                   title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
                 Prenota
+              </b-button>
+              <b-button v-else-if="slotPrenotatiInSessione.includes(data.value)"
+                        @click="selectSlot(data.value)"
+                        variant="success"
+                        disabled
+                        v-b-modal.modal-1>
+                Prenotato
               </b-button>
             </div>
             <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
@@ -165,15 +187,21 @@
         </template>
         <template #cell(ven)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
-                JSON.stringify({sezione: data.value}))">
+          <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) === JSON.stringify({sezione: data.value}))">
             <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
-              <b-button
+              <b-button v-if="!slotPrenotatiInSessione.includes(data.value)"
                   disabled
                   variant="info"
                   v-b-tooltip.hover
                   title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
                 Prenota
+              </b-button>
+              <b-button v-else-if="slotPrenotatiInSessione.includes(data.value)"
+                        @click="selectSlot(data.value)"
+                        variant="success"
+                        disabled
+                        v-b-modal.modal-1>
+                Prenotato
               </b-button>
             </div>
             <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
@@ -199,6 +227,7 @@
             Tutor non disponibile
           </b-button>
         </template>
+
 
 
 
@@ -506,7 +535,16 @@ export default {
           slot: this.$store.getters.prenotazioneSlot,
           nomeCorso: this.$store.getters.courseName
         },)
-        // TODO: aggiungere toast di conferma
+        setTimeout(() => {
+          var _this = this;
+          $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet', function (jsonPersonalHistory) {
+            _this.jsonPersonalHistory = jsonPersonalHistory.filter( element => element.stato === '0');
+            _this.$store.state.jsonPersonalHistory = jsonPersonalHistory.filter( element => element.stato === '0');
+            console.log(_this.jsonPersonalHistory);
+          });
+        }, 200)
+
+
         console.log("Prenotazione avvenuta col tutor " + this.$store.getters.tutorId + " di " + this.$store.getters.courseName + " nello slot " + this.$store.getters.prenotazioneSlot)
         this.slotPrenotatiInSessione.push(this.$store.getters.prenotazioneSlot)
         setTimeout(() => {this.makeToastEff()}, 200)
