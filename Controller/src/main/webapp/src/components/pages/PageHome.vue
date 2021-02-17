@@ -9,7 +9,11 @@
 
     <select-course></select-course>
     <select-tutor v-if="this.$store.getters.elencoTutor !== ''"></select-tutor>
+
     <table-availability v-if="this.$store.getters.elencoDisponibilita !== ''"></table-availability>
+<!--    <b-button v-else-if="this.$store.getters.elencoDisponibilita !== '' && this.$store.state.isLogged">Refresh</b-button>-->
+
+
   </div>
 
 </template>

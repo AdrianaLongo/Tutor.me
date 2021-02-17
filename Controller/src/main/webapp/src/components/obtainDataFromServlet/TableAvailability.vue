@@ -1,9 +1,13 @@
 <template>
   <div>
-<!--    <p>elencoDisponibilita: {{this.$store.getters.elencoDisponibilita}}</p>-->
-<!--    <p>disponibilitaDocente: {{this.$store.getters.disponibilitaDocente}}</p>-->
-<!--    TODO: aggiornare tabella con disponibiltia utente se si logga alla fine-->
-    <b-container v-if="this.$store.getters.userLogged">
+    <!--    <p>elencoDisponibilita: {{this.$store.getters.elencoDisponibilita}}</p>-->
+    <!--    <p>disponibilitaDocente: {{this.$store.getters.disponibilitaDocente}}</p>-->
+    <!--    TODO: refresh tabella con disponibilita utente se si logga alla fine-->
+    <!--    TODO: rendere opaco lo slot appena prenotato-->
+
+    <b-container v-if="this.$store.getters.userLogged && this.$store.state.needRefresh">
+      <!--      <b-button @click="refreshAvailability">Refresh</b-button>-->
+
       <b-table class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita" :jsonPersonalHistory="jsonPersonalHistory">
         <!--        <template #cell(lun)="data">-->
         <!--          &lt;!&ndash; `data.value` is the value after formatted by the Formatter &ndash;&gt;-->
@@ -12,6 +16,8 @@
         <!--            Prenota-->
         <!--          </b-button>-->
         <!--        </template>-->
+
+
 
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
@@ -175,7 +181,7 @@
 
     </b-container>
 
-    <b-container v-if="!this.$store.getters.userLogged">
+    <b-container v-if="!this.$store.getters.userLogged && !this.$store.state.needRefresh">
       <b-table class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita">
         <!--        <template #cell(lun)="data">-->
         <!--          &lt;!&ndash; `data.value` is the value after formatted by the Formatter &ndash;&gt;-->
@@ -185,17 +191,17 @@
         <!--          </b-button>-->
         <!--        </template>-->
 
-<!--        <template #cell(lun)="data" :value="{day: 'Lunedi'}">-->
-<!--        <template #cell(lun)="data" :day="Lunedi">-->
-<!--        <template #cell(lun)="data" v-model="fields.label">-->
-<!--        <template #cell(lun)="data" :value="day = 'Lunedi'">-->
+        <!--        <template #cell(lun)="data" :value="{day: 'Lunedi'}">-->
+        <!--        <template #cell(lun)="data" :day="Lunedi">-->
+        <!--        <template #cell(lun)="data" v-model="fields.label">-->
+        <!--        <template #cell(lun)="data" :value="day = 'Lunedi'">-->
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
           <b-button v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
-                     @click="selectSlot(data.value)"
-                     variant="success"
-                     v-b-modal.modal-1>
+                    @click="selectSlot(data.value)"
+                    variant="success"
+                    v-b-modal.modal-1>
             Prenota
           </b-button>
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
@@ -210,9 +216,9 @@
           <!-- `data.value` is the value after formatted by the Formatter -->
           <b-button v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
-                     @click="selectSlot(data.value)"
-                     variant="success"
-                     v-b-modal.modal-1>
+                    @click="selectSlot(data.value)"
+                    variant="success"
+                    v-b-modal.modal-1>
             Prenota
           </b-button>
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
@@ -289,6 +295,7 @@
     </b-container>
 
   </div>
+
 </template>
 
 <script>
@@ -382,17 +389,27 @@ export default {
           ven: {day: 'Venerdi', slot: 'VEN4'},
         },
       ],
+
+      show: false
     }
   },
   // beforeCreate() {
   //   if (this.$store.getters.currentToken !== '') // esiste token -> utente loggato
   //     this.isLogged = true;
   // },
+  beforeCreate() {
+    console.log("BEFORECREATE")
+  },
   created() {
+    console.log("CREATED")
     this.jsonDisponibilita = this.$store.getters.elencoDisponibilita;
     console.log("Disponibilita' professori (created): ")
     console.log(this.$store.getters.elencoDisponibilita)
-
+    console.log("this.$store.state.isLogged" + this.$store.state.isLogged)
+    this.jsonPersonalHistory = this.$store.state.jsonPersonalHistory
+  },
+  beforeMount() {
+    console.log("BEFOREMOUNT")
     if(this.$store.state.isLogged) {
       console.log("Utente loggato")
       var _this = this;
@@ -404,6 +421,27 @@ export default {
     } else {
       console.log("Utente non loggato")
     }
+  },
+  mounted() {
+    console.log("MOUNTED")
+
+
+  },
+  beforeUpdate() {
+    console.log("BEFOREUPDATE")
+
+  },
+  updated(){
+    console.log("UPDATED")
+    setTimeout(() => {this.jsonPersonalHistory = this.$store.state.jsonPersonalHistory}, 200)
+
+
+  },
+  beforeDestroy() {
+    console.log("BEFOREDESTROY")
+  },
+  destroyed(){
+    console.log("DESTROYED")
   },
   methods: {
     selectSlot: function(s){
@@ -428,8 +466,6 @@ export default {
       }
     },
     creaPrenotazione: function(){
-
-      // TODO: gestire sessione
       if (this.$store.getters.userLogged){
         console.log("Sei loggato!")
         $.post('http://localhost:8080/TWEB_war_exploded/EffettuaPrenotazioneServlet', {
@@ -438,11 +474,27 @@ export default {
           slot: this.$store.getters.prenotazioneSlot,
           nomeCorso: this.$store.getters.courseName
         },)
+        // TODO: aggiungere toast di conferma
         console.log("Prenotazione avvenuta col tutor " + this.$store.getters.tutorId + " di " + this.$store.getters.courseName + " nello slot " + this.$store.getters.prenotazioneSlot)
+        setTimeout(() => {this.makeToastEff()}, 200)
       } else {
         console.log("Non sei loggato.")
       }
     },
+    makeToastEff(){
+      this.$bvToast.toast(
+          `Hai prenotato una ripetizione di ${this.nomeCorso} col tutor ${this.nomeDocente} ${this.cognomeDocente} delle ore ${this.hours} di ${this.day} `,
+          {
+            title: `Prenotazione effettuata con successo!`,
+            variant: 'success',
+            solid: true
+          }
+      )
+    },
+    refreshAvailability(){
+      this.$store.dispatch('retrieveTutorAvailability', this.$store.getters.tutorId)
+      this.$store.state.needRefresh = false
+    }
   }
 }
 </script>

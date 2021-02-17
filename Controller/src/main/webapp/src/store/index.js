@@ -33,6 +33,7 @@ export default new Vuex.Store({
             slot: ''
         },
         jsonPersonalHistory: '',
+        jsonPersonalHistoryAttive: '',
         personalHistory:{
             slot: ''
         },
@@ -46,7 +47,9 @@ export default new Vuex.Store({
         isLogged: false,
         jsonAttive: '',
         jsonEffettuate: '',
-        jsonCancellate: ''
+        jsonCancellate: '',
+
+        needRefresh: false
     },
 
     // Quello che mettiamo in getters puo essere visto da altri componenti
@@ -192,6 +195,7 @@ export default new Vuex.Store({
                         // // context.commit('login', token)
                         this.state.isLogged = true;
                         console.log("isLogged: " + this.state.isLogged)
+                        this.state.needRefresh = true;
                     }
 
                 })
@@ -220,7 +224,7 @@ export default new Vuex.Store({
             });
         },
 
-        retrieveAvailability(context, tutor){
+        retrieveTutorAvailability(context, tutor){
             var _this = this;
             $.getJSON({
                 type: "GET",
