@@ -26,22 +26,28 @@
             <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
               <b-button
                   disabled
-                  variant="success"
+                  variant="info"
                   v-b-tooltip.hover
                   title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
                 Prenota
               </b-button>
             </div>
             <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
-              <b-button
+              <b-button v-if="!slotPrenotatiInSessione.includes(data.value)"
                   @click="selectSlot(data.value)"
-                  variant="success"
+                  variant="info"
                   v-b-modal.modal-1>
                 Prenota
               </b-button>
+              <b-button v-else-if="slotPrenotatiInSessione.includes(data.value)"
+                  @click="selectSlot(data.value)"
+                  variant="success"
+                  disabled
+                  v-b-modal.modal-1>
+                Prenotato
+              </b-button>
             </div>
           </div>
-
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
                     variant="danger"
@@ -56,22 +62,28 @@
             <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
               <b-button
                   disabled
-                  variant="success"
+                  variant="info"
                   v-b-tooltip.hover
                   title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
                 Prenota
               </b-button>
             </div>
             <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
-              <b-button
+              <b-button v-if="!slotPrenotatiInSessione.includes(data.value)"
                   @click="selectSlot(data.value)"
-                  variant="success"
+                  variant="info"
                   v-b-modal.modal-1>
                 Prenota
               </b-button>
+              <b-button v-else-if="slotPrenotatiInSessione.includes(data.value)"
+                  @click="selectSlot(data.value)"
+                  variant="success"
+                  disabled
+                  v-b-modal.modal-1>
+                Prenotato
+              </b-button>
             </div>
           </div>
-
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
                     variant="danger"
@@ -86,22 +98,28 @@
             <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
               <b-button
                   disabled
-                  variant="success"
+                  variant="info"
                   v-b-tooltip.hover
                   title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
                 Prenota
               </b-button>
             </div>
             <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
-              <b-button
+              <b-button v-if="!slotPrenotatiInSessione.includes(data.value)"
                   @click="selectSlot(data.value)"
-                  variant="success"
+                  variant="info"
                   v-b-modal.modal-1>
                 Prenota
               </b-button>
+              <b-button v-else-if="slotPrenotatiInSessione.includes(data.value)"
+                  @click="selectSlot(data.value)"
+                  variant="success"
+                  disabled
+                  v-b-modal.modal-1>
+                Prenotato
+              </b-button>
             </div>
           </div>
-
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
                     variant="danger"
@@ -116,22 +134,28 @@
             <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
               <b-button
                   disabled
-                  variant="success"
+                  variant="info"
                   v-b-tooltip.hover
                   title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
                 Prenota
               </b-button>
             </div>
             <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
-              <b-button
+              <b-button v-if="!slotPrenotatiInSessione.includes(data.value)"
                   @click="selectSlot(data.value)"
-                  variant="success"
+                  variant="info"
                   v-b-modal.modal-1>
                 Prenota
               </b-button>
+              <b-button v-else-if="slotPrenotatiInSessione.includes(data.value)"
+                  @click="selectSlot(data.value)"
+                  variant="success"
+                  disabled
+                  v-b-modal.modal-1>
+                Prenotato
+              </b-button>
             </div>
           </div>
-
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
                     variant="danger"
@@ -146,22 +170,28 @@
             <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
               <b-button
                   disabled
-                  variant="success"
+                  variant="info"
                   v-b-tooltip.hover
                   title="Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale.">
                 Prenota
               </b-button>
             </div>
             <div v-else-if="!JSON.stringify(jsonPersonalHistory).includes(data.value)">
-              <b-button
+              <b-button v-if="!slotPrenotatiInSessione.includes(data.value)"
                   @click="selectSlot(data.value)"
-                  variant="success"
+                  variant="info"
                   v-b-modal.modal-1>
                 Prenota
               </b-button>
+              <b-button v-else-if="slotPrenotatiInSessione.includes(data.value)"
+                  @click="selectSlot(data.value)"
+                  variant="success"
+                  disabled
+                  v-b-modal.modal-1>
+                Prenotato
+              </b-button>
             </div>
           </div>
-
           <b-button v-else-if="jsonDisponibilita.some(code => JSON.stringify(code) !==
                 JSON.stringify({sezione: data.value}))" disabled
                     variant="danger"
@@ -169,6 +199,8 @@
             Tutor non disponibile
           </b-button>
         </template>
+
+
 
       </b-table>
 
@@ -200,7 +232,7 @@
           <b-button v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
                     @click="selectSlot(data.value)"
-                    variant="success"
+                    variant="info"
                     v-b-modal.modal-1>
             Prenota
           </b-button>
@@ -217,7 +249,7 @@
           <b-button v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
                     @click="selectSlot(data.value)"
-                    variant="success"
+                    variant="info"
                     v-b-modal.modal-1>
             Prenota
           </b-button>
@@ -234,7 +266,7 @@
           <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
                      @click="selectSlot(data.value)"
-                     variant="success"
+                     variant="info"
                      v-b-modal.modal-1>
             Prenota
           </b-button>
@@ -251,7 +283,7 @@
           <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
                      @click="selectSlot(data.value)"
-                     variant="success"
+                     variant="info"
                      v-b-modal.modal-1>
             Prenota
           </b-button>
@@ -268,7 +300,7 @@
           <b-button  v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
                 JSON.stringify({sezione: data.value}))"
                      @click="selectSlot(data.value)"
-                     variant="success"
+                     variant="info"
                      v-b-modal.modal-1>
             Prenota
           </b-button>
@@ -390,7 +422,7 @@ export default {
         },
       ],
 
-      show: false
+      slotPrenotatiInSessione: []
     }
   },
   // beforeCreate() {
@@ -476,6 +508,7 @@ export default {
         },)
         // TODO: aggiungere toast di conferma
         console.log("Prenotazione avvenuta col tutor " + this.$store.getters.tutorId + " di " + this.$store.getters.courseName + " nello slot " + this.$store.getters.prenotazioneSlot)
+        this.slotPrenotatiInSessione.push(this.$store.getters.prenotazioneSlot)
         setTimeout(() => {this.makeToastEff()}, 200)
       } else {
         console.log("Non sei loggato.")
@@ -483,7 +516,7 @@ export default {
     },
     makeToastEff(){
       this.$bvToast.toast(
-          `Hai prenotato una ripetizione di ${this.nomeCorso} col tutor ${this.nomeDocente} ${this.cognomeDocente} delle ore ${this.hours} di ${this.day} `,
+          `Hai prenotato una ripetizione di ${this.$store.getters.courseName} col tutor ${this.$store.getters.tutorFullName} delle ore ${this.hours} di ${this.day} `,
           {
             title: `Prenotazione effettuata con successo!`,
             variant: 'success',
