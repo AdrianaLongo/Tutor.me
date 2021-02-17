@@ -228,16 +228,20 @@
           </b-button>
         </template>
 
-
-
-
       </b-table>
 
-      <b-modal id="modal-1" title="Vuoi confermare la prenotazione?" align="center"
+      <b-modal id="modal-1"
+               title="Vuoi confermare la prenotazione?"
+               align="center"
+               :ok-disabled="JSON.stringify(jsonPersonalHistory).includes(this.$store.getters.prenotazioneSlot)"
                @ok="creaPrenotazione()">
         <p class="my-4"> Corso: {{ this.$store.getters.courseName }} </p>
         <p class="my-4"> Tutor: {{ this.$store.getters.tutorFullName }} </p>
         <p class="my-4"> Data e ora: {{ day }}, {{ hours }}</p>
+        <p class="text-danger font-weight-bold"
+           v-if="JSON.stringify(jsonPersonalHistory).includes(this.$store.getters.prenotazioneSlot)">
+          Il tutor è libero ma questo slot è occupato nel tuo calendario. Per procedere, cancella la prenotazione nella tua pagina personale oppure seleziona un altro slot.
+        </p>
       </b-modal>
 
     </b-container>
@@ -451,12 +455,19 @@ export default {
         },
       ],
 
-      slotPrenotatiInSessione: []
+      slotPrenotatiInSessione: [],
+
+      slotOccupied: false,
     }
   },
   // beforeCreate() {
   //   if (this.$store.getters.currentToken !== '') // esiste token -> utente loggato
   //     this.isLogged = true;
+  // },
+  // computed: {
+  //   slotIsOccupied(){
+  //     return
+  //   }
   // },
   beforeCreate() {
     console.log("BEFORECREATE")
