@@ -3,7 +3,8 @@
 // import jQuery from "jquery";
 
 const selectCourse = (state, payload) => {
-        state.course.nome = payload;
+        // state.course.nome = payload;
+        state.course = payload;
     };
 
 const selectTutorName = (state, payload) => {

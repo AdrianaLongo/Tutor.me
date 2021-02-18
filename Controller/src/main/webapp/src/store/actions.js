@@ -8,12 +8,21 @@ import jQuery from 'jquery'
 
 const login = (context, credentials) => {
     //  TODO: gestire timeout sessione
-    // var self = this;
     jQuery.post('http://localhost:8080/TWEB_war_exploded/LoginServlet', {
         username: credentials.username,
         password: credentials.password,
     })
+
+    // Quando l'utente fa il login, mi conviene mantenere sempre nello store...
+    // 1) nome utente
     context.commit('setCurrentSession', credentials.username)
+    // 2) storico delle prenotazioni dell'utente
+    $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet', function (jsonPersonalHistory) {
+        context.commit('setJsonPersonalHistoryComplete', jsonPersonalHistory)
+        context.commit('setJsonPersonalHistoryAttive', jsonPersonalHistory.filter( element => element.stato === '0'))
+        context.commit('setJsonPersonalHistory', jsonPersonalHistory.filter( element => element.stato === '0'))
+    });
+
 };
 
 const retrieveTutorsForCourse = (context, course) => {

@@ -14,9 +14,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        course: {
-            nome: ''
-        },
+        course: '',
         tutorJSON: '',
         tutor: {
             nome: '',

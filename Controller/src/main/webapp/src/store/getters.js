@@ -1,6 +1,7 @@
 // = getters in Java
 
-const courseName = state => state.course.nome;
+// const courseName = state => state.course.nome;
+const courseName = state => state.course;
 
 const tutorName = state => state.tutor.nome;
 

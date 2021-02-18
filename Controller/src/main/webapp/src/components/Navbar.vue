@@ -92,6 +92,33 @@
 
         <b-nav-item v-show="!this.$store.getters.userLogged">
           <login></login>
+<!--          <b-dropdown id="dropdown-login"-->
+<!--                      right-->
+<!--                      text="Login"-->
+<!--                      variant="outline-success"-->
+<!--                      ref="dropdown"-->
+<!--                      class="m-2">-->
+<!--            <b-dropdown-form>-->
+<!--              <b-form-group label="Username" label-for="dropdown-login-username" @submit.stop.prevent>-->
+<!--                <b-form-input-->
+<!--                    id="dropdown-login-username"-->
+<!--                    size="sm"-->
+<!--                    placeholder="Username"-->
+<!--                ></b-form-input>-->
+<!--              </b-form-group>-->
+
+<!--              <b-form-group label="Password" label-for="dropdown-login-password">-->
+<!--                <b-form-input-->
+<!--                    id="dropdown-login-password"-->
+<!--                    type="password"-->
+<!--                    size="sm"-->
+<!--                    placeholder="Password"-->
+<!--                ></b-form-input>-->
+<!--              </b-form-group>-->
+
+<!--              <b-button variant="primary" size="sm" @click="login()">Login</b-button>-->
+<!--            </b-dropdown-form>-->
+<!--          </b-dropdown>-->
         </b-nav-item>
 
 
@@ -137,24 +164,46 @@ export default {
       this.showCollapse = false
     }
   },
-  methods: {
-    logout: function(){
-      // TODO: sistemare logout (serve sessione)
-      localStorage.access_token = '';
-      this.isLogged = false;
-      console.log("token in localstorage: " + localStorage.access_token)
-      console.log("token in store: " + this.$store.getters.currentToken)
-
-    },
-    checkLogin: function(){
-      if(localStorage.access_token !== null){
-        this.isLogged = true;
-      }
-    },
-    login: function(){
-
-    }
-  }
+  // methos: {
+  //   login: function () {
+  //     this.$store.dispatch('login', {
+  //       username: this.username,
+  //       password: this.password,
+  //     });
+  //
+  //
+  //     if (this.$store.getters.courseName !== '' && this.$store.getters.tutorId !== '') {
+  //       this.$store.dispatch('retrievePersonalHistory')
+  //     }
+  //
+  //     setTimeout(() => {
+  //       this.makeToast()
+  //     }, 200)
+  //     console.log("Username inserito: " + this.username);
+  //     console.log("Password inserita: " + this.password);
+  //   },
+  //
+  //   makeToast() {
+  //     if (this.$store.state.isLogged) {
+  //       this.$bvToast.toast(
+  //           `Benvenut*, ${this.username}!`,
+  //           {
+  //             title: `Login effettuato con successo`,
+  //             variant: 'success',
+  //             solid: true
+  //           })
+  //     } else {
+  //       this.$bvToast.toast(
+  //           `Controlla username e password.`,
+  //           {
+  //             title: `Login non effettuato!`,
+  //             variant: 'danger',
+  //             solid: true
+  //           })
+  //     }
+  //
+  //   },
+  // }
 }
 </script>
 
