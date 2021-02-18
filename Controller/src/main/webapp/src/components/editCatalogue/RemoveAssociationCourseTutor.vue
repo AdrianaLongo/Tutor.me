@@ -289,7 +289,7 @@ export default {
           _this.jsonCoursesForTutor = jsonCoursesForTutor;
           // console.log(jsonTutor);
           // console.log(jsonTutor);
-          // this.$store.commit("retrieveTutors", jsonTutor)
+          // this.$store.commit("retrieveAllTutors", jsonTutor)
           // console.log("tutor in memoria " + this.$store.getters.elencoTutor);
 
           // _this.state.tutorJSON = jsonTutor;
@@ -310,7 +310,7 @@ export default {
           _this.jsonTutorsForCourse = jsonTutorsForCourse;
           // console.log(jsonTutor);
           // console.log(jsonTutor);
-          // this.$store.commit("retrieveTutors", jsonTutor)
+          // this.$store.commit("retrieveAllTutors", jsonTutor)
           // console.log("tutor in memoria " + this.$store.getters.elencoTutor);
 
           // _this.state.tutorJSON = jsonTutor;

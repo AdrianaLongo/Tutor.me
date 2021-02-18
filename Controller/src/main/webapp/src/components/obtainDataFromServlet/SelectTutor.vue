@@ -48,20 +48,15 @@ export default {
       let val = evt.target.value;
       console.log("cambio tutor" + val);
       this.$store.state.disponibilitaJSON = '';
-      // this.$store.commit("resetAvailability", '');
     },
     showAvailiability: function(){
-      // console.log(this.tutor.id); // torna l'id
+      // Dovendo passare questi dati ad un altro componente, devo mantenerli nello store => mi sevono actions e mutations
+
       this.$store.commit("selectTutorId", this.tutor.id);
       this.$store.commit("selectTutorName", this.tutor.nome);
       this.$store.commit("selectTutorSurname", this.tutor.cognome);
-      console.log("courseName in store = " + this.$store.getters.courseName); // torna il corso
-      console.log("tutorId in store = " + this.$store.getters.tutorId); // torna l'id
-      // this.retrieveAvailability();
 
-      this.$store.dispatch('retrieveAvailability', this.$store.getters.tutorId)
-
-      console.log("Slot in store (showAvailiability): " + this.$store.getters.prenotazioneSlot);
+      this.$store.dispatch('retrieveTutorAvailability', this.$store.getters.tutorId)
     },
   },
 }

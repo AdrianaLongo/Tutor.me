@@ -65,12 +65,9 @@ export default {
     insertCourse(courseToAdd, tutor) {
       this.courseToAdd = this.courseToAdd.charAt(0).toUpperCase() + this.courseToAdd.slice(1)
       if(tutor.id !== undefined) {
-        console.log("Tutor esistente")
-        console.log("courseToAdd: " + courseToAdd)
-        console.log("tutor.nome: " + tutor.nome)
-        console.log("tutor.cognome: " + tutor.cognome)
-        console.log("tutor.id: " + tutor.id)
         var _this = this;
+        // Non c'è bisogno di mantenere il corso appena inserito nello store,
+        // quindi non abbiamo bisogno di action per fare la richiesta
         jQuery.post('http://localhost:8080/TWEB_war_exploded/CourseTutorAssociationServlet', {
           opCode: "insertCourse",
           nomeCorso: _this.courseToAdd,
@@ -84,15 +81,9 @@ export default {
               this.makeToast(tutor.nome, tutor.cognome);
             })
       } else {
-        console.log("Nuovo tutor. Un nuovo id sarà generato dal backend")
-        console.log("courseToAdd: " + courseToAdd)
-        console.log("tutor: ")
-        console.log(tutor)
         var nuovoTutor = tutor.split(' ');
         var nomeNuovoTutor = nuovoTutor[0].charAt(0).toUpperCase() + nuovoTutor[0].slice(1);
-        console.log("nomeNuovoTutor: " + nomeNuovoTutor);
         var cognomeNuovoTutor = nuovoTutor[1].charAt(0).toUpperCase() + nuovoTutor[1].slice(1);
-        console.log("cognomeNuovoTutor: " + cognomeNuovoTutor);
         _this = this;
         jQuery.post('http://localhost:8080/TWEB_war_exploded/CourseTutorAssociationServlet', {
           opCode: "insertCourseAndTutor",
@@ -107,8 +98,6 @@ export default {
             })
       }
       this.courseAdded = true;
-
-      console.log("Ho inserito il corso: " + this.courseToAdd)
     },
     makeToast(nomeTutor, cognomeTutor){
       this.$bvToast.toast(
@@ -123,9 +112,6 @@ export default {
       this.courseToAdd = ''
       this.tutorSelected = ''
     },
-    pairCourseToTutor:function(){
-      console.log("Ho associato il corso al tutor!")
-    }
   }
 }
 </script>

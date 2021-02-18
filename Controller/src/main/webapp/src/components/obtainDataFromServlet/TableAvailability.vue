@@ -3,7 +3,7 @@
     <!--    <p>elencoDisponibilita: {{this.$store.getters.elencoDisponibilita}}</p>-->
     <!--    <p>disponibilitaDocente: {{this.$store.getters.disponibilitaDocente}}</p>-->
 
-    <b-container v-if="this.$store.getters.userLogged && this.$store.state.needRefresh">
+    <b-container v-if="this.$store.getters.userLogged">
       <!--      <b-button @click="refreshAvailability">Refresh</b-button>-->
 
       <b-table class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita" :jsonPersonalHistory="jsonPersonalHistory">
@@ -246,7 +246,7 @@
 
     </b-container>
 
-    <b-container v-if="!this.$store.getters.userLogged && !this.$store.state.needRefresh">
+    <b-container v-if="!this.$store.getters.userLogged">
       <b-table class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita">
         <!--        <template #cell(lun)="data">-->
         <!--          &lt;!&ndash; `data.value` is the value after formatted by the Formatter &ndash;&gt;-->
@@ -460,67 +460,26 @@ export default {
       slotOccupied: false,
     }
   },
-  // beforeCreate() {
-  //   if (this.$store.getters.currentToken !== '') // esiste token -> utente loggato
-  //     this.isLogged = true;
-  // },
-  // computed: {
-  //   slotIsOccupied(){
-  //     return
-  //   }
-  // },
-  beforeCreate() {
-    console.log("BEFORECREATE")
-  },
   created() {
-    console.log("CREATED")
     this.jsonDisponibilita = this.$store.getters.elencoDisponibilita;
-    console.log("Disponibilita' professori (created): ")
-    console.log(this.$store.getters.elencoDisponibilita)
-    console.log("this.$store.state.isLogged" + this.$store.state.isLogged)
     this.jsonPersonalHistory = this.$store.state.jsonPersonalHistory
   },
   beforeMount() {
-    console.log("BEFOREMOUNT")
     if(this.$store.state.isLogged) {
-      console.log("Utente loggato")
       var _this = this;
       $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet', function (jsonPersonalHistory) {
         _this.jsonPersonalHistory = jsonPersonalHistory.filter( element => element.stato === '0');
-        console.log(_this.jsonPersonalHistory);
       });
-      console.log("Disponibilita' utente: " + this.$store.state.jsonPersonalHistory)
-    } else {
-      console.log("Utente non loggato")
     }
-  },
-  mounted() {
-    console.log("MOUNTED")
-
-
-  },
-  beforeUpdate() {
-    console.log("BEFOREUPDATE")
-
   },
   updated(){
     console.log("UPDATED")
     setTimeout(() => {this.jsonPersonalHistory = this.$store.state.jsonPersonalHistory}, 200)
-
-
-  },
-  beforeDestroy() {
-    console.log("BEFOREDESTROY")
-  },
-  destroyed(){
-    console.log("DESTROYED")
   },
   methods: {
     selectSlot: function(s){
+      // Dovendo passare questi dati ad un altro componente, devo mantenerli nello store => mi serve una mutation
       this.$store.commit("selectSlot", s);
-      console.log("corso = " + this.$store.getters.courseName);
-      console.log("tutor = " + this.$store.getters.tutorFullName + ", " + this.$store.getters.tutorId );
-      console.log("slot = " + this.$store.getters.prenotazioneSlot);
       switch(s.slice(0,3)){
         case 'LUN': this.day = "Lunedi"; break;
         case 'MAR': this.day = "Martedi"; break;
@@ -541,7 +500,6 @@ export default {
       if (this.$store.getters.userLogged){
         console.log("Sei loggato!")
         $.post('http://localhost:8080/TWEB_war_exploded/EffettuaPrenotazioneServlet', {
-          // jSessionId: this.$store.getters.currentToken,
           idDocente: this.$store.getters.tutorId,
           slot: this.$store.getters.prenotazioneSlot,
           nomeCorso: this.$store.getters.courseName
@@ -551,16 +509,10 @@ export default {
           $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet', function (jsonPersonalHistory) {
             _this.jsonPersonalHistory = jsonPersonalHistory.filter( element => element.stato === '0');
             _this.$store.state.jsonPersonalHistory = jsonPersonalHistory.filter( element => element.stato === '0');
-            console.log(_this.jsonPersonalHistory);
           });
         }, 200)
-
-
-        console.log("Prenotazione avvenuta col tutor " + this.$store.getters.tutorId + " di " + this.$store.getters.courseName + " nello slot " + this.$store.getters.prenotazioneSlot)
         this.slotPrenotatiInSessione.push(this.$store.getters.prenotazioneSlot)
         setTimeout(() => {this.makeToastEff()}, 200)
-      } else {
-        console.log("Non sei loggato.")
       }
     },
     makeToastEff(){
@@ -572,10 +524,6 @@ export default {
             solid: true
           }
       )
-    },
-    refreshAvailability(){
-      this.$store.dispatch('retrieveTutorAvailability', this.$store.getters.tutorId)
-      this.$store.state.needRefresh = false
     }
   }
 }

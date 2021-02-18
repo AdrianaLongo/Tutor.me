@@ -1,6 +1,16 @@
 <template>
   <b-container class="mt-4">
-    <b-card bg-variant="light" title="Associa un tutor ad un corso">
+    <b-card bg-variant="light" title="Associa un corso ad un tutor">
+      <b-form-group label="Corso"
+                    label-for="nested-course"
+                    label-cols-md="1"
+                    label-align-md="right"
+      >
+        <b-form-select v-model="courseSelected">
+          <option v-for="course in jsonCourses" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
+        </b-form-select>
+      </b-form-group>
+
       <b-form-group label="Tutor"
           label-for="nested-tutor"
           label-cols-md="1"
@@ -13,16 +23,6 @@
         </b-form-select>
       </b-form-group>
 
-      <b-form-group label="Corso"
-          label-for="nested-course"
-          label-cols-md="1"
-          label-align-md="right"
-      >
-        <b-form-select v-model="courseSelected">
-          <option v-for="course in jsonCourses" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
-        </b-form-select>
-      </b-form-group>
-
       <div v-if="tutorSelected !== '' && courseSelected !== ''">
         <b-button @click="addAssociation" variant="primary">Aggiungi associazione</b-button>
       </div>
@@ -32,37 +32,40 @@
 </template>
 
 <script>
-import $ from "jquery";
+// TODO: non far comparire il corso a cui e' gia associato
 import jQuery from "jquery";
+import $ from "jquery";
 
 export default {
   name: "AddAssociationCourseTutor",
   data(){
     return{
-      jsonCourses: null,
-      jsonTutor: null,
+      jsonCourses: '',
+      jsonTutor: '',
       tutorSelected: '',
       courseSelected: '',
     }
   },
   beforeCreate: function() {
-    _this = this;
+    // Potrebbero esserci state delle modifiche nel catalogo nel frattempo,
+    // quindi non mi conviene recuperare dallo store tutti i corsi in catalogo;
+    // non abbiamo bisogno di memorizzarli in catalogo, quindi non abbiamo bisogno dell'action per fare la richiesta
+    var _this = this;
     $.getJSON('http://localhost:8080/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
       _this.jsonCourses = jsonCourses;
     });
 
-    var _this = this;
+    // Non c'e' bisogno di mantenere nello store la ricerca dei tutor di una determinata materia,
+    // quindi
     $.getJSON('http://localhost:8080/TWEB_war_exploded/PopolaDocenteServlet', function(jsonTutor){
       _this.jsonTutor = jsonTutor;
     })
+
   },
   methods: {
+    // Non c'è bisogno di mantenere l'associazione appena fatta nello store,
+    // quindi non abbiamo bisogno di action per fare la richiesta
     addAssociation: function(){
-      console.log(this.courseSelected.nome)
-      console.log(this.tutorSelected.nome)
-      console.log(this.tutorSelected.cognome)
-      console.log(this.tutorSelected.id)
-
       jQuery.post('http://localhost:8080/TWEB_war_exploded/ExistingEntAssociationServlet', {
         nomeCorso: this.courseSelected.nome,
         nomeDocente: this.tutorSelected.nome,

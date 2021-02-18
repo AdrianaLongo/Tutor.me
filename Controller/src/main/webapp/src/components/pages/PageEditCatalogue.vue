@@ -28,36 +28,6 @@
         </b-tabs>
       </b-card>
 
-
-
-    <!--    LAYOUT CON COLONNE-->
-    <!--    <b-row>-->
-    <!--      <b-col>-->
-    <!--        <add-course></add-course>-->
-    <!--      </b-col>-->
-    <!--      <b-col>-->
-    <!--        <add-tutor></add-tutor>-->
-    <!--      </b-col>-->
-    <!--    </b-row>-->
-
-    <!--    <b-row>-->
-    <!--      <b-col>-->
-    <!--        <remove-course></remove-course>-->
-    <!--      </b-col>-->
-    <!--      <b-col>-->
-    <!--        <remove-tutor></remove-tutor>-->
-    <!--      </b-col>-->
-    <!--    </b-row>-->
-
-    <!--    <b-row>-->
-    <!--      <b-col>-->
-    <!--        <add-association-course-tutor></add-association-course-tutor>-->
-    <!--      </b-col>-->
-    <!--      <b-col>-->
-    <!--        <remove-association-course-tutor></remove-association-course-tutor>-->
-    <!--      </b-col>-->
-    <!--    </b-row>-->
-
   </div>
 
   </b-container>
