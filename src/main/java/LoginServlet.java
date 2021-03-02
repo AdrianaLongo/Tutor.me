@@ -1,3 +1,4 @@
+import utils.IdentifyUsers;
 import utils.Useful;
 import com.google.gson.Gson;
 import dao.DAO;
@@ -14,13 +15,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-/** Si prende cura dell'operazione di Login:
+/**
+ * Si prende cura dell'operazione di Login:
  * 1) Recupera i campi Nome e Cognome dalla request inviata dal frontend
  * 2) Prova a recuperare dal db l'oggetto Utente con i valori presi prima dalla request
  * 3) Se l'oggetto recuperato è diverso da null (quindi nel db esistono nome e cognome dell'Utente), creo un'HTTP
  * session e setto degli attributi per indicare dei dati dell'Utente in un posto accesibile anche al frontend
  * 4) Se il login non va, do al frontend un Json composto da due parti: un messaggio ed un numero generale di failure -1
- * */
+ */
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/LoginServlet")
 public class LoginServlet extends HttpServlet {
@@ -35,7 +37,7 @@ public class LoginServlet extends HttpServlet {
         String url = ctx.getInitParameter("DB-Url"); //indirizzo DB nel web.xml
         String user = ctx.getInitParameter("user");
         String pwd = ctx.getInitParameter("password");
-        dao = new DAO (url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
+        dao = new DAO(url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,42 +50,64 @@ public class LoginServlet extends HttpServlet {
 
         try {
             user = dao.retrieveUtente(username, password);
-        }
-        catch (SQLException e) {
+            System.out.println((user.getUsername() + " " + user.getPassword()));
+        } catch (SQLException e) {
             throw new ServletException(e.getMessage());
-        }
-        finally {
-            if (user != null) { //il controllo sullo user non funziona con campi vuoti
-                if(user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                    HttpSession session = request.getSession();
-                    String jSessionId = session.getId();//se l'utente corrisponde ai dati inseriti, creo la sessione
-                    System.out.println("Sei loggato");
+        } finally {
+            //il controllo sullo user non funziona con campi vuoti
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+/*
+                HttpSession session = request.getSession();
+                String jSessionId = session.getId();//se l'utente corrisponde ai dati inseriti, creo la sessione
+                System.out.println("Sei loggato");
 
-                    session.setAttribute("User", username);
-                    session.setAttribute("ruoloUtente", user.getRuolo()); //setto il ruolo per definire i componenti in cui ha accesso l'utente
-                    session.setAttribute("Idutente", user.getId()); //un pò un capriccio ma magari serve
-                    session.setAttribute("Idsessione", jSessionId);
+                session.setAttribute("User", username);
+                session.setAttribute("ruoloUtente", user.getRuolo()); //setto il ruolo per definire i componenti in cui ha accesso l'utente
+                session.setAttribute("Idutente", user.getId()); //un pò un capriccio ma magari serve
+                session.setAttribute("Idsessione", jSessionId);
+*/
+                Useful success = new Useful("Successful login", 1, null);
+                String Json = gson.toJson(success);
 
-                    Useful success = new Useful("Successful login", 1, jSessionId);
-                    String Json = gson.toJson(success);
-                    out.println(Json);//mando un json al fronto di mancata operazione
 
-                }else{
-                    System.out.println("Spiacente o nome o cognome non non corrispondono");
-                    Useful error = new Useful("Login unsuccessful", -1, null);
-                    String Json = gson.toJson(error);
-                    out.println(Json);//mando un json al fronto di mancata operazione
-                }
-            }else  {
-                System.out.println("User è null");
+                String id = String.valueOf(Useful.generateId());
+                IdentifyUsers.sessionId = String.valueOf(id);
+                IdentifyUsers.nome = user.getNome();
+                IdentifyUsers.cognome = user.getCognome();
+                IdentifyUsers.userRole = user.getRuolo();
+
+                Cookie JSESSIONID = new Cookie("JSESSIONID", id);
+                Cookie ruoloUtente = new Cookie("ruoloUtente", user.getRuolo());
+                Cookie idUtente = new Cookie("idUtente", String.valueOf(user.getId()));
+                Cookie nome = new Cookie("nomeUtente", user.getNome());
+                Cookie cognome = new Cookie("cognomeUtente", user.getCognome());
+
+                JSESSIONID.setMaxAge(5000);
+                ruoloUtente.setMaxAge(5000);
+                idUtente.setMaxAge(5000);
+                nome.setMaxAge(5000);
+                cognome.setMaxAge(5000);
+
+                response.addCookie(JSESSIONID);
+                response.addCookie(ruoloUtente);
+                response.addCookie(idUtente);
+                response.addCookie(nome);
+                response.addCookie(cognome);
+
+                out.println(Json);//mando un json al fronto di mancata operazione
+
+
+            } else {
+                System.out.println("Spiacente o nome o cognome non non corrispondono");
                 Useful error = new Useful("Login unsuccessful", -1, null);
                 String Json = gson.toJson(error);
                 out.println(Json);//mando un json al fronto di mancata operazione
-
             }
             out.flush();
         }
+
     }
+
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

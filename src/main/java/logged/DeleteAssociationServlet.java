@@ -3,6 +3,7 @@ package logged;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
+import utils.IdentifyUsers;
 import utils.Useful;
 
 import javax.servlet.*;
@@ -37,7 +38,6 @@ public class DeleteAssociationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
 
-        HttpSession session = request.getSession(false);
         PrintWriter out = response.getWriter();
 
         Gson gson = new Gson();
@@ -48,10 +48,11 @@ public class DeleteAssociationServlet extends HttpServlet {
 
         Useful message = new Useful();
 
-        if (session != null) {
-            String sessionId = request.getParameter("jSessionId");
-            if (sessionId.equals(session.getId())) {
-                if (session.getAttribute("ruolo").equals("admin")) {
+        Cookie toCheck[] = request.getCookies();
+
+        if (IdentifyUsers.identifyIdCookie(toCheck)) {
+
+            if (IdentifyUsers.identifyRoleCookie(toCheck)) {
 
                     nomeCorso = request.getParameter("nomeCorso");
                     idDocente = Integer.parseInt(request.getParameter("idDocente"));
@@ -68,10 +69,9 @@ public class DeleteAssociationServlet extends HttpServlet {
                         out.write(Json);
                         out.flush();
                     }
-                }
             }
             else {
-                message = new Useful("Sorry but your id doesn't correspond", -1, null);
+                message = new Useful("Sorry but your role doesn't have access to this function", -1, null);
             }
         }
         else {

@@ -3,6 +3,7 @@ package logged;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
+import utils.IdentifyUsers;
 import utils.Useful;
 
 import javax.servlet.*;
@@ -37,8 +38,6 @@ public class ExistingEntAssociationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
 
-        HttpSession session = request.getSession(false);
-
         String opCode = request.getParameter("opCode");
         Gson gson = new Gson();
         String Json;
@@ -50,9 +49,10 @@ public class ExistingEntAssociationServlet extends HttpServlet {
         String cognomeDocente = "";
         String nomeCorso = "";
 
-        if (session != null) {
-            String sessionId = request.getParameter("jSessionId");
-            if (sessionId.equals(session.getId())) {
+        Cookie toCheck[] = request.getCookies();
+
+        if (IdentifyUsers.identifyIdCookie(toCheck)) {
+            if (IdentifyUsers.identifyRoleCookie(toCheck)) {
 
                 nomeCorso = request.getParameter("nomeCorso");
                 nomeDocente = request.getParameter("nomeDocente");
@@ -76,6 +76,19 @@ public class ExistingEntAssociationServlet extends HttpServlet {
                     out.flush();
                 }
             }
+            else {
+                message = new Useful("Sorry but your role doesn't have access to this function", -1,null);
+                Type type = new TypeToken<Useful>() {}.getType();
+                Json = gson.toJson(message, type);
+                out.write(Json);
+                out.flush();
+            }
+        }else {
+            message = new Useful("Sorry but you're not logged in", -1,null);
+            Type type = new TypeToken<Useful>() {}.getType();
+            Json = gson.toJson(message, type);
+            out.write(Json);
+            out.flush();
         }
 
 

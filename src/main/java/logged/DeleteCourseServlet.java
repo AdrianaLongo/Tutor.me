@@ -3,6 +3,7 @@ package logged;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
+import utils.IdentifyUsers;
 import utils.Useful;
 
 import javax.servlet.*;
@@ -44,39 +45,33 @@ public class DeleteCourseServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        HttpSession session = request.getSession(false);
+        Cookie toCheck[] = request.getCookies();
 
-        if (session != null) {
-            String sessionId = request.getParameter("jSessionId");
-            if (sessionId.equals(session.getId())) {
-                if (session.getAttribute("ruolo").equals("admin")) {
-                    String course = request.getParameter("nomeCorso");
+        if (IdentifyUsers.identifyIdCookie(toCheck)) {
+            if (IdentifyUsers.identifyRoleCookie(toCheck)) {
+                String course = request.getParameter("nomeCorso");
 
-                    try {
-                        boolean check = dao.checkCourse(course);
+                try {
+                    boolean check = dao.checkCourse(course);
 
-                        if (check) {
-                            dao.deleteCourse(course);
-                            message = new Useful("Course correctly deleted", 1, null);
-                        } else {
-                            message = new Useful("Course doesn't exist", -1, null);
-                        }
-                    } catch (SQLException e) {
-                        System.out.println(e.getMessage());
-                        message = new Useful("There was some problem querying the course", -1, null);
-                        toSendJson = gson.toJson(message);
-                        out.write(toSendJson);
-                        out.flush();
+                    if (check) {
+                        dao.deleteCourse(course);
+                        message = new Useful("Course correctly deleted", 1, null);
+                    } else {
+                        message = new Useful("Course doesn't exist", -1, null);
                     }
-                } else {
-                    message = new Useful("Sorry you don't have admin privileges", -1, null);
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                    message = new Useful("There was some problem querying the course", -1, null);
+                    toSendJson = gson.toJson(message);
+                    out.write(toSendJson);
+                    out.flush();
                 }
-
+            } else {
+                message = new Useful("Sorry you don't have admin privileges", -1, null);
             }
-            else
-                message = new Useful("Sorry your sessionId doesn't match", -1, null);
 
-        }else
+        } else
             message = new Useful("Sorry you're not logged in", -1, null);
 
         Type type = new TypeToken<Useful>() {

@@ -3,6 +3,7 @@ package logged;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DAO;
+import utils.IdentifyUsers;
 import utils.Useful;
 
 import javax.servlet.*;
@@ -39,8 +40,6 @@ public class TutorCourseAssociationServlet extends HttpServlet {
 
         response.setContentType("application/json, charset=UTF-8");
 
-        HttpSession session = request.getSession(false);
-
         String opCode = request.getParameter("opCode");
         Gson gson = new Gson();
         String Json;
@@ -53,10 +52,10 @@ public class TutorCourseAssociationServlet extends HttpServlet {
         int idTutor = 0;
         boolean checkCourse;
 
-        if (session != null) {
-            String sessionId = request.getParameter("jSessionId");
-            if (sessionId.equals(session.getId())) {
+        Cookie toCheck[] = request.getCookies();
 
+        if (IdentifyUsers.identifyIdCookie(toCheck)) {
+            if (IdentifyUsers.identifyRoleCookie(toCheck)) {
                 nomeCorso = request.getParameter("nomeCorso");
                 nomeDocente = request.getParameter("nomeDocente");
                 cognomeDocente = request.getParameter("cognomeDocente");
@@ -71,7 +70,8 @@ public class TutorCourseAssociationServlet extends HttpServlet {
                     } catch (SQLException e) {
                         System.out.println(e.getMessage());
                         message = new Useful("There were problems in step 1, adding the new course", -1, null);
-                        Type type = new TypeToken<Useful>() {}.getType();
+                        Type type = new TypeToken<Useful>() {
+                        }.getType();
                         Json = gson.toJson(message, type);
                         out.write(Json);
                         out.flush();
@@ -81,21 +81,40 @@ public class TutorCourseAssociationServlet extends HttpServlet {
                 try {
                     dao.insertCorsoDocenteAssociation(nomeCorso, idTutor, nomeDocente, cognomeDocente);
                     message = new Useful("Correctly associated elements", 1, null);
-                    Type type = new TypeToken<Useful>() {}.getType();
+                    Type type = new TypeToken<Useful>() {
+                    }.getType();
                     Json = gson.toJson(message, type);
                     out.write(Json);
                     out.flush();
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                     message = new Useful("There were problems in step 2, associating elements", -1, null);
-                    Type type = new TypeToken<Useful>() {}.getType();
+                    Type type = new TypeToken<Useful>() {
+                    }.getType();
                     Json = gson.toJson(message, type);
                     out.write(Json);
                     out.flush();
                 }
 
             }
+            else {
+                message = new Useful("Sorry your role doesn't have access to this function", -1, null);
+                Type type = new TypeToken<Useful>() {
+                }.getType();
+                Json = gson.toJson(message, type);
+                out.write(Json);
+                out.flush();
+            }
         }
+        else {
+            message = new Useful("Sorry your id doesn't check with the current user", -1,null);
+            Type type = new TypeToken<Useful>() {
+            }.getType();
+            Json = gson.toJson(message, type);
+            out.write(Json);
+            out.flush();
+        }
+
 
     }
 }

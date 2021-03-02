@@ -7,7 +7,7 @@
     <context-param>
         <description>Url di MySql</description>
         <param-name>DB-Url</param-name>
-        <param-value>jdbc:mysql://localhost:3306/ripetizioni?autoReconnect=true&amp;useSSL=false</param-value>
+        <param-value>jdbc:mysql://localhost:8889/ripetizioni?autoReconnect=true&amp;useSSL=false</param-value>
     </context-param>
     <context-param>
         <description>User per DB</description>
@@ -17,7 +17,7 @@
     <context-param>
         <description>Password del DB</description>
         <param-name>password</param-name>
-        <param-value></param-value>
+        <param-value>root</param-value>
     </context-param>
     <session-config>
         <session-timeout>30</session-timeout>
@@ -123,7 +123,7 @@
     <filter>
         <filter-name>CorsFilter</filter-name>
         <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
-        //add below config
+
         <init-param>
             <param-name>cors.allowed.origins</param-name>
             <param-value>http://localhost:8081</param-value>

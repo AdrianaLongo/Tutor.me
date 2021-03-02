@@ -3,15 +3,12 @@ package utils;
 import dao.Slot;
 
 
-import javax.servlet.ServletContext;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Useful {
+    public static String idSession;
     private String message;
     private int success;
     private Object object;
@@ -72,6 +69,11 @@ public class Useful {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         return random.nextInt(10, 1000000000);
     }
+
+
+
+
+
 
 }
 
