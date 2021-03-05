@@ -1,16 +1,14 @@
 package logged;
 
 import com.google.gson.reflect.TypeToken;
+import utils.IdentifyUsers;
 import utils.Useful;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
@@ -32,25 +30,29 @@ public class LogoutServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         Gson gson = new Gson();
-        Useful message = new Useful();
-        String Json = "";
+        Useful message;
+        String Json;
 
-        String sessionId = request.getParameter("jSessionId");
-        HttpSession s = request.getSession(false);//Distruggo la sessione per evitare che logout+rilogin segnino parametri a cazzo
+        Cookie[] toInvalidate = request.getCookies();
 
-        if (s != null) {
-            if (s.getId().equals(sessionId)) {
-                s.invalidate();
+        if (toInvalidate != null) {
+            if (IdentifyUsers.identifyIdCookie(toInvalidate)) {
+                for (Cookie cookie : toInvalidate) {
+                    cookie.setValue("");
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
                 message = new Useful("Logout successful", 1, null);
-
             } else {
+                message = new Useful("Your id doesn't match the one in store", -1, null);
+
+            }
+        }else{
                 message = new Useful("I don't think you're logged", -1, null);
             }
-        } else {
-            message = new Useful("I don't think you're logged", -1, null);
 
-        }
-        Type type = new TypeToken<Useful>() {}.getType();
+        Type type = new TypeToken<Useful>() {
+        }.getType();
         Json = gson.toJson(message, type);
         out.write(Json);
         out.flush();
