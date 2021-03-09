@@ -59,14 +59,15 @@ public class cercaTutorServlet extends HttpServlet {
             checkCourse = dao.checkCourse(corso);
 
             if (checkCourse) {
-
+                System.out.println("Corso: " + corso);
                 tutor = dao.mostraDocentiConCorso(corso); //mostra i tutor in base al corso scelto
-                System.out.print("Tutor recuperati");
 
                 Type type = new TypeToken<ArrayList<Docente>>() {}.getType(); //stabilisce il tipo di Docente
                 String jsonTutor = gson.toJson(tutor, type); //e se io voglio passare più dati Json sulla stessa pagina ?
 
                 out.print(jsonTutor);//stampa il tutor
+                System.out.print(jsonTutor);
+
 
             } else {
 

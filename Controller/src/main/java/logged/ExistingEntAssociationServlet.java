@@ -38,7 +38,7 @@ public class ExistingEntAssociationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
 
-        String opCode = request.getParameter("opCode");
+//        String opCode = request.getParameter("opCode");
         Gson gson = new Gson();
         String Json;
         Useful message;

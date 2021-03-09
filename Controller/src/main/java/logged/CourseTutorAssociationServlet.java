@@ -85,9 +85,10 @@ public class CourseTutorAssociationServlet extends HttpServlet {
                 } else if (opCode.equals("insertCourseAndTutor")) {
                     System.out.println("Inserisco nuovo corso per nuovo tutor");
                     idTutor = Useful.generateId();
+//                    TODO: decidere se decommentare
 //                    try {
 //                        //anche se controllo con checkDocente se esiste
-//                        //è deleterio, potrebbe esse un omonimo
+////                        //è deleterio, potrebbe esse un omonimo
 //                        dao.addDocente(idTutor, nomeDocente, cognomeDocente);
 //                    } catch (SQLException e) {
 //                        System.out.println(e.getMessage());
@@ -123,8 +124,5 @@ public class CourseTutorAssociationServlet extends HttpServlet {
         out.flush();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
-            ServletException, IOException {
 
-    }
 }
