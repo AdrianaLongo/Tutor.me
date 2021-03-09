@@ -26,6 +26,58 @@ public class DAO {
         }
     }
 
+    public ArrayList<Utente> retrieveUtenti () throws SQLException {
+
+        ArrayList<Utente> utentiRec = new ArrayList<>();
+        Utente resultUser;
+
+        PreparedStatement pst = null;
+        Connection conn = null;
+
+        int id = 0;
+        String nome = "";
+        String cognome = "";
+        String ruolo = "";
+        String usernameExtracted = "";
+        String passwordExtracted = "";
+
+        try {
+
+            conn = DriverManager.getConnection(url, user, pw);
+            if (conn != null) {
+                System.out.println("Connected to DB");
+
+                String sql = "SELECT * FROM utente";
+                pst = conn.prepareStatement(sql);
+
+                ResultSet userValues = pst.executeQuery();
+                while (userValues.next()) {
+                    id = userValues.getInt("idUtente");
+                    usernameExtracted = userValues.getString("username");
+                    passwordExtracted = userValues.getString("password");
+                    nome = userValues.getString("nomeUtente");
+                    cognome = userValues.getString("cognomeUtente");
+                    ruolo = userValues.getString("ruolo");
+                    resultUser = new Utente(id, nome, cognome, ruolo, usernameExtracted, passwordExtracted);
+                    utentiRec.add(resultUser);
+                }
+            }
+            System.out.println("Retrieve Utente fatto");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+        return utentiRec;
+    }
+
 
     public Utente retrieveUtente(String username, String password) throws SQLException {
 
