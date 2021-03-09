@@ -60,6 +60,12 @@ const setTutorsForCourses = (state, jsonTutor) => {
     state.tutorsForCourses = jsonTutor
 }
 
+const deleteCurrentSession = (state, username) => {
+    state.isLogged = false;
+    state.username = username;
+    console.log("state.username" + state.username)
+}
+
 export default{
     selectCourse,
     selectTutorName,
@@ -74,5 +80,6 @@ export default{
     setJsonPersonalHistoryComplete,
     setJsonPersonalHistoryAttive,
     setJsonPersonalHistory,
-    setTutorsForCourses
+    setTutorsForCourses,
+    deleteCurrentSession
 }

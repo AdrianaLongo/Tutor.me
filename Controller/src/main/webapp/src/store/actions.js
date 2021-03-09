@@ -15,7 +15,7 @@ const login = (context, credentials) => {
 
     // Quando l'utente fa il login, mi conviene mantenere sempre nello store...
     // 1) nome utente
-    context.commit('setCurrentSession', credentials.username)
+    context.commit('setCurrentSession', '')
     // 2) storico delle prenotazioni dell'utente
     $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet', function (jsonPersonalHistory) {
         context.commit('setJsonPersonalHistoryComplete', jsonPersonalHistory)
@@ -77,11 +77,32 @@ const retrieveAllTutors = (context) => {
     })
 }
 
+const logout = (context) => {
+    jQuery.post('http://localhost:8080/TWEB_war_exploded/LogoutServlet',{
+
+    })
+        .then(response => {
+            console.log(response)
+        })
+
+    // Quando l'utente fa il logout, devo togliere tutte le sue info dallo store...
+    // 1) nome utente
+    context.commit('deleteCurrentSession', '')
+    // 2) storico delle prenotazioni dell'utente
+    context.commit('setJsonPersonalHistoryComplete', '')
+    context.commit('setJsonPersonalHistoryAttive', '')
+    context.commit('setJsonPersonalHistory', '')
+
+    // il reindirizzamento alla homepage avviene in login.vue
+};
+
+
 export default{
     login,
     retrieveAllTutors,
     retrieveTutorAvailability,
     // retrieveClientsHistory,
     retrievePersonalHistory,
-    retrieveTutorsForCourse
+    retrieveTutorsForCourse,
+    logout
 }
