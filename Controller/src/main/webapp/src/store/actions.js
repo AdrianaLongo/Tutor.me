@@ -55,21 +55,32 @@ const retrievePersonalHistory = (context) => {
     });
 };
 
-// retrieveClientsHistory(context, user){
-// TODO: risistemare dopo la servlet
-// var _this = this;
-// $.getJSON({
-//     type: "GET",
-//     url: 'http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet',
-//     data: 'jSessionId='+ user,
-//     success: function (jsonPersonalHistory) {
-//         console.log("user: " + user);
-//         _this.jsonPersonalHistory = jsonPersonalHistory;
-//         console.log("Elenco prenotazioni " + jsonPersonalHistory);
-//         _this.state.personalHistoryJSON = jsonPersonalHistory;
-//         console.log(_this.state.personalHistoryJSON);
-//     }
-// });
+// const retrieveClientsHistory = (context, user) => {
+const retrieveClientsHistory = (context, clientId) => {
+    // var _this = this;
+    // $.getJSON({
+    //     type: "GET",
+    //     url: 'http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet',
+    //     data: 'jSessionId=' + user,
+    //     success: function (jsonPersonalHistory) {
+    //         console.log("user: " + user);
+    //         _this.jsonPersonalHistory = jsonPersonalHistory;
+    //         console.log("Elenco prenotazioni " + jsonPersonalHistory);
+    //         _this.state.personalHistoryJSON = jsonPersonalHistory;
+    //         console.log(_this.state.personalHistoryJSON);
+    //     }
+    // });
+    console.log("clientId arrivato: " + clientId)
+    $.getJSON({
+        type: "GET",
+        url: 'http://localhost:8080/TWEB_war_exploded/RetrieveClientHistory',
+        data: 'clientId='+clientId,
+        success: function (jsonClientHistory) {
+            context.commit('setJsonClientsHistory', jsonClientHistory)
+            console.log(jsonClientHistory)
+        }
+    });
+}
 
 const retrieveAllTutors = (context) => {
     $.getJSON('http://localhost:8080/TWEB_war_exploded/PopolaDocenteServlet', function(jsonTutor){
@@ -97,11 +108,13 @@ const logout = (context) => {
 };
 
 
+
+
 export default{
     login,
     retrieveAllTutors,
     retrieveTutorAvailability,
-    // retrieveClientsHistory,
+    retrieveClientsHistory,
     retrievePersonalHistory,
     retrieveTutorsForCourse,
     logout

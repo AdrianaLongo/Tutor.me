@@ -38,11 +38,13 @@ public class RetrieveClientsServlet extends HttpServlet {
         response.setContentType("application/json, charset=UTF-8");
 
         ArrayList<Utente> utentiPerHistory;
-        PrintWriter out = response.getWriter();
-
-        String Json;
         Gson gson = new Gson();
+//        String Json;
+        Type type;
+
         Useful message = new Useful();
+
+        PrintWriter out = response.getWriter();
 
         Cookie cookies[] = request.getCookies();
 
@@ -52,6 +54,13 @@ public class RetrieveClientsServlet extends HttpServlet {
 
                 try {
                     utentiPerHistory = dao.retrieveUtenti();
+                    type = new TypeToken<ArrayList<Utente>>() {}.getType();
+                    String jsonUtentiPerHistory = gson.toJson(utentiPerHistory, type);
+                    out.print(jsonUtentiPerHistory);
+                    out.flush();
+                    System.out.println(utentiPerHistory);
+                    System.out.println(jsonUtentiPerHistory);
+                    // TODO: passa password in chiaro!
                     message = new Useful("Correctly retrieved users", 1,utentiPerHistory);
                 }catch(SQLException e) {
                     System.out.println(e.getMessage());
@@ -66,11 +75,11 @@ public class RetrieveClientsServlet extends HttpServlet {
             message = new Useful("Doesn't seem that you're logged in", -1,null);
         }
 
-        Type type = new TypeToken<Useful>() {
-        }.getType();
-        Json = gson.toJson(message, type);
-        out.println(Json);
-        out.flush();
+//        Type type = new TypeToken<Useful>() {
+//        }.getType();
+//        Json = gson.toJson(message, type);
+//        out.println(Json);
+//        out.flush();
     }
 
     @Override

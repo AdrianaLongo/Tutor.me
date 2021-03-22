@@ -21,6 +21,14 @@ const currentToken = state => state.token;
 
 const userLogged = state => state.isLogged;
 
+const clientName = state => state.client.nome;
+
+const clientSurname = state => state.client.cognome;
+
+const clientId = state => state.client.id;
+
+const elencoPrenotazioniCliente = state => state.jsonClientsHistory;
+
 export default {
     courseName,
     tutorName,
@@ -31,5 +39,9 @@ export default {
     elencoDisponibilita,
     elencoMiePrenotazioni,
     currentToken,
-    userLogged
+    userLogged,
+    clientName,
+    clientSurname,
+    clientId,
+    elencoPrenotazioniCliente
 }

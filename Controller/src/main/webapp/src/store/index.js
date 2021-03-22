@@ -46,7 +46,14 @@ export default new Vuex.Store({
 
         jsonCourses: '',
 
-        tutorsForCourses: ''
+        tutorsForCourses: '',
+
+        client: {
+            nome: '',
+            cognome: '',
+            id: ''
+        },
+        jsonClientsHistory: '',
 
     },
 

@@ -1,22 +1,23 @@
 <template>
-  <b-container>
+  <b-container class="mt-5">
     <h1>Prenotazioni clienti</h1>
-    <table-clients-history></table-clients-history>
+    <select-client></select-client>
+    <table-clients-history v-if="this.$store.getters.elencoPrenotazioniCliente !== ''"></table-clients-history>
   </b-container>
 </template>
 
 <script>
+import SelectClient from "@/components/obtainDataFromServlet/SelectClient";
 import TableClientsHistory from "@/components/obtainDataFromServlet/TableClientsHistory";
+
 
 export default {
   name: "PageClientsHistory",
   components: {
-    TableClientsHistory
+    SelectClient,
+    TableClientsHistory,
   },
   beforeCreate() {
-    // console.log("token in localstorage: " + localStorage.access_token)
-    console.log("token in store: " + this.$store.getters.currentToken)
-
   }
 }
 </script>

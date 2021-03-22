@@ -66,6 +66,22 @@ const deleteCurrentSession = (state, username) => {
     console.log("state.username" + state.username)
 }
 
+const selectClientName = (state, payload) => {
+    state.client.nome = payload;
+};
+
+const selectClientSurname = (state, payload) => {
+    state.client.cognome = payload;
+};
+
+const selectClientId = (state, payload) => {
+    state.client.id = payload;
+};
+
+const setJsonClientsHistory = (state, payload) => {
+    state.jsonClientsHistory = payload;
+}
+
 export default{
     selectCourse,
     selectTutorName,
@@ -81,5 +97,12 @@ export default{
     setJsonPersonalHistoryAttive,
     setJsonPersonalHistory,
     setTutorsForCourses,
-    deleteCurrentSession
+    deleteCurrentSession,
+
+    selectClientName,
+    selectClientSurname,
+    selectClientId,
+
+    setJsonClientsHistory,
+
 }
