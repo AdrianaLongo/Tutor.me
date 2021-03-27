@@ -8,12 +8,12 @@
         label-for="input-horizontal"
         class="font-weight-bold text-lg-left"
     >
-      <b-form-select v-model="course" @change.native="courseHasChanged">
+      <b-form-select v-model="courseSelected" @change.native="courseHasChanged">
         <!--"name" e' il nome che do alla variabile "nome" che mi arriva dal db -->
         <option v-for="c in courses" :key="c.corso" :value="{name: c.nome}">{{ c.nome }}</option>
       </b-form-select>
 
-      <div v-if="course.name !== undefined">
+      <div v-if="courseSelected.name !== undefined">
         <b-button @click="showTutors" variant="primary">Cerca tutor per questo corso</b-button>
       </div>
 
@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       courses: null,
-      course: '',
+      courseSelected: '',
     }
   },
   beforeCreate: function() {
@@ -48,8 +48,8 @@ export default {
 
     showTutors: function(){
       // Dovendo passare questi dati ad un altro componente, devo mantenerli nello store => mi sevono actions e mutations
-      this.$store.commit("selectCourse", this.course.name);
-      this.$store.dispatch('retrieveTutorsForCourse', this.course.name);
+      this.$store.commit("selectCourse", this.courseSelected.name);
+      this.$store.dispatch('retrieveTutorsForCourse', this.courseSelected.name);
     },
   }
 

@@ -1,19 +1,14 @@
 <template>
   <div>
     <b-container class="m-4">
-      <b-form-select>
-
-      </b-form-select>
-      <b-button @click="simulaLogin">Simula login</b-button>
-
-      <b-table v-if="loginSucceded" class="personalHistoryTable" :fields="fields" :items="items" :jsonPersonalHistory="jsonPersonalHistory">
+      <b-table class="selectedClientHistoryTable" :fields="fields" :items="items" :jsonPrenotazioniCliente="jsonPrenotazioniCliente">
 
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
+          <div v-if="JSON.stringify(jsonPrenotazioniCliente).includes(data.value)">
             <b-button v-if="JSON.stringify(jsonAttive).includes(data.value)"
-                      variant="primary"
-                      v-b-modal.modal-1>
+                      disabled
+                      variant="primary">
               Prenotazione attiva
             </b-button>
             <b-button v-else-if="JSON.stringify(jsonEffettuate).includes(data.value)"
@@ -28,14 +23,13 @@
             </b-button>
           </div>
         </template>
-
         <template #cell(mar)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
+          <div v-if="JSON.stringify(jsonPrenotazioniCliente).includes(data.value)">
             <b-button v-if="JSON.stringify(jsonAttive).includes(data.value)"
-                      variant="primary"
-                      v-b-modal.modal-1>
-              Prenotazione attiva {{jsonAttive.idPrenotazione}}
+                      disabled
+                      variant="primary">
+              Prenotazione attiva
             </b-button>
             <b-button v-else-if="JSON.stringify(jsonEffettuate).includes(data.value)"
                       disabled
@@ -49,13 +43,12 @@
             </b-button>
           </div>
         </template>
-
         <template #cell(mer)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
+          <div v-if="JSON.stringify(jsonPrenotazioniCliente).includes(data.value)">
             <b-button v-if="JSON.stringify(jsonAttive).includes(data.value)"
-                      variant="primary"
-                      v-b-modal.modal-1>
+                      disabled
+                      variant="primary">
               Prenotazione attiva
             </b-button>
             <b-button v-else-if="JSON.stringify(jsonEffettuate).includes(data.value)"
@@ -70,13 +63,12 @@
             </b-button>
           </div>
         </template>
-
         <template #cell(gio)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
+          <div v-if="JSON.stringify(jsonPrenotazioniCliente).includes(data.value)">
             <b-button v-if="JSON.stringify(jsonAttive).includes(data.value)"
-                      variant="primary"
-                      v-b-modal.modal-1>
+                      disabled
+                      variant="primary">
               Prenotazione attiva
             </b-button>
             <b-button v-else-if="JSON.stringify(jsonEffettuate).includes(data.value)"
@@ -91,13 +83,12 @@
             </b-button>
           </div>
         </template>
-
         <template #cell(ven)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
-          <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
+          <div v-if="JSON.stringify(jsonPrenotazioniCliente).includes(data.value)">
             <b-button v-if="JSON.stringify(jsonAttive).includes(data.value)"
-                      variant="primary"
-                      v-b-modal.modal-1>
+                      disabled
+                      variant="primary">
               Prenotazione attiva
             </b-button>
             <b-button v-else-if="JSON.stringify(jsonEffettuate).includes(data.value)"
@@ -113,16 +104,17 @@
           </div>
         </template>
 
+
+
       </b-table>
-      <b-modal id="modal-1" title="Cosa vuoi fare con questa operazione?" align="center" hide-footer>
-        <b-button variant="outline-danger" class="mr-3" @click="eliminaPrenotazione">Cancellare</b-button>
-        <b-button variant="outline-success" class="ml-3" @click="segnaPrenotazioneComeEffettuata">Segnare come effettuata</b-button>
-      </b-modal>
+
     </b-container>
   </div>
 </template>
 
 <script>
+// import $ from "jquery";
+
 export default {
   name: "tableClientsHistory",
   data(){
@@ -130,7 +122,7 @@ export default {
       slotVue: '',
       day: null,
       hours: null,
-      jsonPersonalHistory: '',
+
       elenco: '',
       jsonAttive: '',
       jsonEffettuate:'',
@@ -139,6 +131,7 @@ export default {
       loginSucceded: false,
 
       jsonClients: '',
+      clientSelected: '',
 
       fields: [
         {
@@ -209,47 +202,44 @@ export default {
           ven: {day: 'Venerdi', slotVue: 'VEN4'},
         },
       ],
+
+      jsonPrenotazioniCliente: ''
     }
   },
-  beforeCreate() {
-    // TODO: sostituire questo metodo con vero login
-    this.$store.dispatch("retrieveClientsHistory", "this.$store.getters.currentToken");
-    console.log("Log simulato con idUtente 123");
+  // beforeCreate() {
+  //   console.log(this.$store.getters.clientId)
+  //   $.getJSON({
+  //     type: "GET",
+  //     url: 'http://localhost:8080/TWEB_war_exploded/RetrieveClientHistory',
+  //     data: 'clientId='+this.$store.getters.clientId,
+  //     success: function (jsonClientHistory) {
+  //       this.$store.commit('setJsonClientsHistory', jsonClientHistory)
+  //       console.log(jsonClientHistory)
+  //     }
+  //   });
+  // },
+  created: function() {
+    this.jsonPrenotazioniCliente = this.$store.getters.elencoPrenotazioniCliente;
+    this.jsonAttive = this.jsonPrenotazioniCliente.filter( element => element.stato === '0');
+    // _this.jsonAttiveParsified = JSON.parse(JSON.stringify(_this.jsonAttive))
+    this.jsonEffettuate = this.jsonPrenotazioniCliente.filter( element => element.stato === '1');
+    this.jsonCancellate = this.jsonPrenotazioniCliente.filter( element => element.stato === '-1');
+
+    console.log(this.jsonPrenotazioniCliente)
+    console.log(this.jsonAttive)
+    console.log(this.jsonEffettuate)
+    console.log(this.jsonCancellate)
 
   },
   methods: {
-    // simulaLogin: function(){
-    //   this.loginSucceded = true;
-    //   this.jsonPersonalHistory = this.$store.getters.elencoMiePrenotazioni;
-    //   console.log("Elenco prenotazioni: ");
-    //   console.log(this.jsonPersonalHistory);
-    //   this.jsonAttive = this.jsonPersonalHistory.filter( element => element.stato === 'attiva');
-    //   console.log(this.jsonAttive);
-    //   this.jsonEffettuate = this.jsonPersonalHistory.filter( element => element.stato === 'effettuata');
-    //   this.jsonCancellate = this.jsonPersonalHistory.filter( element => element.stato === 'cancellata');
-    //
-    //
-    // },
-    selectSlot: function(s){
-      this.$store.commit("selectSlot", s);
-      console.log("corso = " + this.$store.getters.courseName);
-      console.log("tutor = " + this.$store.getters.tutorFullName + ", " + this.$store.getters.tutorId );
-      console.log("slot = " + this.$store.getters.prenotazioneSlot);
-    },
-    eliminaPrenotazione: function(corso, tutor, slot){
-      // TODO: implementare metodo per eliminare prenotazione
-      console.log(corso + tutor + slot);
-    },
-    segnaPrenotazioneComeEffettuata: function(){
-      // TODO: implementare metodo per segnare prenotazione come effettuata
 
-    }
+
   }
 }
 </script>
 
 <style scoped>
-.personalHistoryTable {
+.selectedClientHistoryTable {
   background-color: white !important;
   text-align: center;
 }

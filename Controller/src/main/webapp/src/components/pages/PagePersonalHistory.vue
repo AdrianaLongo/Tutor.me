@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container class="mt-5">
     <h1>Le mie prenotazioni</h1>
     <table-personal-history></table-personal-history>
   </b-container>

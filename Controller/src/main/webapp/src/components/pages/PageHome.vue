@@ -1,15 +1,23 @@
 <template>
-  <div>
-    <b-jumbotron header="Tutor.me">
-      <p> Tutor.me è una piattaforma che ti permette di trovare il tutor adatto alle tue
+  <div class="mt-2">
+    <b-jumbotron>
+      <template #header>Tutor.me</template>
+
+      <template #lead>
+        Tutor.me è una piattaforma che ti permette di trovare il tutor adatto alle tue
         esigenze.
         Scegli il corso per cui hai bisogno, seleziona il tutor che preferisci ed è fatta!
-      </p>
+      </template>
     </b-jumbotron>
+
 
     <select-course></select-course>
     <select-tutor v-if="this.$store.getters.elencoTutor !== ''"></select-tutor>
     <table-availability v-if="this.$store.getters.elencoDisponibilita !== ''"></table-availability>
+
+
+
+
 
 
   </div>
@@ -39,5 +47,4 @@ export default {
   },
 }
 </script>
-
 

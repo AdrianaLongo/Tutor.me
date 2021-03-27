@@ -7,7 +7,8 @@
                     label-align-md="right"
       >
         <b-form-select v-model="courseSelected">
-          <option v-for="course in jsonCourses" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
+<!--          TODO: non far comparire i corsi che quel tutor insegna gia-->
+          <option v-for="c in courses" :key="c.corso" :value="{name: c.nome}">{{ c.nome }}</option>
         </b-form-select>
       </b-form-group>
 
@@ -17,8 +18,9 @@
           label-align-md="right"
       >
         <b-form-select v-model="tutorSelected">
-          <option v-for="tutor in jsonTutor" :key="tutor.id" :value="{id: tutor.id, nome: tutor.nome, cognome:tutor.cognome}">
-            {{ tutor.nome }} {{tutor.cognome}}
+<!--          TODO: non far comparire i tutor che già insegnano quel corso-->
+          <option v-for="t in tutors" :key="t.id" :value="{id: t.id, name: t.name, cognome: t.cognome}">
+            {{ t.nome }} {{t.cognome}}
           </option>
         </b-form-select>
       </b-form-group>
@@ -40,8 +42,8 @@ export default {
   name: "AddAssociationCourseTutor",
   data(){
     return{
-      jsonCourses: '',
-      jsonTutor: '',
+      courses: '',
+      tutors: '',
       tutorSelected: '',
       courseSelected: '',
     }
@@ -51,14 +53,14 @@ export default {
     // quindi non mi conviene recuperare dallo store tutti i corsi in catalogo;
     // non abbiamo bisogno di memorizzarli in catalogo, quindi non abbiamo bisogno dell'action per fare la richiesta
     var _this = this;
-    $.getJSON('http://localhost:8080/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
-      _this.jsonCourses = jsonCourses;
+    $.getJSON('http://localhost:8080/TWEB_war_exploded/PopulateCorsiServlet', function (courses) {
+      _this.courses = courses;
     });
 
     // Non c'e' bisogno di mantenere nello store la ricerca dei tutor di una determinata materia,
     // quindi
-    $.getJSON('http://localhost:8080/TWEB_war_exploded/PopolaDocenteServlet', function(jsonTutor){
-      _this.jsonTutor = jsonTutor;
+    $.getJSON('http://localhost:8080/TWEB_war_exploded/PopolaDocenteServlet', function(tutors){
+      _this.tutors = tutors;
     })
 
   },
@@ -66,9 +68,12 @@ export default {
     // Non c'è bisogno di mantenere l'associazione appena fatta nello store,
     // quindi non abbiamo bisogno di action per fare la richiesta
     addAssociation: function(){
+      console.log(this.courseSelected)
+      console.log(this.courseSelected.nome)
+      console.log(this.courseSelected.name)
       jQuery.post('http://localhost:8080/TWEB_war_exploded/ExistingEntAssociationServlet', {
-        nomeCorso: this.courseSelected.nome,
-        nomeDocente: this.tutorSelected.nome,
+        nameCorso: this.courseSelected.name,
+        nameDocente: this.tutorSelected.name,
         cognomeDocente: this.tutorSelected.cognome,
         idDocente: this.tutorSelected.id
       })
@@ -80,7 +85,7 @@ export default {
     },
     makeToast(){
       this.$bvToast.toast(
-          `Hai associato il tutor ${this.tutorSelected.nome} ${this.tutorSelected.cognome} al corso di ${this.courseSelected.nome}.`,
+          `Hai associato il tutor ${this.tutorSelected.name} ${this.tutorSelected.cogname} al corso di ${this.courseSelected.name}.`,
           {
             title: `Catalogo aggiornato con successo!`,
             variant: 'success',

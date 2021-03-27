@@ -1,8 +1,10 @@
 <template>
-  <b-container class="mt-4">
+  <b-container class="mt-5">
+    <h1>Modifica catalogo</h1>
+
     <div class="mt-4 mb-4">
       <b-card no-body>
-        <b-tabs card lazy pills vertical>
+        <b-tabs card lazy fill pills>
         <!-- LAZY ci permette di caricare il contenuto della tab solo quando attiva:
         in questo modo il contenuto delle select e' sempre aggiornato -->
           <b-tab title="Aggiungi corso" active>
@@ -23,8 +25,6 @@
           <b-tab title="Rimuovi associazione corso-docente">
             <remove-association-course-tutor></remove-association-course-tutor>
           </b-tab>
-
-
         </b-tabs>
       </b-card>
 

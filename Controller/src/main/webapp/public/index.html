@@ -21,6 +21,7 @@
   <!-- Load the following for BootstrapVueIcons support -->
   <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 
+
   </head>
   <body>
     <noscript>
@@ -28,5 +29,20 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+
+  <script>
+      setTimeout(function(){
+          // let state = this.$store.state;
+          // let newState = {};
+          //
+          // Object.keys(state).forEach(key => {
+          //     newState[key] = null; // or = initialState[key]
+          // });
+          //
+          // this.$store.replaceState(newState);
+          alert("Session expired. Refresh page");
+          // TODO: far sì che premendo "ok" nell'alert si refreshi la pagina
+      }, 1800000) // 30 minuti in millisecondi
+  </script>
   </body>
 </html>
