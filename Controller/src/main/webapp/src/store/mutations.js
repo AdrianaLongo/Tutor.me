@@ -32,6 +32,7 @@ const selectForDelete = (state, payload) => {
 const setCurrentSession = (state, username) => {
     state.isLogged = true;
     state.username = username;
+    console.log("username in mut: " + username)
 }
 
 const setJsonTutor = (state, jsonTutor) => {

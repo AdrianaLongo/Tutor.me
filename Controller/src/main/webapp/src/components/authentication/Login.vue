@@ -33,14 +33,13 @@ export default {
         username: this.username,
         password: this.password,
       });
-
       setTimeout(() => {this.makeToast()}, 200)
       console.log("Username inserito: " + this.username);
       console.log("Password inserita: " + this.password);
     },
-
     makeToast(){
       if(this.$store.state.isLogged){
+        console.log("isLogged: " + this.$store.state.isLogged)
         this.$bvToast.toast(
             `Benvenut*, ${this.username}!`,
             {
@@ -49,6 +48,7 @@ export default {
               solid: true
             })
       } else {
+        console.log("isLogged: " + this.$store.state.isLogged)
         this.$bvToast.toast(
             `Controlla username e password.`,
             {
@@ -57,7 +57,6 @@ export default {
               solid: true
             })
       }
-
     },
   }
 }

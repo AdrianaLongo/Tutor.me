@@ -7,22 +7,25 @@ import jQuery from 'jquery'
 
 
 const login = (context, credentials) => {
-    //  TODO: gestire timeout sessione
-    jQuery.post('http://localhost:8080/TWEB_war_exploded/LoginServlet', {
+    $.post('http://localhost:8080/TWEB_war_exploded/LoginServlet', {
         username: credentials.username,
         password: credentials.password,
+    }).then(response => {
+        console.log(typeof response)
+        console.log(response)
+        if(response.includes("Successful login")){
+            console.log("OK!")
+            // Quando l'utente fa il login, mi conviene mantenere sempre nello store...
+            // 1) nome utente
+            context.commit('setCurrentSession', '')
+            // 2) storico delle prenotazioni dell'utente
+            $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet', function (jsonPersonalHistory) {
+                context.commit('setJsonPersonalHistoryComplete', jsonPersonalHistory)
+                context.commit('setJsonPersonalHistoryAttive', jsonPersonalHistory.filter( element => element.stato === '0'))
+                context.commit('setJsonPersonalHistory', jsonPersonalHistory.filter( element => element.stato === '0'))
+            });
+        }
     })
-
-    // Quando l'utente fa il login, mi conviene mantenere sempre nello store...
-    // 1) nome utente
-    context.commit('setCurrentSession', '')
-    // 2) storico delle prenotazioni dell'utente
-    $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet', function (jsonPersonalHistory) {
-        context.commit('setJsonPersonalHistoryComplete', jsonPersonalHistory)
-        context.commit('setJsonPersonalHistoryAttive', jsonPersonalHistory.filter( element => element.stato === '0'))
-        context.commit('setJsonPersonalHistory', jsonPersonalHistory.filter( element => element.stato === '0'))
-    });
-
 };
 
 const retrieveTutorsForCourse = (context, course) => {
