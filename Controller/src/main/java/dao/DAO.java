@@ -229,7 +229,7 @@ public class DAO {
             }
 
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM docente");
+            ResultSet rs = st.executeQuery("SELECT * FROM docente WHERE disponibilitaDocente=1");
             while (rs.next()) {
                 Docente d = new Docente(rs.getString("nomeDocente"), rs.getString("cognomeDocente"), rs.getInt(
                         "idDocente"));
@@ -519,7 +519,7 @@ public class DAO {
         try {
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
-            String sql = "DELETE FROM corso WHERE nomeCorso=?";
+            String sql = "UPDATE corso SET disponibilitaCorso=0 WHERE nomeCorso=?";
             pst = conn.prepareStatement(sql);
             pst.setString(1, courseName);
             pst.execute();
@@ -577,7 +577,7 @@ public class DAO {
         try {
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
-            String sql = "DELETE FROM docente WHERE idDocente = ?";
+            String sql = "UPDATE docente SET disponibilitaDocente=0 WHERE idDocente = ?";
             pst = conn.prepareStatement(sql);
             pst.setInt(1, idDocente);
             pst.execute();
