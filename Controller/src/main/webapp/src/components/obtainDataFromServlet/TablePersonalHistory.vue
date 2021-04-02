@@ -4,7 +4,7 @@
 <!--      <b-button @click="simulaLogin">Simula login</b-button>-->
 
 <!--      <b-table v-if="loginSucceded" class="personalHistoryTable" :fields="fields" :items="items" :jsonPersonalHistory="jsonPersonalHistory">-->
-      <b-table class="personalHistoryTable" :fields="fields" :items="items" :jsonPersonalHistory="jsonPersonalHistory">
+      <b-table responsive="" class="personalHistoryTable" :fields="fields" :items="items" :jsonPersonalHistory="jsonPersonalHistory">
 
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
@@ -239,6 +239,7 @@ export default {
       fields: [
         {
           key: 'hours',
+          stickyColumn: true,
           label: 'Fascia oraria',
           formatter: value => {
             return value

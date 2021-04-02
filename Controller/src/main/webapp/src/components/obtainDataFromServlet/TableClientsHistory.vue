@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-container class="m-4">
-      <b-table class="selectedClientHistoryTable" :fields="fields" :items="items" :jsonPrenotazioniCliente="jsonPrenotazioniCliente">
+      <b-table responsive class="selectedClientHistoryTable" :fields="fields" :items="items" :jsonPrenotazioniCliente="jsonPrenotazioniCliente">
 
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
@@ -136,6 +136,7 @@ export default {
       fields: [
         {
           key: 'hours',
+          stickyColumn: true,
           label: 'Fascia oraria',
           formatter: value => {
             return value

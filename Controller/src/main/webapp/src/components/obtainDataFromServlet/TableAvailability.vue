@@ -1,6 +1,6 @@
 <template>
   <b-container v-if="this.$store.getters.userLogged">
-    <b-table class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita" :jsonPersonalHistory="jsonPersonalHistory">
+    <b-table responsive class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita" :jsonPersonalHistory="jsonPersonalHistory">
       <template #cell(lun)="data">
         <!-- `data.value` is the value after formatted by the Formatter -->
         <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) === JSON.stringify({sezione: data.value}))">
@@ -229,7 +229,7 @@
   </b-container>
 
   <b-container v-else-if="!this.$store.getters.userLogged">
-    <b-table class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita">
+    <b-table responsive class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita">
       <template #cell(lun)="data">
         <!-- `data.value` is the value after formatted by the Formatter -->
         <b-button v-if="jsonDisponibilita.some(code => JSON.stringify(code) ===
@@ -342,6 +342,7 @@ export default {
       fields: [
         {
           key: 'hours',
+          stickyColumn: true,
           label: 'Fascia oraria',
           formatter: value => {
             return value
