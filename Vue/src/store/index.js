@@ -7,7 +7,8 @@ window.jQuery = jQuery()
 
 Vue.use(Vuex)
 
-
+//Questa classe viene usata per condividere i dati tra i vari components
+//si occupa di comunicare con la servlet, ottenere i dati e di storarli e renderli disponibili alle view
 export default new Vuex.Store({
     state: {
 

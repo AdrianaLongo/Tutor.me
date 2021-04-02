@@ -42,7 +42,6 @@ public class PopolaDocenteServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json, charset=UTF-8");
-        //RequestDispatcher reqDisp = request.getRequestDispatcher("Logout.html");
         PrintWriter out = response.getWriter();
         try {
             docenti = dao.mostraDocenti(); //recupera tutti i docenti

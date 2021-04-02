@@ -6,86 +6,75 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.calendar.PopupFragment">
-    <!--
-    TODO creare file stile per raggruppare scritte
-    TODO definire colori e struttura-->
 
     <TextView
         android:id="@+id/lvl1"
+        style="@style/TextViewPopup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
         android:text="@string/corso_popup"
-        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lvl1c"
+        style="@style/TextViewPopup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/lvl2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lvl2"
+        style="@style/TextViewPopup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
         android:text="@string/professore_popup"
-        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lvl1" />
 
     <TextView
         android:id="@+id/lvl2c"
+        style="@style/TextViewPopup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/lvl2"
         app:layout_constraintTop_toBottomOf="@id/lvl1c" />
 
     <TextView
         android:id="@+id/lvl3"
+        style="@style/TextViewPopup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
         android:text="@string/giorno_popup"
-        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lvl2" />
 
     <TextView
         android:id="@+id/lvl3c"
+        style="@style/TextViewPopup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/lvl2"
         app:layout_constraintTop_toBottomOf="@id/lvl2c" />
 
     <TextView
         android:id="@+id/lvl4"
+        style="@style/TextViewPopup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
         android:text="@string/orario_popup"
-        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lvl3" />
 
     <TextView
         android:id="@+id/lvl4c"
+        style="@style/TextViewPopup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/lvl2"
         app:layout_constraintTop_toBottomOf="@id/lvl3c" />

@@ -37,7 +37,6 @@ public class DisponibilitaTutorServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("40 DisponibilitàTutorServlet: Sono dentro");
         response.setContentType("application/json, charset=UTF-8");
 
         PrintWriter out = response.getWriter();
@@ -52,12 +51,11 @@ public class DisponibilitaTutorServlet extends HttpServlet {
         try {
             int idTutor = Integer.parseInt(idDocente);
 
-            slotOccupati = dao.getSlotOccupati(idTutor);
-            slotLiberi = Useful.getSlotLiberi(slotOccupati);
+            slotOccupati = dao.getSlotOccupati(idTutor);                //ottengo gli slot occupati dei professori
+            slotLiberi = Useful.getSlotLiberi(slotOccupati);            //interseco e faccio differenza con gli slot disponibili
 
             type = new TypeToken<ArrayList<Slot>>() {}.getType(); //crea il token corrisp all'argomento passato
             String jsonCorsi = gson.toJson(slotLiberi, type); //e se io voglio passare più dati Json sulla stessa pagina ?
-
             out.print(jsonCorsi); //printa il Json
             out.close();
         }

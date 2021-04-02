@@ -8,7 +8,7 @@ import java.net.CookiePolicy;
 import java.net.MalformedURLException;
 import java.util.Map;
 
-//mand la richiesta alla servlet
+//mando la richiesta alla servlet
 public class HttpRequest {
 
     private final String url;

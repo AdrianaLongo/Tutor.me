@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /** Recupera i corsi in base ad un idDocente fornito
- * All'interno del blocco try cerca di trasformare il valore fornito che prima era una stringa in Int0
+ * All'interno del blocco try cerca di trasformare il valore fornito che prima era una stringa in Int
  * In caso non si recuperi nessun corso restituisce un messaggio Json vuoto per lasciare alla frontend
  * la libertà di dire che niente è sbagliato, semplicemente con quel professore non ci sono corsi associati
  * */

@@ -10,4 +10,5 @@
     <color name="gray">@color/material_on_primary_emphasis_medium</color>
     <color name="red">@android:color/holo_red_dark</color>
     <color name="green">@android:color/holo_green_light</color>
+    <color name="panna">#F0EAD6</color>
 </resources>

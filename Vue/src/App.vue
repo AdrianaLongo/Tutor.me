@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navbar />
+    <Navbar/>
     <div></div>
     <router-view :key="$route.path"></router-view>
   </div>
@@ -11,9 +11,9 @@ import Navbar from "./components/Navbar.vue";
 
 
 export default {
-   name: 'App',
-   components: {
-     Navbar
+  name: 'App',
+  components: {
+    Navbar
   }
 }
 

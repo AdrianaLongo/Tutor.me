@@ -1,24 +1,25 @@
 <template>
-<!--  PAGINA-->
-<!--  <b-container>-->
-<!--    <div class="container">-->
-<!--      <div class="row-cols-1 m-5 text-center" label-cols-sm="4"-->
-<!--           label-cols-lg="3">-->
-<!--        <b-form @submit.stop.prevent>-->
-<!--          <b-form-input id="input-username" v-model="username" required placeholder="Username"></b-form-input>-->
-<!--&lt;!&ndash;          <b-form-input id="input-password" v-model="password" required placeholder="Password" class="mt-3"></b-form-input>&ndash;&gt;-->
-<!--          <b-form-input id="text-password" v-model="password" type="password" required placeholder="Password" class="mt-3"></b-form-input>-->
-<!--          <div class="mt-2">-->
-<!--            <b-button variant="primary" @click="login()">Login</b-button>-->
-<!--          </div>-->
-<!--        </b-form>-->
+  <!--  PAGINA-->
+  <!--  <b-container>-->
+  <!--    <div class="container">-->
+  <!--      <div class="row-cols-1 m-5 text-center" label-cols-sm="4"-->
+  <!--           label-cols-lg="3">-->
+  <!--        <b-form @submit.stop.prevent>-->
+  <!--          <b-form-input id="input-username" v-model="username" required placeholder="Username"></b-form-input>-->
+  <!--&lt;!&ndash;          <b-form-input id="input-password" v-model="password" required placeholder="Password" class="mt-3"></b-form-input>&ndash;&gt;-->
+  <!--          <b-form-input id="text-password" v-model="password" type="password" required placeholder="Password" class="mt-3"></b-form-input>-->
+  <!--          <div class="mt-2">-->
+  <!--            <b-button variant="primary" @click="login()">Login</b-button>-->
+  <!--          </div>-->
+  <!--        </b-form>-->
 
-<!--      </div>-->
-<!--    </div>-->
-<!--  </b-container>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </b-container>-->
 
-<!--  MODAL-->
+  <!--  MODAL-->
   <div v-if="this.$store.getters.currentToken === ''">
+    <!--mi entra dentro solo che non ho ancora ottenuti un jSessionId-->
     <b-col md="4">
       <b-button type="primary" v-b-modal.modal-1>Login</b-button>
     </b-col>
@@ -27,7 +28,8 @@
       <b-form @submit.stop.prevent>
         <b-form-input id="input-username" v-model="username" required placeholder="Username"></b-form-input>
         <!--          <b-form-input id="input-password" v-model="password" required placeholder="Password" class="mt-3"></b-form-input>-->
-        <b-form-input id="text-password" v-model="password" type="password" required placeholder="Password" class="mt-3"></b-form-input>
+        <b-form-input id="text-password" v-model="password" type="password" required placeholder="Password"
+                      class="mt-3"></b-form-input>
         <div class="mt-2">
           <b-button variant="primary" @click="login()" type="submit">Login</b-button>
         </div>
@@ -47,13 +49,13 @@ import jQuery from "jquery";
 
 export default {
   name: "login",
-  data(){
+  data() {
     return {
       username: null,
       password: null,
     }
   },
-  methods:{
+  methods: {
     // login: function(){
     //   this.$store.dispatch('login',{
     //     username: this.username,
@@ -64,7 +66,7 @@ export default {
     //   console.log("Username inserito: " + this.username);
     //   console.log("Password inserita: " + this.password);
     // },
-    login: function() {
+    login: function () {
       // var self = this;
       jQuery.post('http://localhost:8081/TWEB_war_exploded/LoginServlet', {
         username: this.username,
@@ -80,7 +82,7 @@ export default {
             // console.log("id = " + id)
             var resp = JSON.parse(response);
             // console.log("request" + sessionStorage)
-            if(resp.success === 1) {
+            if (resp.success === 1) {
               console.log("response: " + response)
               console.log("credentials.username: " + this.username)
               console.log("credentials.password: " + this.password)
@@ -88,7 +90,7 @@ export default {
               localStorage.setItem('access_token', this.$store.state.token)
               // console.log("token in localstorage: " + localStorage.access_token)
               console.log("token in store: " + this.$store.state.token)
-              this.$session.set("session-id",JSON.parse(response).object);
+              this.$session.set("session-id", JSON.parse(response).object);
               console.log("this.$session.get(): " + this.$session.get("session-id"))
               // context.commit('login', token)
               this.$store.state.isLogged = true;
@@ -100,11 +102,11 @@ export default {
             console.log(error)
           })
     },
-    makeToast(){
+    makeToast() {
       console.log("toast creato")
       console.log("token:" + this.$store.state.token)
       console.log("userLogged:" + this.$store.getters.userLogged)
-      if(this.$store.getters.currentToken !== ''){
+      if (this.$store.getters.currentToken !== '') {
         console.log("currentToken (if): " + this.$store.getters.currentToken)
         this.$bvToast.toast(
             `Benvenut*, ${this.username}!`,

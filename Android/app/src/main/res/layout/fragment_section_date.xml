@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.calendar.SlotDayFragment">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/course_container"
         android:layout_width="match_parent"
@@ -18,19 +19,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:backgroundTint="@color/panna"
             android:elevation="4dip"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/First_Slot"
                 style="@style/TextViewDate"
-                android:text="@string/first_slot"/>
+                android:text="@string/first_slot" />
 
             <ImageView
                 android:id="@+id/imageView1"
                 style="@style/ImageView"
-                android:contentDescription="@string/alert"/>
+                android:contentDescription="@string/alert" />
 
         </androidx.cardview.widget.CardView>
 
@@ -39,14 +41,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:backgroundTint="@color/panna"
             android:elevation="4dip"
-            app:layout_constraintTop_toBottomOf="@id/first_level"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/first_level">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/Second_Slot"
                 style="@style/TextViewDate"
                 android:text="@string/second_slot" />
+
             <ImageView
                 android:id="@+id/imageView2"
                 style="@style/ImageView"
@@ -58,14 +62,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:backgroundTint="@color/panna"
             android:elevation="4dip"
-            app:layout_constraintTop_toBottomOf="@id/second_level"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/second_level">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/Third_Slot"
                 style="@style/TextViewDate"
                 android:text="@string/third_slot" />
+
             <ImageView
                 android:id="@+id/imageView3"
                 style="@style/ImageView"
@@ -77,14 +83,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:backgroundTint="@color/panna"
             android:elevation="4dip"
-            app:layout_constraintTop_toBottomOf="@id/third_level"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/third_level">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/Fourth_Slot"
                 style="@style/TextViewDate"
                 android:text="@string/fourth_slot" />
+
             <ImageView
                 android:id="@+id/imageView4"
                 style="@style/ImageView"

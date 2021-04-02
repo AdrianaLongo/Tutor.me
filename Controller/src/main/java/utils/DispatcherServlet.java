@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+// Il dispatcher permette di reindirizzare le request alle servlet competenti tramite le action
 @WebServlet(name = "DispatcherServlet", value = "/DispatcherServlet")
 public class DispatcherServlet extends HttpServlet {
     @Override
@@ -22,17 +23,15 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
-        System.out.println("23 DispatcherServlet: sono dentro");
 
         ServletContext ctx = getServletContext();
         String page = "";
 
         String action = request.getParameter("action");
 
-        if (action.equals("login")) {
-            System.out.println("31 DispatcherServlet: sono dentro la richiesta per il login");
+        if (action.equals("login"))
             page = ctx.getInitParameter("LoginServlet");
-        }
+
         if(action.equals("searchProf"))
             page = ctx.getInitParameter("cercaTutorServlet");
 
@@ -66,14 +65,11 @@ public class DispatcherServlet extends HttpServlet {
         if(action.equals("populateTutors"))
             page = ctx.getInitParameter("PopolaDocenteServlet");
 
-        if(action.equals("populateCourses")) {
-            System.out.println("70 DispatcherServlet: sono dentro la richiesta per i corsi");
+        if(action.equals("populateCourses"))
             page = ctx.getInitParameter("PopulateCorsiServlet");
-        }
+
         RequestDispatcher reqDisp = ctx.getRequestDispatcher(page);
-        System.out.println("74 DispatcherServlet: sono oltre il reqdisp");
         reqDisp.forward(request,response);
-        System.out.println("76 DispatcherServlet: sono oltre il forward");
 
     }
 }

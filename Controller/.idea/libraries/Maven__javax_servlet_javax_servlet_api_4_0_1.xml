@@ -8,6 +8,7 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/4.0.1/javax.servlet-api-4.0.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/javax.servlet-api-4.0.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

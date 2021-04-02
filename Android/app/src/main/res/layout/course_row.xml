@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:backgroundTint="@color/panna"
         android:elevation="4dip">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

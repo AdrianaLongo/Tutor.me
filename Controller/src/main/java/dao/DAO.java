@@ -3,7 +3,6 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 
-//jdbc:mysql://localhost:3306/ripetizioni?autoReconnect=true&amp;useSSL=false
 public class DAO {
 
     private static String url;
@@ -17,7 +16,7 @@ public class DAO {
         registerDriver();
     }
 
-    // 1. Registrazione del driver JDBC
+    // 1. Registrazione del driver JDBC specifici del db
     public static void registerDriver() {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
@@ -29,8 +28,8 @@ public class DAO {
 
     public Utente retrieveUtente(String username, String password) throws SQLException {
 
-        PreparedStatement pst = null;
         Connection conn = null;
+        PreparedStatement pst = null;
 
         int id = 0;
         String nome = "";
@@ -176,9 +175,11 @@ public class DAO {
             if (conn != null) {
                 System.out.println("Connected to the database \"ripetizioni\".");
             }
-
+            // 3. Creazione statement
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM docente");
+            // 4. Creo il ResultSet che è dove mi finiranno i risultati della query
+            ResultSet rs = st.executeQuery("SELECT * FROM docente WHERE disponibilitaDocente=1");
+            // 5. Inserisco i docenti trovati nell'arrayList che andrò a tornare
             while (rs.next()) {
                 Docente d = new Docente(rs.getString("nomeDocente"), rs.getString("cognomeDocente"), rs.getInt(
                         "idDocente"));
@@ -187,7 +188,7 @@ public class DAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        // 4. Chiudo la connessione
+        // 6. Chiudo la connessione
         finally { // succede sempre
             if (conn != null) {
                 try {
@@ -262,7 +263,7 @@ public class DAO {
             }
 
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM corso");
+            ResultSet rs = st.executeQuery("SELECT * FROM corso WHERE disponibilitaCorso=1");
             while (rs.next()) {
                 Corso c = new Corso(rs.getString("nomeCorso"));
                 out.add(c);
@@ -284,6 +285,7 @@ public class DAO {
 
         return out;
     }
+
     public void checkAssociation(int idDocente, String nomeCorso) {
 
         Connection conn = null;
@@ -299,7 +301,7 @@ public class DAO {
             String sql = "SELECT * FROM insegna WHERE idDocente = ? AND nomeCorso = ?";
             pst = conn.prepareStatement(sql);
             pst.setInt(1, idDocente);
-            pst.setString(2,nomeCorso);
+            pst.setString(2, nomeCorso);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 check = true;
@@ -320,7 +322,8 @@ public class DAO {
         }
 
     }
-    public boolean checkDocente (int idDocente) throws SQLException {
+
+    public boolean checkDocente(int idDocente) throws SQLException {
         Connection conn = null;
         boolean check = false;
         PreparedStatement pst;
@@ -498,7 +501,7 @@ public class DAO {
             System.out.println("Connected to the database \"ripetizioni\".");
             String sql = "INSERT INTO docente(idDocente,nomeDocente, cognomeDocente) VALUES (?, ?, ?)";
             pst = conn.prepareStatement(sql);
-            pst.setInt(1,idDocente);
+            pst.setInt(1, idDocente);
             pst.setString(2, nomeDocente);
             pst.setString(3, cognomeDocente);
             pst.execute();
@@ -628,7 +631,7 @@ public class DAO {
 
 
     // ELIMINARE ASSOCIAZIONE DOCENTE-CORSO
-    public void deleteCorsoDocenteAssociation(String nomeCorso,int idDocente) throws SQLException {
+    public void deleteCorsoDocenteAssociation(String nomeCorso, int idDocente) throws SQLException {
         PreparedStatement pstEliminaAssociazione = null, pstOttieniIdDocente = null;
         Connection conn = null;
         try {

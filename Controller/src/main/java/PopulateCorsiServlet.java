@@ -33,31 +33,28 @@ public class PopulateCorsiServlet extends HttpServlet {
     public void init(ServletConfig conf) throws ServletException {
 
         super.init(conf);
+        // il context
         ServletContext ctx = conf.getServletContext(); //prendo il context per accedere a web.xml
         String url = ctx.getInitParameter("DB-Url"); //indirizzo DB nel web.xml
         String user = ctx.getInitParameter("user");
         String pwd = ctx.getInitParameter("password");
         dao = new DAO(url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
-        System.out.println("39 PopulateCorsiServlet: fine Init");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //processRequest(request,response);
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //processRequest(request,response);
         response.setContentType("application/json, charset=UTF-8");
-        //RequestDispatcher reqDisp = request.getRequestDispatcher("Logout.html");
-        System.out.println("49 PopulateCorsiServlet: sono dentro");
+
         PrintWriter out = response.getWriter();
         try {
             corso = dao.mostraCorsi(); //prende tutti i corsi
-            System.out.println("49 PopulateCorsiServlet: ho trovato i corsi: " + corso.toString());
             System.out.print("Corsi recuperati");
             type = new TypeToken<ArrayList<Corso>>() {
             }.getType(); //crea il token corrisp all'argomento passato
-            String jsonCorsi = gson.toJson(corso, type); //e se io voglio passare più dati Json sulla stessa pagina ?
+            String jsonCorsi = gson.toJson(corso, type);
             out.print(jsonCorsi); //printa il Json
         } catch (SQLException e) {
             System.out.println(e.getMessage());

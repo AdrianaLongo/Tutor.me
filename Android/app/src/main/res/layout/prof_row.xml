@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:elevation="4dip">
+    android:elevation="4dip"
+    android:backgroundTint="@color/panna">
 
     <LinearLayout
         android:layout_width="match_parent"

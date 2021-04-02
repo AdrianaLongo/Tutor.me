@@ -41,9 +41,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html, charset=UTF-8");//stabilisce la risorsa a cui andrà/tornerà
-
-        System.out.println("44 LoginServlet: " + "sono dentro la LoginServlet");
+        response.setContentType("application/json, charset=UTF-8");//stabilisce la risorsa a cui andrà/tornerà
 
         PrintWriter out = response.getWriter();
 
@@ -53,17 +51,11 @@ public class LoginServlet extends HttpServlet {
         try {
             user = dao.retrieveUtente(username, password);
 
-            System.out.println("54 LoginServlet: ho ottenuto l'utente: " + user.toString());
         } catch (SQLException e) {
             throw new ServletException(e.getMessage());
         } finally {
             if (user != null) {
-
-                System.out.println("61 LoginServlet: passato primo if");
-
                 if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-
-                    System.out.println("61 LoginServlet: passato secondo if");
                     HttpSession session = request.getSession();
                     String jSessionId = session.getId();//se l'utente corrisponde ai dati inseriti, creo la sessione
                     System.out.println("Sei loggato");
@@ -81,13 +73,13 @@ public class LoginServlet extends HttpServlet {
                     System.out.println("Spiacente o nome o cognome non corrispondono");
                     Useful error = new Useful("Login unsuccessful", -1, null);
                     String Json = gson.toJson(error);
-                    out.println(Json);//mando un json al fronto di mancata operazione
+                    out.println(Json);//mando un json a fronte di successo
                 }
             } else {
                 System.out.println("User è null");
                 Useful error = new Useful("Login unsuccessful", -1, null);
                 String Json = gson.toJson(error);
-                out.println(Json);//mando un json al fronto di mancata operazione
+                out.println(Json);//mando un json a fronte di mancata operazione
 
             }
             out.flush();
