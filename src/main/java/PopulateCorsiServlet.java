@@ -34,6 +34,7 @@ public class PopulateCorsiServlet extends HttpServlet {
         String user = ctx.getInitParameter("user");
         String pwd = ctx.getInitParameter("password");
         dao = new DAO(url, user, pwd); //creo un nuovo oggetto DAO, vedere costruttore in DAO
+        System.out.println("Sono in init pop corsi");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,7 +50,7 @@ public class PopulateCorsiServlet extends HttpServlet {
         response.setContentType("application/json, charset=UTF-8");
 
         PrintWriter out = response.getWriter();
-
+        System.out.println("Dai oh doGet");
         try {
             corso = dao.mostraCorsi(); //prende tutti i corsi
             System.out.print("Corsi recuperati");

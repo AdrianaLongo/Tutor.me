@@ -1,7 +1,7 @@
 package utils;
 
 import javax.servlet.http.Cookie;
-import java.net.http.HttpRequest;
+
 
 public class IdentifyUsers {
 
@@ -42,7 +42,7 @@ public class IdentifyUsers {
         return "-1";
     }
 
-    public static void destroyCookies (Cookie cook[], HttpRequest request) {
+    public static void destroyCookies (Cookie cook[]) {
         if(cook != null){
             for(Cookie cookie: cook) {
                 cookie.setMaxAge(0);

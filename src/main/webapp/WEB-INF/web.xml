@@ -7,7 +7,7 @@
     <context-param>
         <description>Url di MySql</description>
         <param-name>DB-Url</param-name>
-        <param-value>jdbc:mysql://localhost:8889/ripetizioni?autoReconnect=true&amp;useSSL=false</param-value>
+        <param-value>jdbc:mysql://localhost:8889/ripetizioni?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</param-value>
     </context-param>
     <context-param>
         <description>User per DB</description>
