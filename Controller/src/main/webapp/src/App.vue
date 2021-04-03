@@ -8,13 +8,13 @@
 
 <script>
 import Navbar from "./components/Navbar.vue";
-
+// import store from "./store"
 
 export default {
-   name: 'App',
-   components: {
-     Navbar
-  }
+  name: 'App',
+  components: {
+    Navbar
+  },
 }
 
 

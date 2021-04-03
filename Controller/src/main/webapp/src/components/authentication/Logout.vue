@@ -20,10 +20,8 @@ export default {
   name: "Logout",
   methods:{
     logout(){
-      //TODO: AGGIORNARE SERVLET CON I COOKIES
       this.$store.dispatch('logout');
-      // this.$router.push('/'); // per reindirizzare l'utente alla homepage dopo il logout
-      this.$router.push("/#").catch(()=>{});
+      this.$router.push("/#").catch(()=>{}); // per reindirizzare l'utente alla homepage dopo il logout
 
     }
   }
