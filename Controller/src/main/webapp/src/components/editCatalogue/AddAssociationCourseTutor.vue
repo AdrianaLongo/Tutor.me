@@ -8,7 +8,7 @@
       >
         <b-form-select v-model="courseSelected">
 <!--          TODO: non far comparire i corsi che quel tutor insegna gia-->
-          <option v-for="c in courses" :key="c.corso" :value="{name: c.nome}">{{ c.nome }}</option>
+          <option v-for="c in courses" :key="c.corso" :value="{courseName: c.nome}">{{ c.nome }}</option>
         </b-form-select>
       </b-form-group>
 
@@ -19,7 +19,7 @@
       >
         <b-form-select v-model="tutorSelected">
 <!--          TODO: non far comparire i tutor che già insegnano quel corso-->
-          <option v-for="t in tutors" :key="t.id" :value="{id: t.id, name: t.name, cognome: t.cognome}">
+          <option v-for="t in tutors" :key="t.id" :value="{tutorId: t.id, tutorName: t.nome, tutorSurname: t.cognome}">
             {{ t.nome }} {{t.cognome}}
           </option>
         </b-form-select>
@@ -45,7 +45,11 @@ export default {
       courses: '',
       tutors: '',
       tutorSelected: '',
+      tutorName: '',
+      tutorSurname: '',
+      tutorId: '',
       courseSelected: '',
+      courseName: '',
     }
   },
   beforeCreate: function() {
@@ -68,14 +72,13 @@ export default {
     // Non c'è bisogno di mantenere l'associazione appena fatta nello store,
     // quindi non abbiamo bisogno di action per fare la richiesta
     addAssociation: function(){
-      console.log(this.courseSelected)
-      console.log(this.courseSelected.nome)
-      console.log(this.courseSelected.name)
+      console.log("corso" + this.courseSelected.courseName)
+      console.log("tutor" + this.tutorSelected.tutorName + this.tutorSelected.tutorSurname)
       jQuery.post('http://localhost:8080/TWEB_war_exploded/ExistingEntAssociationServlet', {
-        nameCorso: this.courseSelected.name,
-        nameDocente: this.tutorSelected.name,
-        cognomeDocente: this.tutorSelected.cognome,
-        idDocente: this.tutorSelected.id
+        nomeCorso: this.courseSelected.courseName,
+        nomeDocente: this.tutorSelected.tutorName,
+        cognomeDocente: this.tutorSelected.tutorSurname,
+        idDocente: this.tutorSelected.tutorId
       })
 
       this.makeToast()
@@ -85,7 +88,7 @@ export default {
     },
     makeToast(){
       this.$bvToast.toast(
-          `Hai associato il tutor ${this.tutorSelected.name} ${this.tutorSelected.cogname} al corso di ${this.courseSelected.name}.`,
+          `Hai associato il tutor ${this.tutorSelected.tutorName} ${this.tutorSelected.tutorSurname} al corso di ${this.courseSelected.courseName}.`,
           {
             title: `Catalogo aggiornato con successo!`,
             variant: 'success',
