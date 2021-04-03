@@ -97,17 +97,17 @@ const logout = (context) => {
     })
         .then(response => {
             console.log(response)
+            // Quando l'utente fa il logout, devo togliere tutte le sue info dallo store...
+            // 1) nome utente
+            context.commit('deleteCurrentSession', '')
+            // 2) storico delle prenotazioni dell'utente
+            context.commit('setJsonPersonalHistoryComplete', '')
+            context.commit('setJsonPersonalHistoryAttive', '')
+            context.commit('setJsonPersonalHistory', '')
+            // il reindirizzamento alla homepage avviene in login.vue
         })
 
-    // Quando l'utente fa il logout, devo togliere tutte le sue info dallo store...
-    // 1) nome utente
-    context.commit('deleteCurrentSession', '')
-    // 2) storico delle prenotazioni dell'utente
-    context.commit('setJsonPersonalHistoryComplete', '')
-    context.commit('setJsonPersonalHistoryAttive', '')
-    context.commit('setJsonPersonalHistory', '')
 
-    // il reindirizzamento alla homepage avviene in login.vue
 };
 
 
