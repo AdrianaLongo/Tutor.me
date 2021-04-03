@@ -104,7 +104,7 @@ const logout = (context) => {
             context.commit('setJsonPersonalHistoryComplete', '')
             context.commit('setJsonPersonalHistoryAttive', '')
             context.commit('setJsonPersonalHistory', '')
-            // il reindirizzamento alla homepage avviene in login.vue
+            // il reindirizzamento alla homepage avviene in logout.vue
         })
 
 
