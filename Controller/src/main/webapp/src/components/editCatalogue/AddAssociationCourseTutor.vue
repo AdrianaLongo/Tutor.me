@@ -7,7 +7,6 @@
                     label-align-md="right"
       >
         <b-form-select v-model="courseSelected">
-<!--          TODO: non far comparire i corsi che quel tutor insegna gia-->
           <option v-for="c in courses" :key="c.corso" :value="{courseName: c.nome}">{{ c.nome }}</option>
         </b-form-select>
       </b-form-group>
@@ -18,7 +17,6 @@
           label-align-md="right"
       >
         <b-form-select v-model="tutorSelected">
-<!--          TODO: non far comparire i tutor che già insegnano quel corso-->
           <option v-for="t in tutors" :key="t.id" :value="{tutorId: t.id, tutorName: t.nome, tutorSurname: t.cognome}">
             {{ t.nome }} {{t.cognome}}
           </option>
@@ -34,7 +32,6 @@
 </template>
 
 <script>
-// TODO: non far comparire il corso a cui e' gia associato
 import jQuery from "jquery";
 import $ from "jquery";
 

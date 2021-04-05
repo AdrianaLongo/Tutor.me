@@ -25,17 +25,7 @@ new Vue({
   store,
   beforeCreate() {
     setTimeout(function(){
-      // let state = this.$store.state;
-      // let newState = {};
-      //
-      // Object.keys(state).forEach(key => {
-      //     newState[key] = null; // or = initialState[key]
-      // });
-      //
-      // this.$store.replaceState(newState);
       alert("Session expired. Refresh page");
-      // TODO: far sì che premendo "ok" nell'alert si refreshi la pagina
-      // location.reload() // rimane nella stessa pagina
       location.href='/#/'
       store.dispatch('logout');
     }, 1800000) // 30 minuti in millisecondi ( 20 secondi:20000 )

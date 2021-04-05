@@ -2,7 +2,6 @@
   <div>
     <b-container class="m-4">
       <b-table responsive class="selectedClientHistoryTable" :fields="fields" :items="items" :jsonPrenotazioniCliente="jsonPrenotazioniCliente">
-        <!--      TODO: inserire nome corso nel bottone e tutor a comparsa-->
 
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->

@@ -1,7 +1,6 @@
 <template>
   <b-container v-if="this.$store.getters.userLogged">
     <b-table responsive class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita" :jsonPersonalHistory="jsonPersonalHistory">
-<!--      TODO: inserire nome corso nel bottone e tutor a comparsa-->
       <template #cell(lun)="data">
         <!-- `data.value` is the value after formatted by the Formatter -->
         <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) === JSON.stringify({sezione: data.value}))">
