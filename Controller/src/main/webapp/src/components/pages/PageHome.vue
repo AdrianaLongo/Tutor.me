@@ -10,16 +10,9 @@
       </template>
     </b-jumbotron>
 
-
     <select-course></select-course>
     <select-tutor v-if="this.$store.getters.elencoTutor !== ''"></select-tutor>
     <table-availability v-if="this.$store.getters.elencoDisponibilita !== ''"></table-availability>
-
-
-
-
-
-
   </div>
 
 </template>
@@ -35,10 +28,6 @@ export default {
     SelectCourse,
     SelectTutor,
     TableAvailability
-  },
-  beforeCreate() {
-    console.log("token in localstorage: " + localStorage.access_token)
-    console.log("token in store: " + this.$store.getters.currentToken)
   },
   beforeDestroy() {
     // Altrimenti rimane sempre l'ultima ricerca fatta

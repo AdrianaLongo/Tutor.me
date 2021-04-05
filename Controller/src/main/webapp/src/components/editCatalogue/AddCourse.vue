@@ -57,6 +57,11 @@ export default {
   },
   beforeCreate: function() {
     var _this = this;
+    // Non c'e' bisogno di mantenere nello store la ricerca dei tutor,
+    // quindi non abbiamo bisogno dell'action per fare la richiesta.
+    // Questo metodo si ripete anche in altri component della stessa "pagina" per far sì che,
+    // a modifiche diverse del catalogo (e quindi a richieste diverse al db) ci sia sempre a monte
+    // un elenco aggiornato di corsi e/o tutor
     $.getJSON('http://localhost:8080/TWEB_war_exploded/PopolaDocenteServlet', function(jsonTutor){
       _this.jsonTutor = jsonTutor;
     })

@@ -1,13 +1,12 @@
 <template>
   <b-container class="mt-4">
-
-    <b-card bg-variant="light" title="Seleziona il corso che vuoi rimuovere dal catalogo"
+    <b-card
+        bg-variant="light"
+        title="Seleziona il corso che vuoi rimuovere dal catalogo"
     >
       <b-form-select v-model="courseToDelete">
         <option v-for="course in jsonCourses" :key="course.corso" :value="{nome: course.nome}">{{ course.nome }}</option>
       </b-form-select>
-
-      <!--    <p>Corso selezionato in courseSelect: {{ courseName.nome }}</p>-->
 
       <div v-if="courseToDelete.nome !== undefined">
         <b-button @click="deleteCourse" variant="danger">Elimina corso</b-button>
@@ -20,7 +19,6 @@
 import $ from "jquery";
 import jQuery from "jquery";
 
-
 export default {
   name: "RemoveCourse",
   data(){
@@ -32,13 +30,17 @@ export default {
   },
   beforeCreate: function(){
     var _this = this;
+    // Non c'e' bisogno di mantenere nello store la ricerca dei corsi,
+    // quindi non abbiamo bisogno dell'action per fare la richiesta.
+    // Questo metodo si ripete anche in altri component della stessa "pagina" per far sì che,
+    // a modifiche diverse del catalogo (e quindi a richieste diverse al db) ci sia sempre a monte
+    // un elenco aggiornato di corsi e/o tutor
     $.getJSON('http://localhost:8080/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
       _this.jsonCourses = jsonCourses;
     });
   },
   methods:{
     deleteCourse: function(){
-      // console.log(this.courseToDelete.nome)
       jQuery.post('http://localhost:8080/TWEB_war_exploded/DeleteCourseServlet', {
         nomeCorso: this.courseToDelete.nome
       })

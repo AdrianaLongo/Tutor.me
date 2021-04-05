@@ -2,6 +2,7 @@
   <div>
     <b-container class="m-4">
       <b-table responsive class="selectedClientHistoryTable" :fields="fields" :items="items" :jsonPrenotazioniCliente="jsonPrenotazioniCliente">
+        <!--      TODO: inserire nome corso nel bottone e tutor a comparsa-->
 
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
@@ -113,7 +114,6 @@
 </template>
 
 <script>
-// import $ from "jquery";
 
 export default {
   name: "tableClientsHistory",
@@ -123,15 +123,10 @@ export default {
       day: null,
       hours: null,
 
-      elenco: '',
       jsonAttive: '',
       jsonEffettuate:'',
       jsonCancellate: '',
-
-      loginSucceded: false,
-
-      jsonClients: '',
-      clientSelected: '',
+      jsonPrenotazioniCliente: '',
 
       fields: [
         {
@@ -204,38 +199,14 @@ export default {
         },
       ],
 
-      jsonPrenotazioniCliente: ''
     }
   },
-  // beforeCreate() {
-  //   console.log(this.$store.getters.clientId)
-  //   $.getJSON({
-  //     type: "GET",
-  //     url: 'http://localhost:8080/TWEB_war_exploded/RetrieveClientHistory',
-  //     data: 'clientId='+this.$store.getters.clientId,
-  //     success: function (jsonClientHistory) {
-  //       this.$store.commit('setJsonClientsHistory', jsonClientHistory)
-  //       console.log(jsonClientHistory)
-  //     }
-  //   });
-  // },
   created: function() {
     this.jsonPrenotazioniCliente = this.$store.getters.elencoPrenotazioniCliente;
     this.jsonAttive = this.jsonPrenotazioniCliente.filter( element => element.stato === '0');
-    // _this.jsonAttiveParsified = JSON.parse(JSON.stringify(_this.jsonAttive))
     this.jsonEffettuate = this.jsonPrenotazioniCliente.filter( element => element.stato === '1');
     this.jsonCancellate = this.jsonPrenotazioniCliente.filter( element => element.stato === '-1');
-
-    console.log(this.jsonPrenotazioniCliente)
-    console.log(this.jsonAttive)
-    console.log(this.jsonEffettuate)
-    console.log(this.jsonCancellate)
-
   },
-  methods: {
-
-
-  }
 }
 </script>
 

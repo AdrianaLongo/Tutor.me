@@ -14,15 +14,12 @@
 </template>
 
 <script>
-// import jQuery from "jquery"
-
 export default {
   name: "Logout",
   methods:{
     logout(){
       this.$store.dispatch('logout');
       this.$router.push("/#").catch(()=>{}); // per reindirizzare l'utente alla homepage dopo il logout
-
     }
   }
 }

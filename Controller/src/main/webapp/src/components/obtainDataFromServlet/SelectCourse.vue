@@ -34,6 +34,8 @@ export default {
   },
   beforeCreate: function() {
     var _this = this;
+    // Non c'e' bisogno di mantenere nello store la ricerca dei corsi,
+    // quindi non abbiamo bisogno dell'action per fare la richiesta.
     $.getJSON('http://localhost:8080/TWEB_war_exploded/PopulateCorsiServlet', function (courses) {
       _this.courses = courses;
     });

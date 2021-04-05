@@ -1,7 +1,7 @@
 <template>
   <b-container class="mt-4">
     <b-card bg-variant="light" title="Rimuovi l'associazione di un corso ad un tutor">
-      <!--All'inizio, entrambe le select sono riempite con tutti i corsi e tutti i tutor:-->
+      <!-- All'inizio, entrambe le select sono riempite con tutti i corsi e tutti i tutor:-->
       <!-- OPZIONE 1) L'utente sceglie un corso -> la select del tutor mostra solo i tutor che insegnano quel corso  -->
       <!-- OPZIONE 2) L'utente sceglie un tutor -> la select del corso mostra solo i corsi da lui insegnati  -->
 

@@ -10,7 +10,6 @@
 import SelectClient from "@/components/obtainDataFromServlet/SelectClient";
 import TableClientsHistory from "@/components/obtainDataFromServlet/TableClientsHistory";
 
-
 export default {
   name: "PageClientsHistory",
   components: {

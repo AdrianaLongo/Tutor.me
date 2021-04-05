@@ -1,11 +1,8 @@
 <template>
   <div>
     <b-container class="m-4">
-<!--      <b-button @click="simulaLogin">Simula login</b-button>-->
 
-<!--      <b-table v-if="loginSucceded" class="personalHistoryTable" :fields="fields" :items="items" :jsonPersonalHistory="jsonPersonalHistory">-->
       <b-table responsive="" class="personalHistoryTable" :fields="fields" :items="items" :jsonPersonalHistory="jsonPersonalHistory">
-
         <template #cell(lun)="data">
           <!-- `data.value` is the value after formatted by the Formatter -->
           <div v-if="JSON.stringify(jsonPersonalHistory).includes(data.value)">
@@ -18,14 +15,14 @@
               </b-dropdown>
 
               <b-button v-show="cancelledArray.includes(data.value)"
-                          variant="danger"
-                          disabled>
+                        variant="danger"
+                        disabled>
                 Prenotazione cancellata
               </b-button>
 
               <b-button v-show="effettuateArray.includes(data.value)"
-                          variant="light"
-                          disabled>
+                        variant="light"
+                        disabled>
                 Ripetizione effettuata
               </b-button>
             </div>
@@ -189,14 +186,14 @@
       </b-table>
 
       <b-modal id="modal-del" title="Vuoi disdire la prenotazione selezionata?" align="center"
-               @ok="disdiciPrenotazione(slot)">
+               @ok="disdiciPrenotazione()">
         <p class="my-4"> Corso: {{ this.$store.state.prenotazione.nomeCorso }} </p>
         <p class="my-4"> Tutor: {{ this.$store.state.prenotazione.nomeDocente }} {{this.$store.state.prenotazione.cognomeDocente}} </p>
         <p class="my-4"> Data e ora: {{ day }}, {{ hours }}</p>
       </b-modal>
 
       <b-modal id="modal-eff" title="Vuoi segnare come effettuata la ripetizone selezionata?" align="center"
-               @ok="segnaRipetizioneComeEffettuata(slot)">
+               @ok="segnaRipetizioneComeEffettuata()">
         <p class="my-4"> Corso: {{ this.$store.state.prenotazione.nomeCorso }} </p>
         <p class="my-4"> Tutor: {{ this.$store.state.prenotazione.nomeDocente }} {{this.$store.state.prenotazione.cognomeDocente}} </p>
         <p class="my-4"> Data e ora: {{ day }}, {{ hours }}</p>
@@ -209,7 +206,6 @@
 <script>
 import $ from "jquery";
 import jQuery from "jquery";
-
 export default {
   name: "personalHistoryTable",
   data(){
@@ -217,25 +213,23 @@ export default {
       slotVue: '',
       day: null,
       hours: null,
+
       jsonPersonalHistory: '',
-      elenco: '',
+      //elenco: '',
       jsonAttive: '',
-      // jsonAttiveParsified: '',
       jsonEffettuate:'',
       jsonCancellate: '',
-
       cancelled: false,
-
       cancelledArray: [],
-
       effettuata: false,
       effettuateArray: [],
-
       slot: '',
       selectedSlot: '',
-
-      loginSucceded: false,
-
+      cognomeDocente: '',
+      nomeDocente: '',
+      idPrenotazione: null,
+      nomeCorso: '',
+      //loginSucceded: false,
       fields: [
         {
           key: 'hours',
@@ -306,86 +300,48 @@ export default {
           ven: {day: 'Venerdi', slotVue: 'VEN4'},
         },
       ],
-
-
-      cognomeDocente: '',
-      nomeDocente: '',
-      idPrenotazione: null,
-      nomeCorso: '',
-
     }
   },
-  computed:{
-    isCancelled(){
-      return this.cancelled ? "danger" : "primary";
-    },
-    isEffettuata(){
-      return this.effettuata ? "light" : "primary";
-    }
-  },
-
   beforeCreate() {
     var _this = this;
+    // Anche se otteniamo lo storico gia' nel login
+    // (e lo memorizziamo nello store in modo che sia  disponibile per
+    // l'intersezione delle disponibilita' calendario dell'utente con quelle del docente),
+    // e' possibile che l'utente effettui una prenotazione prima di vedere il proprio storico:
+    // in quel caso, la versione del calendario dell'utente in store non sarebbe aggiornata,
+    // e' quindi necessario richiederlo nuovamente.
+    // Eventuali modifiche che apportera' in questo component (segnando come cancellata o effettuata una certa prenotazione)
+    // andranno a modificare direttamente la versione del calendario che era gia' memorizzata nello store:
+    // non c'e' problema di inconsistenza di dati perche' gli unici component che modificano il calendario dell'utente
+    // sono questo e quello della prenotazione (TableAvailability.vue), ed entrambi fanno nuove richieste al db
+    // per ottenere il calendario (che ovviamente sara' sempre aggiornato con le ultime modifiche)
     $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet', function (jsonPersonalHistory) {
       _this.jsonPersonalHistory = jsonPersonalHistory;
-      console.log(jsonPersonalHistory);
       _this.jsonAttive = jsonPersonalHistory.filter( element => element.stato === '0');
-      // _this.jsonAttiveParsified = JSON.parse(JSON.stringify(_this.jsonAttive))
       _this.jsonEffettuate = jsonPersonalHistory.filter( element => element.stato === '1');
       _this.jsonCancellate = jsonPersonalHistory.filter( element => element.stato === '-1');
-
-      // this.$store
     });
-
   },
   methods: {
     selectSlot: function(slot){
-
-      console.log("slot: " + slot)
       var jsonAttiveParsified = JSON.parse(JSON.stringify(this.jsonAttive));
       // necessario perche jsonAttiveParsified e' un oggetto, mentre JSON.parse converte una stringa contenente notazione JSON in un oggetto javascript
 
-      // for (var data in jsonAttiveParsified){
-      //   console.log("idPrenotazione" + jsonAttiveParsified[data].idPrenotazione); //mi restituisce 2 idPrenotazione
-      // }
-      console.log("jsonAttiveParsified:")
-      console.log(jsonAttiveParsified)
-
       var selectedSlotData = jsonAttiveParsified.filter(element => element.slot === slot)
 
-      console.log("selectedSlotData")
-      console.log(selectedSlotData)
-
       this.idPrenotazione = selectedSlotData[0].idPrenotazione;
-      console.log("idPrenotazione: " + this.idPrenotazione)
       this.nomeCorso = selectedSlotData[0].nomeCorso;
-      console.log("nomeCorso: " + this.nomeCorso)
       this.nomeDocente = selectedSlotData[0].nomeDocente;
-      console.log("nomeDocente: " + this.nomeDocente)
       this.cognomeDocente = selectedSlotData[0].cognomeDocente;
-      console.log("cognomeDocente: " + this.cognomeDocente)
-
       this.selectedSlot = selectedSlotData[0].slot;
-      console.log("selectedSlot: " + this.selectedSlot)
 
-
-
-          // console.log(selectedSlotData[0].idPrenotazione)
-
+      // Ci serve chiamare una mutation per rendere disponibile lo slot selezionato al modale che conferma l'azione
       this.$store.commit("selectForDelete", {
         idPrenotazione: this.idPrenotazione,
         nomeCorso: this.nomeCorso,
         nomeDocente: this.nomeDocente,
         cognomeDocente: this.cognomeDocente
       });
-      console.log("this.$store.state.prenotazione.idPrenotazione: " + this.$store.state.prenotazione.idPrenotazione)
-      console.log("this.$store.state.prenotazione.nomeCorso: " + this.$store.state.prenotazione.nomeCorso)
-      console.log("this.$store.state.prenotazione.nomeDocente: " + this.$store.state.prenotazione.nomeDocente)
-      console.log("this.$store.state.prenotazione.cognomeDocente: " + this.$store.state.prenotazione.cognomeDocente)
-
-      // console.log("corso = " + this.$store.getters.courseName);
-      // console.log("tutor = " + this.$store.getters.tutorFullName + ", " + this.$store.getters.tutorId );
-      // console.log("slot = " + this.$store.getters.prenotazioneSlot);
 
       switch(this.selectedSlot.slice(0,3)){
         case 'LUN': this.day = "Lunedi"; break;
@@ -402,67 +358,37 @@ export default {
         case '4': this.hours = "18:00 - 19:00"; break;
         default: this.hours = "default";
       }
-
       return this.selectedSlot;
     },
-    // disdiciPrenotazione: function(){
-    //   var _this = this;
-    //   jQuery.post('http://localhost:8080/TWEB_war_exploded/DisdettaServlet', {
-    //     idPrenotazione: _this.idPrenotazione
-    //   })
-    //   .then(response => {
-    //     console.log(response)
-    //     console.log("Prenotazione cancellata: " + _this.idPrenotazione)
-    //   })
-    // },
-    disdiciPrenotazione:function(s){
+
+    disdiciPrenotazione:function(){
       var responseStatus
-      // this.selectedSlot = this.selectSlot(s);
-      // console.log("s in disdiciPrenotazione dopo selectSloct" + s)
-
-      console.log("s in disdiciPrenotazione: " + s)
-
       var _this = this;
+
+      // Non ci serve passare dallo store, quindi facciamo la richiesta direttamente qui
       jQuery.post('http://localhost:8080/TWEB_war_exploded/DisdettaServlet', {
         idPrenotazione: _this.$store.state.prenotazione.idPrenotazione
-      })
-          .then(response => {
+      }).then(response => {
             responseStatus = response.success
-            console.log(response)
-            console.log("Prenotazione cancellata: " + _this.idPrenotazione)
           })
-
       this.cancelled = true;
       this.cancelledArray.push(this.selectedSlot)
-      console.log("cancelledArray: " + this.cancelledArray)
-
       setTimeout(() => {this.makeToastDel(responseStatus)}, 200)
-
     },
-    segnaRipetizioneComeEffettuata: function(s){
+    segnaRipetizioneComeEffettuata: function(){
       var responseStatus
-
-      console.log("s in segnaPrenotazioneComeEffettuata: " + s)
-
-
       var _this = this;
+
+      // Non ci serve passare dallo store, quindi facciamo la richiesta direttamente qui
       jQuery.post('http://localhost:8080/TWEB_war_exploded/PrenotazioneEffettuataServlet', {
         idPrenotazione: _this.idPrenotazione
-      })
-          .then(response => {
+      }).then(response => {
             responseStatus = response.success
-            console.log(response)
-            console.log("Ripetizione segnata come effettuata: " + _this.idPrenotazione)
           })
-
       this.effettuata = true;
       this.effettuateArray.push(this.selectedSlot)
-      console.log("effettuateArray: " + this.effettuateArray)
-
       setTimeout(() => {this.makeToastEff(responseStatus)}, 200)
-
     },
-
     makeToastDel(responseStatus){
       if(responseStatus === 1){
         this.$bvToast.toast(

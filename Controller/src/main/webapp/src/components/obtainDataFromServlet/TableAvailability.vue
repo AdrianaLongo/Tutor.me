@@ -1,6 +1,7 @@
 <template>
   <b-container v-if="this.$store.getters.userLogged">
     <b-table responsive class="availabilityTable" :fields="fields" :items="items" :jsonDisponibilita="jsonDisponibilita" :jsonPersonalHistory="jsonPersonalHistory">
+<!--      TODO: inserire nome corso nel bottone e tutor a comparsa-->
       <template #cell(lun)="data">
         <!-- `data.value` is the value after formatted by the Formatter -->
         <div v-if="jsonDisponibilita.some(code => JSON.stringify(code) === JSON.stringify({sezione: data.value}))">
@@ -445,6 +446,11 @@ export default {
       }
     },
     creaPrenotazione: function(){
+      // Non c'e' bisogno di mantenere nello store i dati della prenotazione appena fatta
+      // perchè l'unico componente che li usa è questo (e il modale viene creato al suo interno),
+      // quindi questi dati non devono essere condivisi con nient'altro;
+      // non avendo neanche bisogno di mantenere nello store,
+      // non abbiamo bisogno dell'action per fare la richiesta.
       if (this.$store.getters.userLogged){
         $.post('http://localhost:8080/TWEB_war_exploded/EffettuaPrenotazioneServlet', {
           idDocente: this.$store.getters.tutorId,

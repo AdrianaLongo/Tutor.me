@@ -42,21 +42,20 @@ export default {
   name: "AddTutor",
   data(){
     return{
-        jsonCourses: null,
-        courseName: '',
-        courseChange: false,
-      jsonTutor: null,
+      jsonCourses: null,
       tutor: '',
       courseToAdd: '',
-      courseAdded: false,
-      tutorToPair: '',
       courseSelected: '',
       tutorToAdd: '',
-      tutorSelected: '',
     }
   },
   beforeCreate: function() {
     var _this = this;
+    // Non c'e' bisogno di mantenere nello store la ricerca dei corsi,
+    // quindi non abbiamo bisogno dell'action per fare la richiesta.
+    // Questo metodo si ripete anche in altri component della stessa "pagina" per far sì che,
+    // a modifiche diverse del catalogo (e quindi a richieste diverse al db) ci sia sempre a monte
+    // un elenco aggiornato di corsi e/o tutor
     $.getJSON('http://localhost:8080/TWEB_war_exploded/PopulateCorsiServlet', function (jsonCourses) {
       _this.jsonCourses = jsonCourses;
     });
@@ -64,20 +63,17 @@ export default {
   },
   methods:{
     insertTutor(tutorToAdd, course){
-      // tutorToAdd e' un oggetto (non una stringa come in AddCourse
+      // tutorToAdd e' un oggetto (non una stringa come in AddCourse)
       var tutor = tutorToAdd.split(' ');
-      console.log(tutor)
       var nomeNuovoTutor = tutor[0].toString().charAt(0).toUpperCase() + tutor[0].toString().slice(1);
-      console.log("nomeNuovoTutor: " + nomeNuovoTutor)
       var cognomeNuovoTutor = tutor[1].toString().charAt(0).toUpperCase() + tutor[1].toString().slice(1);
-      console.log("cognomeNuovoTutor: " + cognomeNuovoTutor)
       var nomeCorso
       if(course.nome === undefined)
         nomeCorso = course.charAt(0).toUpperCase() + course.slice(1)
       else
         nomeCorso = course.nome
-      console.log(course)
-      // var _this = this;
+      // Non abbiamo bisogno di memorizzare nello store i dati inseriti,
+      // quindi non abbiamo bisogno dell'action per fare la richiesta
       jQuery.post('http://localhost:8080/TWEB_war_exploded/TutorCourseServlet', {
         opCode: "insertTutor",
         nomeCorso: nomeCorso,
@@ -89,11 +85,6 @@ export default {
         setTimeout(() => {this.reset()}, 100)
         this.makeToast(nomeNuovoTutor, cognomeNuovoTutor, nomeCorso);
       })
-
-
-      // this.makeToast()
-      // setTimeout(() => {this.reset()}, 100)
-      console.log("Ho inserito un tutor!")
     },
     makeToast(nomeNuovoTutor, cognomeNuovoTutor, nomeCorso){
       this.$bvToast.toast(

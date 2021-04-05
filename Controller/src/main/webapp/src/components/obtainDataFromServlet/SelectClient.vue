@@ -35,9 +35,10 @@ export default {
   },
   beforeCreate: function() {
     var _this = this;
+    // Non c'e' bisogno di mantenere nello store la ricerca dei clienti,
+    // quindi non abbiamo bisogno dell'action per fare la richiesta.
     $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrieveClientsServlet', function (jsonClients) {
       _this.jsonClients = jsonClients;
-      console.log(jsonClients)
     });
   },
   methods: {
@@ -47,10 +48,10 @@ export default {
     },
 
     showClientCalendar: function(){
+      // Dovendo passare questi dati ad un altro componente, devo mantenerli nello store => mi sevono actions e mutations
       this.$store.commit("selectClientName", this.clientSelected.name)
       this.$store.commit("selectClientSurname", this.clientSelected.surname)
       this.$store.commit("selectClientId", this.clientSelected.id)
-      console.log("Genero calendario per il cliente " + this.clientSelected.id)
       this.$store.dispatch('retrieveClientsHistory', this.clientSelected.id)
     }
   }

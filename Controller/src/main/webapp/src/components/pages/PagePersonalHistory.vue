@@ -15,12 +15,6 @@ export default {
   components: {
     TablePersonalHistory
   },
-  beforeCreate() {
-    // console.log("token in localstorage: " + localStorage.access_token)
-    // console.log("token in store: " + this.$store.getters.currentToken)
-
-  }
-
 }
 </script>
 
