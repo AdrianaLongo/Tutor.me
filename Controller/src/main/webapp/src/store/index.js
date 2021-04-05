@@ -5,9 +5,7 @@ import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
 
-
 import jQuery from 'jquery'
-// import $ from "jquery";
 window.jQuery = jQuery()
 
 Vue.use(Vuex)
@@ -15,12 +13,35 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         course: '',
+        jsonCourses: '',
+
         tutorJSON: '',
         tutor: {
             nome: '',
             cognome: '',
             id: ''
         },
+        disponibilitaJSON: '',
+        disponibilita: {
+            slot: ''
+        },
+
+        client: {
+            nome: '',
+            cognome: '',
+            id: '',
+            username: '',
+            isLogged: false,
+            role: '',
+        },
+
+
+        // jsonAttive: '',
+        jsonEffettuate: '',
+        jsonCancellate: '',
+        //tutorsForCourses: '',
+        jsonClientsHistory: '',
+
         prenotazione: {
             idPrenotazione: '',
             nomeCorso: '',
@@ -29,31 +50,11 @@ export default new Vuex.Store({
             slot: '',
             stato: ''
         },
-        disponibilitaJSON: '',
-        disponibilita: {
-            slot: ''
-        },
+
         jsonPersonalHistory: '',
         personalHistory:{
             slot: ''
         },
-        username: '',
-        token: '',
-        isLogged: false,
-        jsonAttive: '',
-        jsonEffettuate: '',
-        jsonCancellate: '',
-
-        jsonCourses: '',
-
-        tutorsForCourses: '',
-
-        client: {
-            nome: '',
-            cognome: '',
-            id: ''
-        },
-        jsonClientsHistory: '',
 
     },
 

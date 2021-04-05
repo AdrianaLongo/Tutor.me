@@ -1,9 +1,6 @@
 // = setters in Java (cambiamenti sincroni)
 
-// import jQuery from "jquery";
-
 const selectCourse = (state, payload) => {
-        // state.course.nome = payload;
         state.course = payload;
     };
 
@@ -22,17 +19,15 @@ const selectSlot = (state, payload) => {
         state.prenotazione.slot = payload;
     };
 const selectForDelete = (state, payload) => {
-        // state.prenotazione.slot = payload.slot;
         state.prenotazione.idPrenotazione = payload.idPrenotazione;
         state.prenotazione.nomeCorso = payload.nomeCorso;
         state.prenotazione.nomeDocente = payload.nomeDocente;
         state.prenotazione.cognomeDocente = payload.cognomeDocente;
     };
 
-const setCurrentSession = (state, username) => {
-    state.isLogged = true;
-    state.username = username;
-    console.log("username in mut: " + username)
+const setCurrentSession = (state, role) => {
+    state.client.isLogged = true;
+    state.client.role = role;
 }
 
 const setJsonTutor = (state, jsonTutor) => {
@@ -90,7 +85,6 @@ export default{
     selectTutorId,
     selectSlot,
     selectForDelete,
-
     setCurrentSession,
     setJsonTutor,
     setJsonDisponibilita,
@@ -99,11 +93,9 @@ export default{
     setJsonPersonalHistory,
     setTutorsForCourses,
     deleteCurrentSession,
-
     selectClientName,
     selectClientSurname,
     selectClientId,
-
     setJsonClientsHistory,
 
 }

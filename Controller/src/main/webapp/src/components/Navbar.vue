@@ -15,15 +15,12 @@
     <b-navbar-toggle target="nav-collapse--menu" style="z-index: 90;"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse--menu" v-model="showCollapse" is-nav>
-<!--      <b-navbar-nav class="ml-auto custom-dropdown-menus" id="nav-nav">-->
       <b-navbar-nav>
-<!--        <b-nav-item v-show="this.$store.getters.userLogged">-->
         <b-nav-item v-show="this.$store.getters.userLogged">
           <router-link class="nav-link ml-2" to="lemieprenotazioni">Le mie prenotazioni</router-link>
         </b-nav-item>
 
-        <b-nav-item-dropdown v-show="this.$store.getters.userLogged" class="m-2"  text="Funzionalità amministratore" >
-        <!-- TODO: Rendere dark il dropdown menu-->
+        <b-nav-item-dropdown v-show="this.$store.getters.userLogged && this.$store.getters.role === 'admin'" class="m-2"  text="Funzionalità amministratore" >
           <b-dropdown-item>
             <router-link to="prenotazioniclienti">
               Prenotazioni clienti
@@ -69,54 +66,13 @@ export default {
       showCollapse: false,
     }
   },
+  // Per far chiudere il menu se avviene un qualsiasi evento
+  // (anche un click dell'utente in un'altra parte della pagina)
   watch: {
     '$route' () {
-      // This will close the collapse if any part of the route changes
-      // including query, params, hash, name, or path
       this.showCollapse = false
     },
   },
-
-  // methos: {
-  //   login: function () {
-  //     this.$store.dispatch('login', {
-  //       username: this.username,
-  //       password: this.password,
-  //     });
-  //
-  //
-  //     if (this.$store.getters.courseName !== '' && this.$store.getters.tutorId !== '') {
-  //       this.$store.dispatch('retrievePersonalHistory')
-  //     }
-  //
-  //     setTimeout(() => {
-  //       this.makeToast()
-  //     }, 200)
-  //     console.log("Username inserito: " + this.username);
-  //     console.log("Password inserita: " + this.password);
-  //   },
-  //
-  //   makeToast() {
-  //     if (this.$store.state.isLogged) {
-  //       this.$bvToast.toast(
-  //           `Benvenut*, ${this.username}!`,
-  //           {
-  //             title: `Login effettuato con successo`,
-  //             variant: 'success',
-  //             solid: true
-  //           })
-  //     } else {
-  //       this.$bvToast.toast(
-  //           `Controlla username e password.`,
-  //           {
-  //             title: `Login non effettuato!`,
-  //             variant: 'danger',
-  //             solid: true
-  //           })
-  //     }
-  //
-  //   },
-  // }
 }
 </script>
 

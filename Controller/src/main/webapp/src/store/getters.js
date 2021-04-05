@@ -1,6 +1,5 @@
 // = getters in Java
 
-// const courseName = state => state.course.nome;
 const courseName = state => state.course;
 
 const tutorName = state => state.tutor.nome;
@@ -17,9 +16,11 @@ const elencoDisponibilita = state => state.disponibilitaJSON;
 
 const elencoMiePrenotazioni = state => state.jsonPersonalHistory;
 
-const currentToken = state => state.token;
+//const currentToken = state => state.token;
 
-const userLogged = state => state.isLogged;
+const userLogged = state => state.client.isLogged;
+
+const role = state => state.client.role;
 
 const clientName = state => state.client.nome;
 
@@ -38,7 +39,8 @@ export default {
     prenotazioneSlot,
     elencoDisponibilita,
     elencoMiePrenotazioni,
-    currentToken,
+    //currentToken,
+    role,
     userLogged,
     clientName,
     clientSurname,
