@@ -77,19 +77,32 @@ export default {
         nomeDocente: this.tutorSelected.tutorName,
         cognomeDocente: this.tutorSelected.tutorSurname,
         idDocente: this.tutorSelected.tutorId
+      }).then(response=>{
+        if(response.success === 1)
+          this.makeToastOk()
+        else
+          this.makeToastErr()
       })
 
-      this.makeToast()
 
       setTimeout(() => {this.reset()}, 100)
 
     },
-    makeToast(){
+    makeToastOk(){
       this.$bvToast.toast(
           `Hai associato il tutor ${this.tutorSelected.tutorName} ${this.tutorSelected.tutorSurname} al corso di ${this.courseSelected.courseName}.`,
           {
             title: `Catalogo aggiornato con successo!`,
             variant: 'success',
+            solid: true
+          })
+    },
+    makeToastErr(){
+      this.$bvToast.toast(
+          `Si e' verificato un errore. Riprova`,
+          {
+            title: `Aggiornamento catalogo fallito`,
+            variant: 'danger',
             solid: true
           })
     },

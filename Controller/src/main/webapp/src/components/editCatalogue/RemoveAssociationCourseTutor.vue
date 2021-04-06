@@ -321,25 +321,34 @@ export default {
     },
     removeAssociation: function(){
       var _this = this;
-      console.log("_this.courseSelected: ")
-      console.log(_this.courseSelected.nome)
-      console.log("_this.tutorSelected: ")
-      console.log(_this.tutorSelected.id)
       jQuery.post('http://localhost:8080/TWEB_war_exploded/DeleteAssociationServlet', {
         nomeCorso: _this.courseSelected.nome,
         idDocente: _this.tutorSelected.id
+      }).then(response=>{
+        if(response.success === 1)
+          this.makeToastOk()
+        else
+          this.makeToastErr()
       })
 
-      this.makeToast()
-      console.log("Associazione rimossa!")
+
       setTimeout(() => {this.reset()}, 100)
     },
-    makeToast(){
+    makeToastOk(){
       this.$bvToast.toast(
           `Hai rimosso l'associazione del tutor ${this.tutorSelected.nome} ${this.tutorSelected.cognome} al corso di ${this.courseSelected.nome}.`,
           {
             title: `Catalogo aggiornato con successo!`,
             variant: 'success',
+            solid: true
+          })
+    },
+    makeToastErr(){
+      this.$bvToast.toast(
+          `Si e' verificato un errore. Riprova`,
+          {
+            title: `Aggiornamento catalogo fallito`,
+            variant: 'danger',
             solid: true
           })
     },

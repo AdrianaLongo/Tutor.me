@@ -43,17 +43,29 @@ export default {
     deleteCourse: function(){
       jQuery.post('http://localhost:8080/TWEB_war_exploded/DeleteCourseServlet', {
         nomeCorso: this.courseToDelete.nome
+      }).then(response=>{
+        if(response.success === 1)
+          this.makeToastOk()
+        else
+          this.makeToastErr()
       })
-      this.makeToast()
       setTimeout(() => {this.reset()}, 100)
-      console.log("Corso eliminato!")
     },
-    makeToast(){
+    makeToastOk(){
       this.$bvToast.toast(
           `Hai rimosso il corso ${this.courseToDelete.nome} dal catalogo.`,
           {
             title: `Catalogo aggiornato con successo!`,
             variant: 'success',
+            solid: true
+          })
+    },
+    makeToastErr(){
+      this.$bvToast.toast(
+          `Si e' verificato un errore. Riprova`,
+          {
+            title: `Aggiornamento catalogo fallito`,
+            variant: 'danger',
             solid: true
           })
     },

@@ -81,17 +81,28 @@ export default {
         cognomeDocente: cognomeNuovoTutor
       })
       .then(response => {
-        console.log(response)
         setTimeout(() => {this.reset()}, 100)
-        this.makeToast(nomeNuovoTutor, cognomeNuovoTutor, nomeCorso);
+        if(response.success === 1)
+          this.makeToastOk(nomeNuovoTutor, cognomeNuovoTutor, nomeCorso);
+        else
+          this.makeToastErr()
       })
     },
-    makeToast(nomeNuovoTutor, cognomeNuovoTutor, nomeCorso){
+    makeToastOk(nomeNuovoTutor, cognomeNuovoTutor, nomeCorso){
       this.$bvToast.toast(
           `Hai aggiunto il tutor ${nomeNuovoTutor} ${cognomeNuovoTutor} per il corso ${nomeCorso} al catalogo.`,
           {
             title: `Catalogo aggiornato con successo!`,
             variant: 'success',
+            solid: true
+          })
+    },
+    makeToastErr(){
+      this.$bvToast.toast(
+          `Si e' verificato un errore. Riprova`,
+          {
+            title: `Aggiornamento catalogo fallito`,
+            variant: 'danger',
             solid: true
           })
     },

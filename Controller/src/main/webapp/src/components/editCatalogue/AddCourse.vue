@@ -81,9 +81,11 @@ export default {
           idDocente: tutor.id
         })
             .then(response => {
-              console.log(response)
               setTimeout(() => {this.reset()}, 100)
-              this.makeToast(tutor.nome, tutor.cognome);
+              if(response.success === 1)
+                this.makeToastOk(tutor.nome, tutor.cognome);
+              else
+                this.makeToastErr()
             })
       } else {
         var nuovoTutor = tutor.split(' ');
@@ -97,19 +99,30 @@ export default {
           cognomeDocente: cognomeNuovoTutor,
         })
             .then(response => {
-              console.log(response)
               setTimeout(() => {this.reset()}, 100)
-              this.makeToast(nomeNuovoTutor, cognomeNuovoTutor);
+              if(response.success === 1)
+                this.makeToastOk(nomeNuovoTutor, cognomeNuovoTutor);
+              else
+                this.makeToastErr()
             })
       }
       this.courseAdded = true;
     },
-    makeToast(nomeTutor, cognomeTutor){
+    makeToastOk(nomeTutor, cognomeTutor){
       this.$bvToast.toast(
           `Hai aggiunto in catalogo il corso ${this.courseToAdd} insegnato dal tutor ${nomeTutor} ${cognomeTutor}.`,
           {
             title: `Catalogo aggiornato con successo!`,
             variant: 'success',
+            solid: true
+          })
+    },
+    makeToastErr(){
+      this.$bvToast.toast(
+          `Si e' verificato un errore. Riprova`,
+          {
+            title: `Aggiornamento catalogo fallito`,
+            variant: 'danger',
             solid: true
           })
     },
