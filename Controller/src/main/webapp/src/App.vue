@@ -15,6 +15,16 @@ export default {
   components: {
     Navbar
   },
+  beforeCreate() {
+    if (sessionStorage.hasntLoggedOut){
+      // Devo chiamare l'action login perche' e' la funzione che riempie lo stato vue della sessione con il calendario
+      // dell'utente (che di per se' non permane al refresh della pagina)
+      this.$store.dispatch('login',{
+        username: sessionStorage.username,
+        password: atob(sessionStorage.password),
+      });
+    }
+  }
 }
 
 

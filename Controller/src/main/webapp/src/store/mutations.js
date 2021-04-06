@@ -1,29 +1,31 @@
 // = setters in Java (cambiamenti sincroni)
 
+// import getters from "@/store/getters";
+
 const selectCourse = (state, payload) => {
-        state.course = payload;
-    };
+    state.course = payload;
+};
 
 const selectTutorName = (state, payload) => {
-        state.tutor.nome = payload;
-    };
+    state.tutor.nome = payload;
+};
 
 const selectTutorSurname = (state, payload) => {
-        state.tutor.cognome = payload;
-    };
+    state.tutor.cognome = payload;
+};
 
 const selectTutorId = (state, payload) => {
-        state.tutor.id = payload;
-    };
+    state.tutor.id = payload;
+};
 const selectSlot = (state, payload) => {
-        state.prenotazione.slot = payload;
-    };
+    state.prenotazione.slot = payload;
+};
 const selectForDelete = (state, payload) => {
-        state.prenotazione.idPrenotazione = payload.idPrenotazione;
-        state.prenotazione.nomeCorso = payload.nomeCorso;
-        state.prenotazione.nomeDocente = payload.nomeDocente;
-        state.prenotazione.cognomeDocente = payload.cognomeDocente;
-    };
+    state.prenotazione.idPrenotazione = payload.idPrenotazione;
+    state.prenotazione.nomeCorso = payload.nomeCorso;
+    state.prenotazione.nomeDocente = payload.nomeDocente;
+    state.prenotazione.cognomeDocente = payload.cognomeDocente;
+};
 
 const setCurrentSession = (state, role) => {
     state.client.isLogged = true;
@@ -57,9 +59,8 @@ const setTutorsForCourses = (state, jsonTutor) => {
 }
 
 const deleteCurrentSession = (state, username) => {
-    state.isLogged = false;
-    state.username = username;
-    console.log("state.username" + state.username)
+    state.client.isLogged = false;
+    state.client.username = username; // passo ''
 }
 
 const selectClientName = (state, payload) => {

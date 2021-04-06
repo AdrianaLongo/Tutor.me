@@ -32,6 +32,16 @@ export default {
         username: this.username,
         password: this.password,
       });
+
+      // Per la persistenza del login al refresh della pagina, memorizziamo nel sessionStorage MA dev'essere encrypted:
+      // la funzione btoa('string') e' una funzione js che codifica la stringa data come argomento,
+      // mentre atob('encoded_string') fa la decodifica della stringa data come argomento
+      sessionStorage.hasntLoggedOut = true;
+      sessionStorage.username = this.username;
+      console.log("sessionStorage.username: " + sessionStorage.username)
+      sessionStorage.password = btoa(this.password);
+      console.log("sessionStorage.password: " + sessionStorage.password)
+
       setTimeout(() => {this.makeToast()}, 200)
       console.log("Username inserito: " + this.username);
       console.log("Password inserita: " + this.password);
@@ -39,12 +49,12 @@ export default {
     makeToast(){
       if(this.$store.state.client.isLogged){
         this.$bvToast.toast(
-          `Benvenut*, ${this.username}!`,
-          {
-            title: `Login effettuato con successo`,
-            variant: 'success',
-            solid: true
-          })
+            `Benvenut*, ${this.username}!`,
+            {
+              title: `Login effettuato con successo`,
+              variant: 'success',
+              solid: true
+            })
       } else {
         this.$bvToast.toast(
             `Controlla username e password.`,

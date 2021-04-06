@@ -53,14 +53,12 @@
 <script>
 import Login from "@/components/authentication/Login";
 import Logout from "@/components/authentication/Logout";
-
 export default {
   name: "navbar",
   components:{
     Login,
     Logout
   },
-
   data() {
     return {
       showCollapse: false,
@@ -77,5 +75,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

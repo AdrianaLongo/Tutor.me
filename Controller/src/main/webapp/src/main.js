@@ -28,7 +28,7 @@ new Vue({
       alert("Session expired. Refresh page");
       location.href='/#/'
       store.dispatch('logout');
-    }, 1800000) // 30 minuti in millisecondi ( 20 secondi:20000 )
+    }, 1800000) // 1800000 30 minuti in millisecondi ( 20 secondi:20000 )
   },
   render: h => h(App)
 }).$mount('#app')
