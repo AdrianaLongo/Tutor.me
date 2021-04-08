@@ -63,38 +63,45 @@ export default {
   },
   methods:{
     insertTutor(tutorToAdd, course){
-      // Controllo assenza di caratteri non validi nel nome e nel cognome
-      var letters = /^[A-Za-z() ]+$/;
-      if(letters.test(tutorToAdd)){
-        var tutor = tutorToAdd.split(' ');
+      // Controllo che ci sia un solo nome e un solo cognome (il db e' impostato cosi')
+      var tutorString = tutorToAdd.toString()
+      var spaceCount = (tutorString.split(" ").length - 1); // conta quanti spazi ci sono
 
-        var nomeNuovoTutor = tutor[0].toString().charAt(0).toUpperCase() + tutor[0].toString().slice(1);
-        var cognomeNuovoTutor = tutor[1].toString().charAt(0).toUpperCase() + tutor[1].toString().slice(1);
-        var nomeCorso
-        if(course.nome === undefined) // corso creato dall'utente
-          nomeCorso = course.charAt(0).toUpperCase() + course.slice(1)
-        else // corso gia' esistente
-          nomeCorso = course.nome
+      if(spaceCount === 1){// inserito un solo nome e un solo cognome
+        // Controllo assenza di caratteri non validi nel nome e nel cognome
+        var letters = /^[A-Za-z() ]+$/;
+        if(letters.test(tutorToAdd)){
+          var tutor = tutorToAdd.split(' ');
 
-        // Non abbiamo bisogno di memorizzare nello store i dati inseriti,
-        // quindi non abbiamo bisogno dell'action per fare la richiesta
-        jQuery.post('http://localhost:8080/TWEB_war_exploded/TutorCourseServlet', {
-          opCode: "insertTutor",
-          nomeCorso: nomeCorso,
-          nomeDocente: nomeNuovoTutor,
-          cognomeDocente: cognomeNuovoTutor
-        })
-            .then(response => {
-              setTimeout(() => {this.reset()}, 100)
-              if(response.success === 1)
-                this.makeToastOk(nomeNuovoTutor, cognomeNuovoTutor, nomeCorso);
-              else
-                this.makeToastErr()
-            })
-      } else {
-        this.makeToastNotAlpha()
+          var nomeNuovoTutor = tutor[0].toString().charAt(0).toUpperCase() + tutor[0].toString().slice(1);
+          var cognomeNuovoTutor = tutor[1].toString().charAt(0).toUpperCase() + tutor[1].toString().slice(1);
+          var nomeCorso
+          if(course.nome === undefined) // corso creato dall'utente
+            nomeCorso = course.charAt(0).toUpperCase() + course.slice(1)
+          else // corso gia' esistente
+            nomeCorso = course.nome
+
+          // Non abbiamo bisogno di memorizzare nello store i dati inseriti,
+          // quindi non abbiamo bisogno dell'action per fare la richiesta
+          jQuery.post('http://localhost:8080/TWEB_war_exploded/TutorCourseServlet', {
+            opCode: "insertTutor",
+            nomeCorso: nomeCorso,
+            nomeDocente: nomeNuovoTutor,
+            cognomeDocente: cognomeNuovoTutor
+          })
+              .then(response => {
+                setTimeout(() => {this.reset()}, 100)
+                if(response.success === 1)
+                  this.makeToastOk(nomeNuovoTutor, cognomeNuovoTutor, nomeCorso);
+                else
+                  this.makeToastErr()
+              })
+        } else {
+          this.makeToastNotAlpha()
+        }
+      } else { // inserito solo un nome o solo un cognome o piu o nomi o piu cognomi
+        this.makeToastTooManySpaces()
       }
-
     },
     makeToastOk(nomeNuovoTutor, cognomeNuovoTutor, nomeCorso){
       this.$bvToast.toast(
@@ -117,6 +124,15 @@ export default {
     makeToastNotAlpha(){
       this.$bvToast.toast(
           `Il nome del tutor deve contenere solo lettere.`,
+          {
+            title: `Aggiornamento catalogo fallito`,
+            variant: 'danger',
+            solid: true
+          })
+    },
+    makeToastTooManySpaces(){
+      this.$bvToast.toast(
+          `Non possono esistere spazi dentro il nome o il cognome del tutor.`,
           {
             title: `Aggiornamento catalogo fallito`,
             variant: 'danger',

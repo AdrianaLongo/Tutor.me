@@ -88,31 +88,38 @@ export default {
                 this.makeToastErr()
             })
       } else { // admin aggiunge nuovo tutor
-        // Controllo assenza di caratteri non validi nel nome e nel cognome
-        var letters = /^[A-Za-z() ]+$/;
-        if(letters.test(tutor)) {
-          var nuovoTutor = tutor.split(' ');
-          var nomeNuovoTutor = nuovoTutor[0].charAt(0).toUpperCase() + nuovoTutor[0].slice(1);
-          var cognomeNuovoTutor = nuovoTutor[1].charAt(0).toUpperCase() + nuovoTutor[1].slice(1);
-          _this = this;
-          jQuery.post('http://localhost:8080/TWEB_war_exploded/CourseTutorAssociationServlet', {
-            opCode: "insertCourseAndTutor",
-            nomeCorso: _this.courseToAdd,
-            nomeDocente: nomeNuovoTutor,
-            cognomeDocente: cognomeNuovoTutor,
-          })
-              .then(response => {
-                setTimeout(() => {
-                  this.reset()
-                }, 100)
-                if (response.success === 1)
-                  this.makeToastOk(nomeNuovoTutor, cognomeNuovoTutor);
-                else
-                  this.makeToastErr()
-              })
-          this.courseAdded = true;
-        } else {
-          this.makeToastNotAlpha()
+        var tutorString = tutor.toString()
+        var spaceCount = (tutorString.split(" ").length - 1); // conta quanti spazi ci sono
+
+        if (spaceCount === 1) {// inserito un solo nome e un solo cognome
+          // Controllo assenza di caratteri non validi nel nome e nel cognome
+          var letters = /^[A-Za-z() ]+$/;
+          if (letters.test(tutor)) {
+            var nuovoTutor = tutor.split(' ');
+            var nomeNuovoTutor = nuovoTutor[0].charAt(0).toUpperCase() + nuovoTutor[0].slice(1);
+            var cognomeNuovoTutor = nuovoTutor[1].charAt(0).toUpperCase() + nuovoTutor[1].slice(1);
+            _this = this;
+            jQuery.post('http://localhost:8080/TWEB_war_exploded/CourseTutorAssociationServlet', {
+              opCode: "insertCourseAndTutor",
+              nomeCorso: _this.courseToAdd,
+              nomeDocente: nomeNuovoTutor,
+              cognomeDocente: cognomeNuovoTutor,
+            })
+                .then(response => {
+                  setTimeout(() => {
+                    this.reset()
+                  }, 100)
+                  if (response.success === 1)
+                    this.makeToastOk(nomeNuovoTutor, cognomeNuovoTutor);
+                  else
+                    this.makeToastErr()
+                })
+            this.courseAdded = true;
+          } else {
+            this.makeToastNotAlpha()
+          }
+        } else { // inserito solo un nome o solo un cognome o piu o nomi o piu cognomi
+          this.makeToastTooManySpaces()
         }
       }
     },
@@ -137,6 +144,15 @@ export default {
     makeToastNotAlpha(){
       this.$bvToast.toast(
           `Il nome del tutor deve contenere solo lettere.`,
+          {
+            title: `Aggiornamento catalogo fallito`,
+            variant: 'danger',
+            solid: true
+          })
+    },
+    makeToastTooManySpaces(){
+      this.$bvToast.toast(
+          `Non possono esistere spazi dentro il nome o il cognome del tutor.`,
           {
             title: `Aggiornamento catalogo fallito`,
             variant: 'danger',
