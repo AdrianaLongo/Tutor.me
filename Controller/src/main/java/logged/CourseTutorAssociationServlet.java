@@ -54,6 +54,7 @@ public class CourseTutorAssociationServlet extends HttpServlet {
 
         if (IdentifyUsers.identifyIdCookie(toCheck)) {
             if (IdentifyUsers.identifyRoleCookie(toCheck)) {
+                System.out.println("utente identificato");
                 nomeCorso = request.getParameter("nomeCorso");
                 System.out.println("nomeCorso: " + nomeCorso);
                 nomeDocente = request.getParameter("nomeDocente");

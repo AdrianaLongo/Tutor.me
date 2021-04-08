@@ -22,9 +22,7 @@ export default {
 
       // Dobbiamo rimuovere i dati della sessione dalla sessionStorage
       sessionStorage.hasntLoggedOut = false;
-      console.log("sessionStorage.hasntLoggedOut: " + sessionStorage.hasntLoggedOut)
       sessionStorage.username = "";
-      console.log("sessionStorage.username: " +sessionStorage.username)
       sessionStorage.password = "";
 
       this.$router.push("/#").catch(()=>{}); // per reindirizzare l'utente alla homepage dopo il logout

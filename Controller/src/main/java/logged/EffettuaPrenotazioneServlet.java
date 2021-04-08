@@ -55,8 +55,8 @@ public class EffettuaPrenotazioneServlet extends HttpServlet {
         Useful message = new Useful();
         boolean disponibilita;
 
-        HttpSession s = request.getSession(false);
-//        String jSession = request.getParameter("jSessionId");
+//        HttpSession s = request.getSession(false);
+        String jSession = request.getParameter("jSessionId");
 
         Cookie toCheck[] = request.getCookies();
 

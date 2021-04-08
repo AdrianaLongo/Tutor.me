@@ -53,6 +53,7 @@
 <script>
 import Login from "@/components/authentication/Login";
 import Logout from "@/components/authentication/Logout";
+
 export default {
   name: "navbar",
   components:{

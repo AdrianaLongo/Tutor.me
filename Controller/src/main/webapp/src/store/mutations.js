@@ -98,5 +98,4 @@ export default{
     selectClientSurname,
     selectClientId,
     setJsonClientsHistory,
-
 }

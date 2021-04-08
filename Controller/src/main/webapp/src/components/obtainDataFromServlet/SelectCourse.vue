@@ -14,6 +14,7 @@
       </b-form-select>
 
       <div v-if="courseSelected.name !== undefined">
+<!--        TODO: provare con v-show-->
         <b-button @click="showTutors" variant="primary">Cerca tutor per questo corso</b-button>
       </div>
 

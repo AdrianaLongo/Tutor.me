@@ -230,6 +230,7 @@ export default {
       idPrenotazione: null,
       nomeCorso: '',
       //loginSucceded: false,
+
       fields: [
         {
           key: 'hours',

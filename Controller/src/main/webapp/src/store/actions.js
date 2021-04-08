@@ -22,7 +22,7 @@ const login = (context, credentials) => {
             $.getJSON('http://localhost:8080/TWEB_war_exploded/RetrievePrenotazioniUtenteServlet', function (jsonPersonalHistory) {
                 context.commit('setJsonPersonalHistoryComplete', jsonPersonalHistory)
                 context.commit('setJsonPersonalHistoryAttive', jsonPersonalHistory.filter( element => element.stato === '0'))
-                context.commit('setJsonPersonalHistory', jsonPersonalHistory.filter( element => element.stato === '0'))
+                context.commit('setJsonPersonalHistory', jsonPersonalHistory.filter( element => element.stato === '0')) // TODO: RIVEDERE
             });
 
         }
