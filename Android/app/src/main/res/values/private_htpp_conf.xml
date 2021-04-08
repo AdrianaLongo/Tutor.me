@@ -2,7 +2,6 @@
 <resources>
     <!-- cercando su internet ho trovato da inserire questo ip, perché solo localhost prende l'ip dell'emulatore -->
     <string name="ip">10.0.2.2</string>
-    <!--TODO cambiare in 8080-->
     <string name="port">8081</string>
     <string name="context">TWEB_war_exploded</string>
     <string name="servlet">DispatcherServlet</string>

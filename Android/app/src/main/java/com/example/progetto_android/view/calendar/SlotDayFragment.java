@@ -34,7 +34,7 @@ public class SlotDayFragment extends Fragment{
 
     private SlotViewModel mViewModel;
     private Connector connector;
-    private int mIndex;
+    private int day;
     private ShareDataViewModel sd;
     private final ArrayList<Book> books = new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class SlotDayFragment extends Fragment{
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
 
-        mIndex = index;
+        day = index;
     }
 
     @Override
@@ -86,7 +86,6 @@ public class SlotDayFragment extends Fragment{
         TextView ss = view.findViewById(R.id.Second_Slot);
         TextView ts = view.findViewById(R.id.Third_Slot);
         TextView qs = view.findViewById(R.id.Fourth_Slot);
-        System.out.println();
 
         //ottengo gli slot dalla ViewModel e li inserisco nella view
         mViewModel.getSlots().observe(getViewLifecycleOwner(), slots -> {
@@ -102,9 +101,9 @@ public class SlotDayFragment extends Fragment{
                             ArrayList<Book> uSlots = new ArrayList<>();
                             if(book != null) {
                                 for (Book p : book) {
+                                    // stato 0 => lezione da effettuare
                                     if (p.getStato().equals("0")) {
                                         uSlots.add(p);
-                                        Log.i("SlotDayFragment", p.toString());
                                     }
                                 }
                             }
@@ -112,31 +111,21 @@ public class SlotDayFragment extends Fragment{
                             //prendo gli orari del giorno che mi serve
                             for (Slot slot : pSlots) {
                                 String day = slot.getDay(slot.getSezione());
-                                switch (mIndex) {
+                                switch (this.day) {
                                     case 0:
-                                        if (day.equals("Lunedì")) {
-                                            hours.add(slot);
-                                        }
+                                        if (day.equals("Lunedì")) {hours.add(slot);}
                                         break;
                                     case 1:
-                                        if (day.equals("Martedì")) {
-                                            hours.add(slot);
-                                        }
+                                        if (day.equals("Martedì")) {hours.add(slot);}
                                         break;
                                     case 2:
-                                        if (day.equals("Mercoledì")) {
-                                            hours.add(slot);
-                                        }
+                                        if (day.equals("Mercoledì")) {hours.add(slot);}
                                         break;
                                     case 3:
-                                        if (day.equals("Giovedì")) {
-                                            hours.add(slot);
-                                        }
+                                        if (day.equals("Giovedì")) {hours.add(slot);}
                                         break;
                                     case 4:
-                                        if (day.equals("Venerdì")) {
-                                            hours.add(slot);
-                                        }
+                                        if (day.equals("Venerdì")) {hours.add(slot);}
                                         break;
                                 }
                             }
@@ -215,11 +204,11 @@ public class SlotDayFragment extends Fragment{
         });
     }
 
-    private void onClick(ImageView tv, ArrayList<Slot> hours, String hour){
-                if (tv.getVisibility() == View.INVISIBLE) {
+    private void onClick(ImageView uAvail, ArrayList<Slot> hours, String hour){
+                if (uAvail.getVisibility() == View.INVISIBLE) {
                     selectSlot(hours, hour);
                     GlobalValue.setHour(hour);
-                    new PopupFragment(mIndex, getActivity()).show(getChildFragmentManager(), null);
+                    new PopupFragment(day, getActivity()).show(getChildFragmentManager(), null);
                 } else {
                     Book book = new Book();
                     for(Slot s : hours){

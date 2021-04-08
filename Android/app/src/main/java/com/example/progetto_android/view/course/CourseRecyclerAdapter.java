@@ -42,7 +42,7 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
         //inserisco il nome del corso ottenuto
         holder.courseView.setText(course.getNomeCorso());
 
-        //collego un listener alla textView così che l'utente per comodità dovunque pigi selezionerà l'opzione
+        //collego un listener alla textView così che l'utente per comodità dovunque clicchi selezionerà l'opzione
         holder.itemView.setOnClickListener(v -> {
 
             final boolean newValue = !holder.check.isChecked();

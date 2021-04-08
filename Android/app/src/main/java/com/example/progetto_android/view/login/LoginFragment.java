@@ -78,7 +78,7 @@ public class LoginFragment extends Fragment {
                             sd.setLoggedIn(true);
 
                             //messaggio di benvenuto
-                            Toast.makeText(getContext(), "Benvenuto " + username, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Benvenut* " + username, Toast.LENGTH_LONG).show();
 
                             //metto in una variabile globali l'id della sessione
                             GlobalValue.setjSessionId(result.getObject());

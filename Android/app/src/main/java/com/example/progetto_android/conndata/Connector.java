@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.progetto_android.R;
 import com.example.progetto_android.conndata.repositories.BookRepository;
-import com.example.progetto_android.conndata.repositories.CorsiRepository;
+import com.example.progetto_android.conndata.repositories.CourseRepository;
 import com.example.progetto_android.conndata.repositories.LoginRepository;
 import com.example.progetto_android.conndata.repositories.ProfRepository;
 import com.example.progetto_android.conndata.repositories.SlotRepository;
@@ -15,7 +15,7 @@ public class Connector {
     private final LoginRepository loginRep;
     private final ProfRepository profRep;
     private final SlotRepository slotRep;
-    private final CorsiRepository courseRep;
+    private final CourseRepository courseRep;
     private static Connector instance;
     private final BookRepository bookRep;
 
@@ -29,7 +29,7 @@ public class Connector {
 
         //istanzio repository così da evocare quella giusta per ogni chiamata
         loginRep = new LoginRepository(http);
-        courseRep = new CorsiRepository(http);
+        courseRep = new CourseRepository(http);
         profRep = new ProfRepository(http);
         slotRep = new SlotRepository(http);
         bookRep = new BookRepository(http);
@@ -39,7 +39,7 @@ public class Connector {
         return loginRep;
     }
 
-    public CorsiRepository getCourseRep() {
+    public CourseRepository getCourseRep() {
         return courseRep;
     }
 

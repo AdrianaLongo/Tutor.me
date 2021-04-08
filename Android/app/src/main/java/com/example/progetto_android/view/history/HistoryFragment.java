@@ -34,7 +34,7 @@ public class HistoryFragment extends Fragment {
     private HistoryViewModel mViewModel;
     private HistoryRecyclerAdapter mAdapter;
     private Connector connector;
-    private int mIndex;
+    private int section;
 
     //chiamata per inizializzare il fragment con il numero della tab a indicare lo stato della prenotazione
     public static HistoryFragment newInstance(int index) {
@@ -56,7 +56,7 @@ public class HistoryFragment extends Fragment {
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
-        mIndex = index;
+        section = index;
         //gestisco il pulsante back
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
@@ -96,8 +96,8 @@ public class HistoryFragment extends Fragment {
 
                 //scelgo solo le prenotazioni in relazione
                 List<Book> specific = new ArrayList<>();
-                switch (mIndex) {
-                    case 0:
+                switch (section) {
+                    case 0:     // prenotate
                         for (Book p : prenotazioni) {
                             if (p.getStato().equals("0")) {
                                 specific.add(p);
@@ -107,7 +107,7 @@ public class HistoryFragment extends Fragment {
                             Toast.makeText(getContext(), "Nessuna prenotazione effettuata", Toast.LENGTH_LONG).show();
                         }
                         break;
-                    case 1:
+                    case 1:     // cancellate
                         for (Book p : prenotazioni) {
                             if (p.getStato().equals("-1")) {
                                 specific.add(p);
@@ -117,7 +117,7 @@ public class HistoryFragment extends Fragment {
                             Toast.makeText(getContext(), "Nessuna prenotazione eliminata", Toast.LENGTH_LONG).show();
                         }
                         break;
-                    case 2:
+                    case 2:     // effettuate
                         for (Book p : prenotazioni) {
                             if (p.getStato().equals("1")) {
                                 specific.add(p);
@@ -130,7 +130,7 @@ public class HistoryFragment extends Fragment {
                 }
                 if (!specific.isEmpty()) {
                     //attraverso l'adapter posso impostare i row della recyclerView riempiendoli con i corsi ottenuti
-                    mAdapter = new HistoryRecyclerAdapter(getActivity(), specific, mIndex);
+                    mAdapter = new HistoryRecyclerAdapter(getActivity(), specific, section);
                     recyclerView.setAdapter(mAdapter);
                 }
             }

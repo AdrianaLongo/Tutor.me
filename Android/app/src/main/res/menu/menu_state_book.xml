@@ -3,9 +3,9 @@
     <item
         android:id="@+id/action_done"
         android:orderInCategory="1"
-        android:title="segna come effettuata" />
+        android:title="Segna come effettuata" />
     <item
         android:id="@+id/action_delete"
         android:orderInCategory="2"
-        android:title="rimuovi prenotazione" />
+        android:title="Rimuovi prenotazione" />
 </menu>

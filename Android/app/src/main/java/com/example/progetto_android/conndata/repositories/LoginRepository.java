@@ -36,17 +36,15 @@ public class LoginRepository {
         //la lambda viene usata per creare un oggetto di classe login riempito con i dati
         //ricevuti dalla result,
         //il metodo sendRequest viene eseguito in modo asincrono, quindi prima viene eseguito quello
-        //e poi la lambda che prenderà i valori ricevuti dalla richiesta e li inserirà nella classe login
+        //e poi la lambda che prenderà i valori ricevuti dalla richiesta e li inserirà nel metodo login
         http.sendRequest(params, result -> {
             try {
                 Useful useful = null;
                 //controllo se sono riuscito a connettermi
                 if (result.getResult().getStatusCode() == HttpURLConnection.HTTP_OK) {
-                    Log.i("47 LoginRep", "Risultato login ricevuto" + result.getResult().getData());
                     //inserisco il risultato che ottengo in formato json
                     // all'interno della classe login
                     useful = gson.fromJson(result.getResult().getData(), Useful.class);
-                    Log.i("53 LoginRep", "inserito roba dentro useful " + useful.toString());
                 }
 
                 if (callback != null)
@@ -68,11 +66,9 @@ public class LoginRepository {
                 Useful useful = null;
                 //controllo se sono riuscito a connettermi
                 if (result.getResult().getStatusCode() == HttpURLConnection.HTTP_OK) {
-                    Log.i("72 LoginRep - Logout", "Risultato login ricevuto" + result.getResult().getData());
                     //inserisco il risultato che ottengo in formato json
                     // all'interno della classe login
                     useful = gson.fromJson(result.getResult().getData(), Useful.class);
-                    Log.i("53 LoginRep", "inserito roba dentro useful " + useful.toString());
                 }
 
                 if (callback != null)
