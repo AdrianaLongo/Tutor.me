@@ -69,7 +69,7 @@ export default {
   methods: {
     insertCourse(courseToAdd, tutor) {
       this.courseToAdd = this.courseToAdd.charAt(0).toUpperCase() + this.courseToAdd.slice(1)
-      if(tutor.id !== undefined) {
+      if(tutor.id !== undefined) { // tutor esiste in catalogo
         var _this = this;
         // Non c'è bisogno di mantenere il corso appena inserito nello store,
         // quindi non abbiamo bisogno di action per fare la richiesta
@@ -87,26 +87,34 @@ export default {
               else
                 this.makeToastErr()
             })
-      } else {
-        var nuovoTutor = tutor.split(' ');
-        var nomeNuovoTutor = nuovoTutor[0].charAt(0).toUpperCase() + nuovoTutor[0].slice(1);
-        var cognomeNuovoTutor = nuovoTutor[1].charAt(0).toUpperCase() + nuovoTutor[1].slice(1);
-        _this = this;
-        jQuery.post('http://localhost:8080/TWEB_war_exploded/CourseTutorAssociationServlet', {
-          opCode: "insertCourseAndTutor",
-          nomeCorso: _this.courseToAdd,
-          nomeDocente: nomeNuovoTutor,
-          cognomeDocente: cognomeNuovoTutor,
-        })
-            .then(response => {
-              setTimeout(() => {this.reset()}, 100)
-              if(response.success === 1)
-                this.makeToastOk(nomeNuovoTutor, cognomeNuovoTutor);
-              else
-                this.makeToastErr()
-            })
+      } else { // admin aggiunge nuovo tutor
+        // Controllo assenza di caratteri non validi nel nome e nel cognome
+        var letters = /^[A-Za-z() ]+$/;
+        if(letters.test(tutor)) {
+          var nuovoTutor = tutor.split(' ');
+          var nomeNuovoTutor = nuovoTutor[0].charAt(0).toUpperCase() + nuovoTutor[0].slice(1);
+          var cognomeNuovoTutor = nuovoTutor[1].charAt(0).toUpperCase() + nuovoTutor[1].slice(1);
+          _this = this;
+          jQuery.post('http://localhost:8080/TWEB_war_exploded/CourseTutorAssociationServlet', {
+            opCode: "insertCourseAndTutor",
+            nomeCorso: _this.courseToAdd,
+            nomeDocente: nomeNuovoTutor,
+            cognomeDocente: cognomeNuovoTutor,
+          })
+              .then(response => {
+                setTimeout(() => {
+                  this.reset()
+                }, 100)
+                if (response.success === 1)
+                  this.makeToastOk(nomeNuovoTutor, cognomeNuovoTutor);
+                else
+                  this.makeToastErr()
+              })
+          this.courseAdded = true;
+        } else {
+          this.makeToastNotAlpha()
+        }
       }
-      this.courseAdded = true;
     },
     makeToastOk(nomeTutor, cognomeTutor){
       this.$bvToast.toast(
@@ -120,6 +128,15 @@ export default {
     makeToastErr(){
       this.$bvToast.toast(
           `Si e' verificato un errore. Riprova`,
+          {
+            title: `Aggiornamento catalogo fallito`,
+            variant: 'danger',
+            solid: true
+          })
+    },
+    makeToastNotAlpha(){
+      this.$bvToast.toast(
+          `Il nome del tutor deve contenere solo lettere.`,
           {
             title: `Aggiornamento catalogo fallito`,
             variant: 'danger',
