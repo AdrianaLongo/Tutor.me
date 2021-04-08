@@ -15,9 +15,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 
-/**
- * Si occupa dell'operazione di Logout: per farlo recupera la session.
- */
 @WebServlet(name = "LogoutServlet", urlPatterns = "/LogoutServlet")
 public class LogoutServlet extends HttpServlet {
 

@@ -16,23 +16,6 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 
-/**
- * Applica allo stato della prenotazione lo stato disdetta
- * MA
- * non elimina la prenotazione in modo da poter ripresentare le prenotazioni nello storico
- * 1) Controllo che ci sia una sessione utente, parametro false nel request.getSession serve ad evitare che crei una
- * sessione in caso non ci sia. La sessione si crea a login
- * 2) Prendo l'attributo ruolo utente assegnato al login in caso esista
- * 3) Recupero il ruolo utente dalla sessione
- * 4) Controllo che il ruolo utente sia Utente o Admin per sicurezza
- * 5) Recupero dalla request idUtente, idDocente, lo slot ed il nome delCorso (da rivedere cosa recupero dal front-end
- * per evitare di dare la possibilità all'utente di cancellare prenotazioni altri.
- * <p>
- * Alcune gestioni di errori andranno riconsiderate in base all'implementazione nel front-end.
- * Quello che sarebbe utile secondo me sarebbe non dare la possibilità all'utente di inserire dati non suoi o dati
- * sbagliati (quest'ultimi grazie a menu a tendina)
- */
-
 @WebServlet(name = "DisdettaServlet", urlPatterns = "/DisdettaServlet")
 public class DisdettaServlet extends HttpServlet {
 

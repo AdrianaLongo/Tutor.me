@@ -21,8 +21,6 @@ import java.util.ArrayList;
 /**
  * Recupera le prenotazioni dell'utente basandosi sull'attributo segnato nella sessione recuperata ad inizio e
  * creata al login.
- * Il parametro false in request.getSession impedisce di creare una sessione nuova in caso non esista (rovinerebbe
- * i parametri segnati al login)
  */
 
 @WebServlet(name = "RetrievePrenotazioniUtenteServlet", urlPatterns = "/RetrievePrenotazioniUtenteServlet")
@@ -48,7 +46,6 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json, charset=UTF-8");
-        //HttpSession s = request.getSession(false);
 
         ArrayList<Prenotazione> prenotazioni;
         PrintWriter out = response.getWriter();
@@ -58,8 +55,6 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
         Useful message = new Useful();
 
 
-        //String jSessionId = s.getId();
-        String idToVerify = request.getParameter("jSessionId");
 
         Cookie cookies[] = request.getCookies();
 
@@ -69,7 +64,6 @@ public class RetrievePrenotazioniUtenteServlet extends HttpServlet {
             }
         }
 
-        System.out.println(IdentifyUsers.sessionId + "IDSESSIONE");
 
         if (IdentifyUsers.identifyIdCookie(cookies)) {
             //String ruoloUtente = (String) s.getAttribute("ruoloUtente");

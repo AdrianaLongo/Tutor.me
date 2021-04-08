@@ -45,7 +45,6 @@ public class RetrieveClientHistory extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json, charset=UTF-8");
-        //HttpSession s = request.getSession(false);
 
         ArrayList<Prenotazione> prenotazioni;
         PrintWriter out = response.getWriter();
@@ -55,9 +54,6 @@ public class RetrieveClientHistory extends HttpServlet {
         Useful message = new Useful();
 
 
-        //String jSessionId = s.getId();
-        String idToVerify = request.getParameter("jSessionId");
-
         Cookie cookies[] = request.getCookies();
 
         if(cookies != null) {
@@ -66,7 +62,6 @@ public class RetrieveClientHistory extends HttpServlet {
             }
         }
 
-        System.out.println(IdentifyUsers.sessionId + "IDSESSIONE");
 
         if (IdentifyUsers.identifyIdCookie(cookies)) {
             //String ruoloUtente = (String) s.getAttribute("ruoloUtente");

@@ -35,8 +35,6 @@ public class CourseTutorAssociationServlet extends HttpServlet {
 
         response.setContentType("application/json, charset=UTF-8");
 
-        HttpSession session = request.getSession(false);
-
         String opCode = request.getParameter("opCode");
         Gson gson = new Gson();
         String Json;
