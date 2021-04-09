@@ -3,4 +3,101 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <context-param>
+        <description>Url di MySql</description>
+        <param-name>DB-Url</param-name>
+        <param-value>jdbc:mysql://localhost:8889/ripetizioni?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</param-value>
+    </context-param>
+    <context-param>
+        <description>User per DB</description>
+        <param-name>user</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <context-param>
+        <description>Password del DB</description>
+        <param-name>password</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <context-param>
+        <param-name>DisdettaServlet</param-name>
+        <param-value>/DisdettaServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>EffettuaPrenotazioniServlet</param-name>
+        <param-value>/EffettuaPrenotazioniServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>LogoutServlet</param-name>
+        <param-value>/LogoutServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>PopolaStoricoServlet</param-name>
+        <param-value>/PopolaStoricoServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>PrenotazioneEffettuataServlet</param-name>
+        <param-value>/PrenotazioneEffettuataServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>RetrievePrenotazioneUtenteServlet</param-name>
+        <param-value>/RetrievePrenotazioneUtenteServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>AddAssociationServlet</param-name>
+        <param-value>/AddAssociationServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>cercaCorsoServlet</param-name>
+        <param-value>/cercaCorsoServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>cercaTutorServlet</param-name>
+        <param-value>/cercaTutorServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>DisponibilitaTutorServlet</param-name>
+        <param-value>/DisponibilitaTutorServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>LoginServlet</param-name>
+        <param-value>/LoginServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>PopolaDocenteServlet</param-name>
+        <param-value>/PopolaDocenteServlet</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>PopulateCorsiServlet</param-name>
+        <param-value>/PopulateCorsiServlet</param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>CorsFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+        <init-param>
+            <param-name>cors.allowed.origins</param-name>
+            <param-value>http://localhost:8081</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CorsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

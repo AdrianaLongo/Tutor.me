@@ -3,16 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="shortcut icon" href="#">
+
+
 </head>
 <body>
-    <form action="/TWEB_war_exploded/Servlet1" method="post">
-        <p><input type="submit" name="submit" value="Invoca Servlet1"></p>
-    </form>
 
-    <form action="/TWEB_war_exploded/PopulateServlet" method="post">
-        <p><input type="submit" name="submit" value="Invoca PopulateServlet"></p>
-    </form>
+<div> Esempio di invocazione di servlet all'interno di un'applicazione web (usando una form) </div>
 
+<form action="/LoginServlet" method="post">
+    <label for="username">username</label><br>
+    <input type="text" id="username" name="username"><br>
+    <label for="password">password</label><br>
+    <input type="text" id="password" name="password"><br>
+    <label for="slot">slot:</label><br>
+    <input type="text" id="slot" name="slot"><br><br>
+    <label for="nomeCorso">nomeCorso:</label><br>
+    <input type="text" id="nomeCorso" name="nomeCorso"><br><br>
+    <input type="submit" value="Populate">
+</form>
+<button onclick="getJSessionId()">OttieniId</button>
+
+<script>
+    // import $ from "jquery";
+
+    function getJSessionId(){
+        console.log(session.getAttribute)
+    }
+</script>
 
 </body>
+
 </html>

@@ -3,13 +3,22 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 
+//jdbc:mysql://localhost:3306/ripetizioni?autoReconnect=true&amp;useSSL=false
 public class DAO {
-    private static final String url = "jdbc:mysql://localhost:8889/ripetizioni?autoReconnect=true&useSSL=false";
-    private static final String user = "root";
-    private static final String pw = "root";
+
+    private static String url;
+    private static String user;
+    private static String pw;
+
+    public DAO(String url, String user, String password) {
+        DAO.user = user;
+        DAO.url = url;
+        DAO.pw = password;
+        registerDriver();
+    }
 
     // 1. Registrazione del driver JDBC
-    public static void registerDriver(){
+    public static void registerDriver() {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         } catch (SQLException e) {
@@ -17,28 +26,216 @@ public class DAO {
         }
     }
 
+    public ArrayList<Utente> retrieveUtenti () throws SQLException {
+
+        ArrayList<Utente> utentiRec = new ArrayList<>();
+        Utente resultUser;
+
+        PreparedStatement pst = null;
+        Connection conn = null;
+
+        int id = 0;
+        String nome = "";
+        String cognome = "";
+        String ruolo = "";
+        String usernameExtracted = "";
+        String passwordExtracted = "";
+
+        try {
+
+            conn = DriverManager.getConnection(url, user, pw);
+            if (conn != null) {
+                System.out.println("Connected to DB");
+
+                String sql = "SELECT * FROM utente";
+                pst = conn.prepareStatement(sql);
+
+                ResultSet userValues = pst.executeQuery();
+                while (userValues.next()) {
+                    id = userValues.getInt("idUtente");
+                    usernameExtracted = userValues.getString("username");
+                    passwordExtracted = userValues.getString("password");
+                    nome = userValues.getString("nomeUtente");
+                    cognome = userValues.getString("cognomeUtente");
+                    ruolo = userValues.getString("ruolo");
+                    resultUser = new Utente(id, nome, cognome, ruolo, usernameExtracted, passwordExtracted);
+                    utentiRec.add(resultUser);
+                }
+            }
+            System.out.println("Retrieve Utente fatto");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+        return utentiRec;
+    }
+
+
+    public Utente retrieveUtente(String username, String password) throws SQLException {
+
+        PreparedStatement pst = null;
+        Connection conn = null;
+
+        int id = 0;
+        String nome = "";
+        String cognome = "";
+        String ruolo = "";
+        String usernameExtracted = "";
+        String passwordExtracted = "";
+
+        try {
+
+            conn = DriverManager.getConnection(url, user, pw);
+            if (conn != null) {
+                System.out.println("Connected to DB");
+
+                String sql = "SELECT idUtente, username, password, nomeUtente, cognomeUtente, ruolo FROM utente WHERE username=? AND password=?";
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, username);
+                pst.setString(2, password);
+                ResultSet userValues = pst.executeQuery();
+                while (userValues.next()) {
+                    id = userValues.getInt("idUtente");
+                    usernameExtracted = userValues.getString("username");
+                    passwordExtracted = userValues.getString("password");
+                    nome = userValues.getString("nomeUtente");
+                    cognome = userValues.getString("cognomeUtente");
+                    ruolo = userValues.getString("ruolo");
+                }
+            }
+            System.out.println("Retrieve Utente fatto");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+        return new Utente(id, nome, cognome, ruolo, usernameExtracted, passwordExtracted);
+    }
+
+
+    public void addUtente(String nomeUtente, String cognomeUtente) throws SQLException {
+        PreparedStatement pst = null;
+        Connection conn = null;
+
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            if (conn != null) {
+                System.out.println("Connected to DB");
+            }
+            String sql = "INSERT INTO utente (nomeUtente, cognomeUtente, ruolo)" +
+                    " VALUES ( ?,?,?)";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, nomeUtente);
+            pst.setString(2, cognomeUtente);
+            pst.setString(3, "utente");
+            pst.execute();
+            System.out.println("Utente aggiunto correttamente.");
+        } catch (SQLException e) {
+            System.out.println("Diofa socio manco una query ?");
+        } finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+    }
+
+    public ArrayList<Docente> cercaTutor(String corso) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pst;
+        PreparedStatement pstNested;
+        ResultSet rsNested;
+
+        // 2. Creazione lista di docenti
+        ArrayList<Docente> out = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            if (conn != null) {
+                System.out.println("Connected to the database \"insegna\".");
+            }
+
+            String sql = "SELECT idDocente FROM insegna WHERE nomeCorso = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, corso);
+            ResultSet rs = pst.executeQuery();
+            System.out.println("Main query andata");
+
+            while (rs.next()) {
+                //idTutor.add(rs.getInt("idDocente"));
+                try {
+                    String sqlNested = "SELECT * FROM docenti WHERE idDocente = ?";
+                    pstNested = conn.prepareStatement(sqlNested);
+                    pstNested.setInt(1, rs.getInt("idDocente"));
+                    rsNested = pstNested.executeQuery();
+                    Docente docente = new Docente(rsNested.getString("Nome"),
+                            rsNested.getString("Cognome"),
+                            rsNested.getInt("idDocente"));
+                    out.add(docente);
+                } catch (SQLException e2) {
+                    System.out.println("NestedQuery failed");
+                    System.out.println(e2.getMessage());
+                }
+
+            }
+
+        } catch (SQLException e1) {
+            System.out.println("MainQuery failed");
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+        return out;
+    }
+
+
     // STAMPA ELENCO DEI DOCENTI
-    public static ArrayList<Docente> mostraDocenti(){
+    public ArrayList<Docente> mostraDocenti() throws SQLException {
         // 1. Apertura della connessione
         Connection conn = null;
 
         // 2. Creazione lista di docenti
         ArrayList<Docente> out = new ArrayList<>();
 
-        try{
+        try {
             conn = DriverManager.getConnection(url, user, pw);
-            if(conn != null){
+            if (conn != null) {
                 System.out.println("Connected to the database \"ripetizioni\".");
             }
 
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM DOCENTE");
-            while(rs.next()){
+            ResultSet rs = st.executeQuery("SELECT * FROM docente WHERE disponibilitaDocente=1");
+            while (rs.next()) {
                 Docente d = new Docente(rs.getString("nomeDocente"), rs.getString("cognomeDocente"), rs.getInt(
                         "idDocente"));
                 out.add(d);
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         // 4. Chiudo la connessione
@@ -56,27 +253,72 @@ public class DAO {
         return out;
     }
 
+    public ArrayList<Slot> getSlotOccupati(int idDocente) throws SQLException {
+        Connection conn = null;
+
+        // 2. Creazione lista di slot occupati del docente
+        ArrayList<Slot> out = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            if (conn != null) {
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+
+            // Estrazione id dei docenti che insegnano quel corso e che sono disponibili
+            String sql = "SELECT prenotazione.slot FROM prenotazione" +
+                    " WHERE prenotazione.idDocente = ? AND stato = 0";
+
+            // Controllo disponibilita' del docente
+
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1, idDocente);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Slot d = new Slot(rs.getString("slot"));
+                out.add(d);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Occhio che magari non hai tolto disponibilità dalla query");
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return out;
+    }
+
+
     // STAMPA ELENCO DEI CORSI IN CATALOGO
-    public static ArrayList<Corso> mostraCorsi(){
+    public ArrayList<Corso> mostraCorsi() throws SQLException {
         // 1. Apertura della connessione
         Connection conn = null;
 
         // 2. Creazione lista di docenti
         ArrayList<Corso> out = new ArrayList<>();
 
-        try{
+        try {
             conn = DriverManager.getConnection(url, user, pw);
-            if(conn != null){
+            if (conn != null) {
                 System.out.println("Connected to the database \"ripetizioni\".");
             }
 
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM corso");
-            while(rs.next()){
+            ResultSet rs = st.executeQuery("SELECT * FROM corso WHERE disponibilitaCorso = 1");
+            while (rs.next()) {
                 Corso c = new Corso(rs.getString("nomeCorso"));
                 out.add(c);
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         // 4. Chiudo la connessione
@@ -93,20 +335,168 @@ public class DAO {
 
         return out;
     }
+    public void checkAssociation(int idDocente, String nomeCorso) {
+
+        Connection conn = null;
+        boolean check = false;
+        PreparedStatement pst;
+
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            if (conn != null) {
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+            Statement st = conn.createStatement();
+            String sql = "SELECT * FROM insegna WHERE idDocente = ? AND nomeCorso = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setInt(1, idDocente);
+            pst.setString(2,nomeCorso);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                check = true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+    }
+    public boolean checkDocente (int idDocente) throws SQLException {
+        Connection conn = null;
+        boolean check = false;
+        PreparedStatement pst;
+
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            if (conn != null) {
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+            Statement st = conn.createStatement();
+            String sql = "SELECT * from docente WHERE idDocente = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setInt(1, idDocente);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                check = true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return check;
+    }
+
+
+    public boolean checkCourse(String course) throws SQLException {
+        Connection conn = null;
+        boolean check = false;
+        PreparedStatement pst;
+
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            if (conn != null) {
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+
+            Statement st = conn.createStatement();
+            String sql = "SELECT * FROM corso WHERE nomeCorso = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, course);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                check = true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return check;
+
+    }
+
+    public boolean checkTutor(int idDocente) throws SQLException {
+        Connection conn = null;
+        boolean check = false;
+        PreparedStatement pst;
+
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            if (conn != null) {
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+
+            Statement st = conn.createStatement();
+            String sql = "SELECT * FROM docente WHERE idDocente = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setInt(1, idDocente);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                check = true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return check;
+
+    }
 
     // INSERIMENTO DI UN CORSO
-    public static void addCourse(String courseName) throws SQLException{
+    public void addCourse(String courseName) throws SQLException {
         PreparedStatement pst = null;
         Connection conn = null;
-        try{
+        try {
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
-            String sql="INSERT INTO corso(nomeCorso) VALUES (?)";
+            String sql = "INSERT INTO corso(nomeCorso) VALUES (?)";
             pst = conn.prepareStatement(sql);
             pst.setString(1, courseName);
             pst.execute();
             System.out.println("Corso aggiunto correttamente.");
-        } catch (SQLException se){
+        } catch (SQLException se) {
             System.out.println(se.getMessage());
         }
         // 4. Chiudo la connessione
@@ -123,18 +513,18 @@ public class DAO {
     }
 
     // RIMOZIONE DI UN CORSO
-    public static void deleteCourse(String courseName) throws SQLException{
+    public void deleteCourse(String courseName) throws SQLException {
         PreparedStatement pst = null;
         Connection conn = null;
-        try{
+        try {
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
-            String sql="DELETE FROM corso WHERE nomeCorso=?";
+            String sql = "UPDATE corso SET disponibilitaCorso=0 WHERE nomeCorso=?";
             pst = conn.prepareStatement(sql);
             pst.setString(1, courseName);
             pst.execute();
             System.out.println("Corso eliminato correttamente.");
-        } catch (SQLException se){
+        } catch (SQLException se) {
             System.out.println(se.getMessage());
         }
         // 4. Chiudo la connessione
@@ -151,19 +541,20 @@ public class DAO {
     }
 
     // INSERIMENTO DI UN DOCENTE
-    public static void addDocente(String nomeDocente, String cognomeDocente) throws SQLException{
+    public void addDocente(int idDocente, String nomeDocente, String cognomeDocente) throws SQLException {
         PreparedStatement pst = null;
         Connection conn = null;
-        try{
+        try {
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
-            String sql="INSERT INTO docente(nomeDocente, cognomeDocente) VALUES (?, ?)";
+            String sql = "INSERT INTO docente(idDocente,nomeDocente, cognomeDocente) VALUES (?, ?, ?)";
             pst = conn.prepareStatement(sql);
-            pst.setString(1, nomeDocente);
-            pst.setString(2, cognomeDocente);
+            pst.setInt(1,idDocente);
+            pst.setString(2, nomeDocente);
+            pst.setString(3, cognomeDocente);
             pst.execute();
             System.out.println("Docente aggiunto correttamente.");
-        } catch (SQLException se){
+        } catch (SQLException se) {
             System.out.println(se.getMessage());
         }
         // 4. Chiudo la connessione
@@ -180,19 +571,18 @@ public class DAO {
     }
 
     // RIMOZIONE DI UN DOCENTE
-    public static void deleteDocente(String nomeDocente, String cognomeDocente) throws SQLException{
+    public void deleteDocente(int idDocente) throws SQLException {
         PreparedStatement pst = null;
         Connection conn = null;
-        try{
+        try {
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
-            String sql="DELETE FROM docente WHERE nomeDocente=? AND cognomeDocente=?";
+            String sql = "UPDATE docente SET disponibilitaDocente=0 WHERE idDocente = ?";
             pst = conn.prepareStatement(sql);
-            pst.setString(1, nomeDocente);
-            pst.setString(2, cognomeDocente);
+            pst.setInt(1, idDocente);
             pst.execute();
             System.out.println("Docente eliminato correttamente.");
-        } catch (SQLException se){
+        } catch (SQLException se) {
             System.out.println(se.getMessage());
         }
         // 4. Chiudo la connessione
@@ -209,13 +599,11 @@ public class DAO {
     }
 
     //INSERIMENTO ASSOCIAZIONE DOCENTE-CORSO
-    public static void insertCorsoDocenteAssociation(String nomeCorso, String nomeDocente, String cognomeDocente)throws SQLException{
+    public void insertCorsoDocenteAssociation(String nomeCorso, int idDocente, String nomeDocente, String cognomeDocente) throws SQLException {
         PreparedStatement pstInserisciAssociazione = null, pstControllaEsistenzaCorso = null, pstInserisciCorso = null, pstControllaEsistenzaDocente = null, pstInserisciDocente = null;
         Connection conn = null;
 
         boolean courseExists = false, docenteExists = false, associazioneExists = false;
-
-        int idDocente = 0;
 
         try{
             conn = DriverManager.getConnection(url, user, pw);
@@ -247,15 +635,23 @@ public class DAO {
             while(rsDocenti.next()){
                 docenteExists = true;
                 idDocente = rsDocenti.getInt("idDocente");
+                System.out.println("idDocente: " + idDocente);
             }
             if(!docenteExists){
-                String sqlInserisciDocente="INSERT INTO docente(nomeDocente, cognomeDocente) VALUES (?, ?)";
+                System.out.println("!docenteExists");
+                String sqlInserisciDocente="INSERT INTO docente(nomeDocente, cognomeDocente, idDocente) VALUES (?, ?, ?)";
                 pstInserisciDocente = conn.prepareStatement(sqlInserisciDocente);
                 pstInserisciDocente.setString(1, nomeDocente);
+                System.out.println("nomeDocente: " + nomeDocente);
                 pstInserisciDocente.setString(2, cognomeDocente);
+                System.out.println("cognomeDocente: " + cognomeDocente);
+                pstInserisciDocente.setInt(3, idDocente);
+                System.out.println("idDocente: " + idDocente);
                 pstInserisciDocente.execute();
-                idDocente = rsDocenti.getInt("idDocente");
+//                idDocente = rsDocenti.getInt("idDocente");7
+                System.out.println("execute eseguita con successo");
             }
+
 
             // Controllo esistenza associazione corso-docente: se esiste, non devo far nulla
             String sqlControllaAssociazione = "SELECT * FROM insegna WHERE nomeCorso = ? AND idDocente = ?";
@@ -295,34 +691,24 @@ public class DAO {
         }
     }
 
+
     // ELIMINARE ASSOCIAZIONE DOCENTE-CORSO
-    public static void deleteCorsoDocenteAssociation(String nomeCorso, String nomeDocente, String cognomeDocente)throws SQLException{
+    public void deleteCorsoDocenteAssociation(String nomeCorso,int idDocente) throws SQLException {
         PreparedStatement pstEliminaAssociazione = null, pstOttieniIdDocente = null;
         Connection conn = null;
-        int idDocente = 0;
-        try{
+        try {
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
 
-            // Estrazione id docente in base al nome e al cognome fornito
-            String sqlOttieniIdDocente = "SELECT * FROM docente WHERE nomeDocente = ? AND cognomeDocente = ?";
-            pstOttieniIdDocente = conn.prepareStatement(sqlOttieniIdDocente);
-            pstOttieniIdDocente.setString(1, nomeDocente);
-            pstOttieniIdDocente.setString(2, cognomeDocente);
-            ResultSet rsDocenti = pstOttieniIdDocente.executeQuery();
-            while(rsDocenti.next()){
-                idDocente = rsDocenti.getInt("idDocente");
-            }
-
             // Eliminazione dalla tabella "insegna"
-            String sqlEliminaAssociazione="DELETE FROM insegna WHERE nomeCorso=? AND idDocente=?";
+            String sqlEliminaAssociazione = "DELETE FROM insegna WHERE nomeCorso=? AND idDocente=?";
             pstEliminaAssociazione = conn.prepareStatement(sqlEliminaAssociazione);
             pstEliminaAssociazione.setString(1, nomeCorso);
             pstEliminaAssociazione.setInt(2, idDocente);
             pstEliminaAssociazione.execute();
             System.out.println("Associazione eliminata correttamente.");
 
-        } catch (SQLException se){
+        } catch (SQLException se) {
             System.out.println(se.getMessage());
         }
         // 4. Chiudo la connessione
@@ -339,22 +725,22 @@ public class DAO {
     }
 
     // VISUALIZZARE LISTA DELLE POSSIBILI RIPETIZIONI PER UN CERTO CORSO
-    public static ArrayList<Docente> mostraDocentiConCorso(String nomeCorso){
+    public ArrayList<Docente> mostraDocentiConCorso(String nomeCorso) throws SQLException {
         // 1. Apertura della connessione
         Connection conn = null;
 
         // 2. Creazione lista di docenti
         ArrayList<Docente> out = new ArrayList<>();
 
-        try{
+        try {
             conn = DriverManager.getConnection(url, user, pw);
-            if(conn != null){
+            if (conn != null) {
                 System.out.println("Connected to the database \"ripetizioni\".");
             }
 
             // Estrazione id dei docenti che insegnano quel corso e che sono disponibili
             String sql = "SELECT docente.nomeDocente, docente.cognomeDocente, insegna.idDocente FROM docente,insegna" +
-                    " WHERE docente.idDocente=insegna.idDocente AND insegna.nomeCorso = ? and disponibilita != 0";
+                    " WHERE docente.idDocente=insegna.idDocente AND insegna.nomeCorso = ? AND docente.disponibilitaDocente = 1";
 
             // Controllo disponibilita' del docente
             String sqlControllaDisponibilita = "SELECT * FROM insegna WHERE nomeCorso=? AND " +
@@ -362,12 +748,58 @@ public class DAO {
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, nomeCorso);
             ResultSet rs = pst.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Docente d = new Docente(rs.getString("nomeDocente"), rs.getString("cognomeDocente"), rs.getInt(
                         "idDocente"));
                 out.add(d);
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Occhio che magari non hai tolto disponibilità dalla query");
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return out;
+    }
+
+    public ArrayList<Corso> mostraCorsiConDocenti(int idDocente) throws SQLException {
+        // 1. Apertura della connessione
+        Connection conn = null;
+
+        // 2. Creazione lista di Corsi
+        ArrayList<Corso> out = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            if (conn != null) {
+                System.out.println("Connected to the database \"ripetizioni\".");
+            }
+            //If(devo verificare la disponibilità prima del docente tramite la tavola prenotazioni)
+            //e poi fare tutto il ramo sotto dentro l'if (Questo lo faccio nella servlet, faccio due chiamate al dato
+
+            // Estrazione id dei docenti che insegnano quel corso e che sono disponibili
+            String sql = "SELECT insegna.nomeCorso FROM insegna" +
+                    " WHERE insegna.idDocente = ?"; //mi serve l'idDocente per lavorare con omonimi
+
+            // Controllo disponibilita' del docente
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1, idDocente);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Corso d = new Corso(rs.getString("nomeCorso"));
+                out.add(d);
+            }
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         // 4. Chiudo la connessione
@@ -385,50 +817,203 @@ public class DAO {
         return out;
     }
 
+    public boolean verificaDisponibilita(String slotlezione, int idDocente) throws SQLException {
+        PreparedStatement pst = null;
+        Connection conn = null;
+
+
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            System.out.println("Connected to the database \"ripetizioni\".");
+            if (conn != null)
+                System.out.println("Connessione a DB eseguita");
+            String sql = "SELECT * FROM prenotazioni WHERE slot = ? AND idDocente = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, slotlezione);
+            pst.setInt(2, idDocente);
+            ResultSet rs = pst.executeQuery();
+            //devo verificare che in prenotazione il professore con quell'idDocente non sia impegnato nello slot
+            //richiesto
+            if (rs == null) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+        return false;
+    }
+
+    public void prenotazioneEffettuata(int idPrenotazione) throws SQLException {
+
+        Connection conn = null;
+        PreparedStatement pst = null;
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            System.out.println("Connected to the database \"ripetizioni\".");
+            String sql = "UPDATE prenotazione SET stato = ? WHERE idPrenotazione = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setInt(1, 1);
+            pst.setInt(2, idPrenotazione);
+            pst.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+
+    }
+
+
+    public ArrayList<Prenotazione> retrievePrenotazioniUtente(int idUtente) throws SQLException {
+        ArrayList<Prenotazione> out = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pst = null;
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            System.out.println("Connected to the database \"ripetizioni\".");
+            String sql = "SELECT p.*, nomeDocente, cognomeDocente FROM prenotazione p JOIN docente d ON (p.idDocente = d.idDocente) WHERE idUtente = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setInt(1, idUtente);
+            ResultSet rs = pst.executeQuery();
+
+
+            while (rs.next()) {
+                Prenotazione pren = new Prenotazione(rs.getInt("idPrenotazione"), rs.getString("nomeCorso"), rs.getInt(
+                        "idDocente"), rs.getString("nomeDocente"), rs.getString("cognomeDocente"), rs.getInt("idUtente"), rs.getString("slot"), rs.getString("stato"));
+                out.add(pren);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return out;
+    }
+
+
+    public ArrayList<Prenotazione> retrievePrenotazioni() throws SQLException {
+
+        ArrayList<Prenotazione> out = new ArrayList<>();
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            System.out.println("Connected to the database \"ripetizioni\".");
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT p.*, nomeDocente, cognomeDocente FROM prenotazione p  JOIN docente d ON (p.idDocente = d.idDocente)");
+            while (rs.next()) {
+                Prenotazione pren = new Prenotazione(rs.getInt("idPrenotazione"), rs.getString("nomeCorso"), rs.getInt(
+                        "idDocente"), rs.getString("nomeDocente"), rs.getString("cognomeDocente"), rs.getInt("idUtente"), rs.getString("slot"), rs.getString("stato"));
+                out.add(pren);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+
+        return out;
+    }
+
+    public boolean isDisponibile(String slot, int idDocente) throws SQLException {
+        PreparedStatement pstControllaDisponibilita = null;
+        boolean disponibilita = true;
+        Connection conn = null;
+
+        try {
+            conn = DriverManager.getConnection(url, user, pw);
+            System.out.println("Connected to the database \"ripetizioni\".");
+
+
+            // Controllo se quello slot è già occupato
+
+            String sqlControllaDisponibilita = "SELECT prenotazione.slot FROM prenotazione WHERE slot = ? AND idDocente = ? AND stato = ?";
+            pstControllaDisponibilita = conn.prepareStatement(sqlControllaDisponibilita);
+            pstControllaDisponibilita.setString(1, slot);
+            pstControllaDisponibilita.setInt(2, idDocente);
+            pstControllaDisponibilita.setString(3, "attiva");
+            ResultSet rsDisponibilita = pstControllaDisponibilita.executeQuery();
+
+            while (rsDisponibilita.next()) {
+                disponibilita = false;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        // 4. Chiudo la connessione
+        finally { // succede sempre
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Connection is now closed.");
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+        return disponibilita;
+    }
+
     // PRENOTAZIONE DI UNA RIPETIZIONE
-    public static void prenotaRipetizione(String nomeCorso, int idDocente, int idUtente, String slot) throws SQLException{
+    public void prenotaRipetizione(String nomeCorso, int idDocente, int idUtente, String slot) throws SQLException {
         PreparedStatement pstControllaDisponibilita = null, pstInserisciPrenotazione = null, pstRimuoviDisponibilita =
                 null;
         Connection conn = null;
         boolean isDisponibile = true;
-        try{
+        try {
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
 
-            // Controllo se quello slot è già occupato
-            String sqlControllaDisponibilita = "SELECT * FROM prenotazione WHERE nomeCorso = ? AND idDocente = ? AND " +
-                    "slot=?";
-            pstControllaDisponibilita = conn.prepareStatement(sqlControllaDisponibilita);
-            pstControllaDisponibilita.setString(1, nomeCorso);
-            pstControllaDisponibilita.setInt(2, idDocente);
-            pstControllaDisponibilita.setString(3, slot);
-            ResultSet rsDisponibilita = pstControllaDisponibilita.executeQuery();
+            String sqlInserisciPrenotazione = "INSERT INTO prenotazione(nomeCorso, idDocente, idUtente, slot, stato) " +
+                    "VALUES (?, ?, ?, ?,?)";
+            pstInserisciPrenotazione = conn.prepareStatement(sqlInserisciPrenotazione);
+            pstInserisciPrenotazione.setString(1, nomeCorso);
+            pstInserisciPrenotazione.setInt(2, idDocente);
+            pstInserisciPrenotazione.setInt(3, idUtente);
+            pstInserisciPrenotazione.setString(4, slot);
+            pstInserisciPrenotazione.setInt(5, 0);
+            pstInserisciPrenotazione.execute();
+            System.out.println("Prenotazione aggiunta correttamente.");
 
-            while(rsDisponibilita.next()){
-                isDisponibile = false;
-            }
-            if(isDisponibile){ // quello slot e' libero, quindi posso inserire una prenotazione
-                System.out.println("Il docente è disponibile in quello slot");
-                String sqlInserisciPrenotazione="INSERT INTO prenotazione(nomeCorso, idDocente, idUtente, slot) " +
-                        "VALUES (?, ?, ?, ?)";
-                pstInserisciPrenotazione = conn.prepareStatement(sqlInserisciPrenotazione);
-                pstInserisciPrenotazione.setString(1, nomeCorso);
-                pstInserisciPrenotazione.setInt(2, idDocente);
-                pstInserisciPrenotazione.setInt(3, idUtente);
-                pstInserisciPrenotazione.setString(4, slot);
-                pstInserisciPrenotazione.execute();
-                System.out.println("Prenotazione aggiunta correttamente.");
-            }
-            else
-                System.out.println("Quello slot non è disponibile.");
-
-            /*
-            String sqlRimuoviDisponibilita="UPDATE insegna SET disponibilita=0 WHERE idDocente=?";
-            pstRimuoviDisponibilita = conn.prepareStatement(sqlRimuoviDisponibilita);
-            pstRimuoviDisponibilita.setInt(1, idDocente);
-            pstRimuoviDisponibilita.execute();*/
-
-        } catch (SQLException se){
+        } catch (SQLException se) {
             System.out.println(se.getMessage());
         }
         // 4. Chiudo la connessione
@@ -445,37 +1030,23 @@ public class DAO {
 
     }
 
-    public static void deletePrenotazione(String nomeCorso, String nomeDocente, String cognomeDocente, int idUtente,
-                                          String slot){
-        PreparedStatement pstEliminaPrenotazione = null, pstOttieniIdDocente = null;
+    public void deletePrenotazione(int idPrenotazione) throws SQLException {
+        PreparedStatement pstEliminaPrenotazione = null;
         Connection conn = null;
-        int idDocente = 0;
-        try{
+        try {
             conn = DriverManager.getConnection(url, user, pw);
             System.out.println("Connected to the database \"ripetizioni\".");
 
-            // Estrazione id docente in base al nome e al cognome fornito
-            String sqlOttieniIdDocente = "SELECT * FROM docente WHERE nomeDocente = ? AND cognomeDocente = ?";
-            pstOttieniIdDocente = conn.prepareStatement(sqlOttieniIdDocente);
-            pstOttieniIdDocente.setString(1, nomeDocente);
-            pstOttieniIdDocente.setString(2, cognomeDocente);
-            ResultSet rsDocenti = pstOttieniIdDocente.executeQuery();
-            while(rsDocenti.next()){
-                idDocente = rsDocenti.getInt("idDocente");
-            }
-
             // Eliminazione dalla tabella "prenotazione"
-            String sqlEliminaAssociazione="DELETE FROM prenotazione WHERE nomeCorso=? AND idDocente=? AND idUtente=? " +
-                    "AND slot=?";
+            String sqlEliminaAssociazione = "UPDATE prenotazione SET stato = ? WHERE idPrenotazione = ?";
             pstEliminaPrenotazione = conn.prepareStatement(sqlEliminaAssociazione);
-            pstEliminaPrenotazione.setString(1, nomeCorso);
-            pstEliminaPrenotazione.setInt(2, idDocente);
-            pstEliminaPrenotazione.setInt(3, idUtente);
-            pstEliminaPrenotazione.setString(4, slot);
+            pstEliminaPrenotazione.setInt(1, -1);
+            pstEliminaPrenotazione.setInt(2, idPrenotazione);
+
             pstEliminaPrenotazione.execute();
             System.out.println("Prenotazione eliminata correttamente.");
 
-        } catch (SQLException se){
+        } catch (SQLException se) {
             System.out.println(se.getMessage());
         }
         // 4. Chiudo la connessione
